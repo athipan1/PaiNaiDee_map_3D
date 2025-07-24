@@ -30,6 +30,7 @@ const texts = {
         noResults: "ไม่พบผลลัพธ์",
         globeCreated: "สร้างโลก 3D ปรับปรุงแล้วสำเร็จ!",
         exploring: "กำลังสำรวจโลก...",
+        startReady: "พร้อมเริ่มต้นแล้ว!",
         weather: "สภาพอากาศ",
         bestTime: "ช่วงเวลาที่เหมาะสม",
         travelTips: "เคล็ดลับการเดินทาง",
@@ -55,6 +56,7 @@ const texts = {
         noResults: "No results found",
         globeCreated: "Enhanced 3D Globe created successfully!",
         exploring: "Exploring the World...",
+        startReady: "Ready to Start!",
         weather: "Weather",
         bestTime: "Best Time",
         travelTips: "Travel Tips",
@@ -2621,8 +2623,14 @@ function initializeEnhancedStartup() {
     mainContainer.style.opacity = '0';
     mainContainer.style.pointerEvents = 'none';
     
-    // Show loading spinner first
+    // Show loading spinner first with enhanced start message
     loadingSpinner.style.display = 'flex';
+    
+    // Update status to indicate ready to start
+    updateStatus(
+        `🚀 ${getText('startReady')} | กำลังเริ่มต้น...`,
+        `🚀 ${getText('startReady')} | Initializing...`
+    );
     
     // Hide loading spinner after 2 seconds and show welcome screen
     setTimeout(() => {
@@ -2632,9 +2640,15 @@ function initializeEnhancedStartup() {
             loadingSpinner.style.display = 'none';
             welcomeOverlay.style.display = 'flex';
             
+            // Update status when welcome screen is shown
+            updateStatus(
+                `🎉 ยินดีต้อนรับ! เริ่มสำรวจได้เลย`,
+                `🎉 Welcome! Ready to start exploring`
+            );
+            
             console.log('🎨 Enhanced welcome screen displayed!');
         }, 500);
-    }, 2000);
+    }, 1800); // Slightly faster loading for better start experience
     
     // Check if user has seen welcome before
     const hasSeenWelcome = localStorage.getItem('painaidee-seen-welcome');
@@ -2642,7 +2656,7 @@ function initializeEnhancedStartup() {
         // Skip welcome for returning users but still show loading
         setTimeout(() => {
             skipToMap();
-        }, 2500);
+        }, 2200); // Optimized timing for returning users
     }
 }
 
