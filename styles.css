@@ -91,6 +91,43 @@ body {
     height: 100vh;
     overflow: hidden;
     transition: all var(--transition-normal);
+    position: relative;
+}
+
+/* Enhanced star field background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(2px 2px at 20px 30px, #ffffff, transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.4), transparent),
+        radial-gradient(2px 2px at 160px 30px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 200px 90px, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 240px 20px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(2px 2px at 280px 60px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 320px 100px, rgba(255,255,255,0.4), transparent),
+        radial-gradient(1px 1px at 360px 40px, rgba(255,255,255,0.7), transparent);
+    background-repeat: repeat;
+    background-size: 400px 200px;
+    animation: starfield 100s linear infinite;
+    opacity: 0.3;
+    z-index: -2;
+    pointer-events: none;
+}
+
+@keyframes starfield {
+    0% { 
+        transform: translateY(0) translateX(0); 
+    }
+    100% { 
+        transform: translateY(-200px) translateX(-400px); 
+    }
 }
 
 #mapContainer {
@@ -429,6 +466,46 @@ button:focus {
     transition: box-shadow var(--transition-normal);
 }
 
+/* Enhanced city lights layer */
+.globe-sphere::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: 
+        /* Bangkok area */
+        radial-gradient(circle 3px at 65% 40%, rgba(255, 255, 0, 0.8), transparent),
+        /* Tokyo area */
+        radial-gradient(circle 2px at 75% 35%, rgba(255, 255, 100, 0.6), transparent),
+        /* Seoul area */
+        radial-gradient(circle 2px at 73% 32%, rgba(255, 255, 150, 0.5), transparent),
+        /* Singapore area */
+        radial-gradient(circle 2px at 67% 48%, rgba(255, 255, 200, 0.7), transparent),
+        /* London area */
+        radial-gradient(circle 2px at 48% 25%, rgba(255, 255, 100, 0.6), transparent),
+        /* Paris area */
+        radial-gradient(circle 2px at 50% 27%, rgba(255, 255, 150, 0.5), transparent),
+        /* New York area */
+        radial-gradient(circle 3px at 25% 30%, rgba(255, 255, 0, 0.8), transparent),
+        /* Los Angeles area */
+        radial-gradient(circle 2px at 20% 32%, rgba(255, 255, 100, 0.6), transparent),
+        /* Sydney area */
+        radial-gradient(circle 2px at 75% 75%, rgba(255, 255, 150, 0.7), transparent);
+    animation: cityLights 4s ease-in-out infinite alternate;
+    opacity: 0.6;
+    z-index: 1;
+}
+
+@keyframes cityLights {
+    0% { 
+        opacity: 0.4;
+    }
+    100% { 
+        opacity: 0.8;
+    }
+}
+
 .globe-sphere:active {
     cursor: grabbing;
 }
@@ -571,6 +648,30 @@ button:focus {
     top: 37%;
     left: 65%;
     animation-delay: 4s;
+}
+
+.marker.huahin {
+    top: 46%;
+    left: 63%;
+    animation-delay: 4.5s;
+}
+
+.marker.kohsamui {
+    top: 58%;
+    left: 64%;
+    animation-delay: 5s;
+}
+
+.marker.chiangrai {
+    top: 30%;
+    left: 62%;
+    animation-delay: 5.5s;
+}
+
+.marker.pattaya {
+    top: 43%;
+    left: 66%;
+    animation-delay: 6s;
 }
 
 .marker.europe {

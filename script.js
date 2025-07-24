@@ -327,6 +327,82 @@ const locations = {
         bestTime: "November - January",
         travelTips: "ระวังลิงแย่งอาหาร เก็บของมีค่าให้ดี / Beware of monkeys snatching food, secure valuables"
     },
+    huahin: {
+        name: "หัวหิน",
+        nameEn: "Hua Hin",
+        description: "เมืองท่องเที่ยวชายทะเลที่เป็นที่ประทับของพระราชวัง มีหาดทรายขาวและอากาศเย็นสบาย",
+        descriptionEn: "Royal seaside resort town with white sandy beaches and pleasant weather",
+        emoji: "🏖️",
+        coordinates: [99.9588, 12.5683],
+        attractions: ["พระราชวังไกลกังวล", "หาดหัวหิน", "ตลาดน้ำอัมพวา", "เขาตะเกียบ", "วัดห้วยมงคล"],
+        attractionsEn: ["Klaikangwon Palace", "Hua Hin Beach", "Amphawa Floating Market", "Khao Takiab", "Wat Huay Mongkol"],
+        photos: [
+            { name: "Royal Beach", emoji: "👑" },
+            { name: "Fishing Boats", emoji: "🎣" },
+            { name: "Night Market", emoji: "🌃" },
+            { name: "Temple View", emoji: "⛩️" }
+        ],
+        weather: "29°C 🌊",
+        bestTime: "November - April",
+        travelTips: "เที่ยวตลาดน้ำเช้าตรู่ เย็นเดินชายหาด / Visit floating market early morning, evening beach walks"
+    },
+    kohsamui: {
+        name: "เกาะสมุย",
+        nameEn: "Koh Samui",
+        description: "เกาะในอ่าวไทยที่มีชื่อเสียงระดับโลก มีหาดทรายขาวและน้ำทะเลใสสวยงาม",
+        descriptionEn: "World-famous island in the Gulf of Thailand with pristine beaches and crystal clear waters",
+        emoji: "🥥",
+        coordinates: [100.0629, 9.5018],
+        attractions: ["หาดเฉวง", "หาดละไม", "วัดพระใหญ่", "หินตาหินยาย", "น้ำตกนาเมือง"],
+        attractionsEn: ["Chaweng Beach", "Lamai Beach", "Big Buddha Temple", "Hin Ta Hin Yai", "Na Muang Waterfall"],
+        photos: [
+            { name: "Paradise Beach", emoji: "🏝️" },
+            { name: "Coconut Trees", emoji: "🥥" },
+            { name: "Sunset View", emoji: "🌅" },
+            { name: "Beach Resort", emoji: "🏨" }
+        ],
+        weather: "30°C 🌴",
+        bestTime: "December - April",
+        travelTips: "เช่ารถจักรยานยนต์เที่ยวรอบเกาะ / Rent a motorbike to explore the island"
+    },
+    chiangrai: {
+        name: "เชียงราย",
+        nameEn: "Chiang Rai",
+        description: "จังหวัดเหนือสุดของไทย มีวัดสีขาวและสีน้ำเงินที่มีชื่อเสียง พร้อมวัฒนธรรมล้านนาที่งดงาม",
+        descriptionEn: "Thailand's northernmost province famous for white and blue temples and beautiful Lanna culture",
+        emoji: "⛩️",
+        coordinates: [99.8325, 19.9105],
+        attractions: ["วัดร่องขุ่น", "วัดร่องเสือเต้น", "สามเหลี่ยมทองคำ", "หมู่บ้านกะเหรี่ยงคอยาว", "ดอยตุง"],
+        attractionsEn: ["Wat Rong Khun (White Temple)", "Wat Rong Suea Ten (Blue Temple)", "Golden Triangle", "Long Neck Karen Village", "Doi Tung"],
+        photos: [
+            { name: "White Temple", emoji: "⛩️" },
+            { name: "Blue Temple", emoji: "💙" },
+            { name: "Golden Triangle", emoji: "🔺" },
+            { name: "Hill Tribes", emoji: "🏔️" }
+        ],
+        weather: "26°C 🌤️",
+        bestTime: "November - February",
+        travelTips: "เที่ยวสามเหลี่ยมทองคำและชมวิวโขง / Visit Golden Triangle and view the Mekong River"
+    },
+    pattaya: {
+        name: "พัทยา",
+        nameEn: "Pattaya",
+        description: "เมืองท่องเที่ยวชายทะเลที่มีชีวิตชีวาตลอด 24 ชั่วโมง มีกิจกรรมทางน้ำและความบันเทิงมากมาย",
+        descriptionEn: "Vibrant 24-hour beach city with abundant water activities and entertainment",
+        emoji: "🌃",
+        coordinates: [100.8868, 12.9236],
+        attractions: ["หาดพัทยา", "เกาะล้าน", "สวนนงนุช", "อุทยานโบราณสถาน", "วอล์กกิ้งสตรีท"],
+        attractionsEn: ["Pattaya Beach", "Koh Larn", "Nong Nooch Garden", "Sanctuary of Truth", "Walking Street"],
+        photos: [
+            { name: "City Beach", emoji: "🏙️" },
+            { name: "Coral Island", emoji: "🐠" },
+            { name: "Night Life", emoji: "🌃" },
+            { name: "Water Sports", emoji: "🚤" }
+        ],
+        weather: "31°C 🌊",
+        bestTime: "November - March",
+        travelTips: "หลีกเลี่ยงวันหยุดยาว ทำกิจกรรมน้ำตอนเช้า / Avoid long holidays, do water activities in the morning"
+    },
     europe: {
         name: "ยุโรป",
         nameEn: "Europe",
@@ -584,6 +660,8 @@ function addEnhancedMouseControls() {
     let currentRotationY = 0;
     let currentRotationX = -10;
     let dragStartTime = 0;
+    let momentum = { x: 0, y: 0 };
+    let lastDragX = 0, lastDragY = 0;
     
     globe.addEventListener('mousedown', (e) => {
         // Don't interfere with marker clicks
@@ -595,6 +673,9 @@ function addEnhancedMouseControls() {
         dragStartTime = Date.now();
         startX = e.clientX;
         startY = e.clientY;
+        lastDragX = e.clientX;
+        lastDragY = e.clientY;
+        momentum = { x: 0, y: 0 };
         globe.style.cursor = 'grabbing';
         globe.style.animationPlayState = 'paused';
         globe.querySelector('.continents-layer').style.animationPlayState = 'paused';
@@ -605,6 +686,10 @@ function addEnhancedMouseControls() {
             const deltaX = e.clientX - startX;
             const deltaY = e.clientY - startY;
             
+            // Calculate momentum for physics
+            momentum.x = e.clientX - lastDragX;
+            momentum.y = e.clientY - lastDragY;
+            
             currentRotationY += deltaX * 0.5;
             currentRotationX = Math.max(-45, Math.min(45, currentRotationX + deltaY * 0.5));
             
@@ -612,6 +697,8 @@ function addEnhancedMouseControls() {
             
             startX = e.clientX;
             startY = e.clientY;
+            lastDragX = e.clientX;
+            lastDragY = e.clientY;
         }
     });
     
@@ -620,6 +707,11 @@ function addEnhancedMouseControls() {
             const dragDuration = Date.now() - dragStartTime;
             isDragging = false;
             globe.style.cursor = 'grab';
+            
+            // Add momentum effect
+            if (Math.abs(momentum.x) > 5 || Math.abs(momentum.y) > 5) {
+                addMomentumEffect(momentum);
+            }
             
             // If it was a very short drag (likely a click), don't prevent marker clicks
             if (dragDuration < 200) {
@@ -634,7 +726,7 @@ function addEnhancedMouseControls() {
         }
     });
     
-    // Mouse wheel for zoom effect
+    // Enhanced mouse wheel for zoom effect with smoother transitions
     globe.addEventListener('wheel', (e) => {
         e.preventDefault();
         const container = document.getElementById('globe3D');
@@ -642,10 +734,47 @@ function addEnhancedMouseControls() {
         let scale = currentScale ? parseFloat(currentScale[1]) : 1;
         
         scale += e.deltaY > 0 ? -0.1 : 0.1;
-        scale = Math.max(0.5, Math.min(2, scale));
+        scale = Math.max(0.5, Math.min(2.5, scale));
         
         container.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        container.style.transition = 'transform 0.2s ease';
+        
+        // Show zoom level feedback
+        showNotification(
+            `🔍 ${userPreferences.language === 'th' ? 'ขยาย' : 'Zoom'}: ${Math.round(scale * 100)}%`,
+            'info'
+        );
     });
+}
+
+// Add momentum physics effect
+function addMomentumEffect(momentum) {
+    let frames = 30;
+    const decay = 0.95;
+    
+    function animateMomentum() {
+        if (frames > 0 && !isDragging) {
+            const currentTransform = globe.style.transform || 'rotateY(0deg) rotateX(-10deg)';
+            const yMatch = currentTransform.match(/rotateY\(([^)]+)deg\)/);
+            const xMatch = currentTransform.match(/rotateX\(([^)]+)deg\)/);
+            
+            let currentY = yMatch ? parseFloat(yMatch[1]) : 0;
+            let currentX = xMatch ? parseFloat(xMatch[1]) : -10;
+            
+            currentY += momentum.x * 0.3;
+            currentX = Math.max(-45, Math.min(45, currentX + momentum.y * 0.3));
+            
+            globe.style.transform = `rotateY(${currentY}deg) rotateX(${currentX}deg)`;
+            
+            momentum.x *= decay;
+            momentum.y *= decay;
+            frames--;
+            
+            requestAnimationFrame(animateMomentum);
+        }
+    }
+    
+    animateMomentum();
 }
 
 function addTouchSupport() {
@@ -956,7 +1085,7 @@ function updateFavoritesDisplay() {
     });
 }
 
-// Weather information (simulated) with error handling
+// Enhanced weather information (simulated) with error handling
 function updateWeatherInfo() {
     const weatherInfo = document.getElementById('weatherInfo');
     if (!weatherInfo) return;
@@ -965,19 +1094,35 @@ function updateWeatherInfo() {
     try {
         setTimeout(() => {
             const weatherData = {
-                bangkok: "30°C ☀️ แจ่มใส",
-                chiangmai: "25°C 🌤️ เย็นสบาย", 
-                phuket: "28°C 🌊 ลมทะเล"
+                bangkok: "30°C ☀️ แจ่มใส / Sunny",
+                chiangmai: "25°C 🌤️ เย็นสบาย / Cool", 
+                phuket: "28°C 🌊 ลมทะเล / Sea Breeze",
+                ayutthaya: "31°C ☀️ ร้อน / Hot",
+                krabi: "27°C 🌴 ชื้น / Humid",
+                sukhothai: "29°C 🌤️ ปกติ / Normal",
+                chonburi: "30°C 🌊 ลมทะเล / Coastal",
+                kanchanaburi: "28°C 🌲 เย็น / Cool",
+                lopburi: "32°C ☀️ ร้อน / Hot",
+                huahin: "29°C 🌊 สบาย / Pleasant",
+                kohsamui: "28°C 🌴 ชื้น / Tropical",
+                chiangrai: "24°C 🌤️ เย็น / Cool",
+                pattaya: "30°C 🌊 ชื้น / Humid"
             };
             
-            const randomLocation = Object.keys(weatherData)[Math.floor(Math.random() * 3)];
+            // Rotate through different destinations every time
+            const locations = Object.keys(weatherData);
+            const randomLocation = locations[Math.floor(Math.random() * locations.length)];
             const locationInfo = locations[randomLocation];
             
             if (locationInfo && weatherData[randomLocation]) {
-                weatherInfo.innerHTML = `🌤️ ${locationInfo.name}: ${weatherData[randomLocation]}`;
+                const displayName = locations[randomLocation] ? getCurrentLocationName(locations[randomLocation]) : randomLocation;
+                weatherInfo.innerHTML = `🌤️ ${displayName}: ${weatherData[randomLocation]}`;
             } else {
                 weatherInfo.innerHTML = `🌤️ สภาพอากาศ: ปกติดี / Weather: Normal`;
             }
+            
+            // Update weather every 10 seconds
+            setTimeout(updateWeatherInfo, 10000);
         }, 2000);
     } catch (error) {
         console.warn('Weather update failed:', error);
@@ -1052,7 +1197,11 @@ function handleKeyboardNavigation(e) {
         '7': 'chonburi',
         '8': 'kanchanaburi',
         '9': 'lopburi',
-        '0': 'world'
+        '0': 'world',
+        'q': 'huahin',
+        'w': 'kohsamui',
+        'e': 'chiangrai',
+        'r': 'pattaya'
     };
     
     if (locationKeys[e.key]) {
@@ -1164,7 +1313,11 @@ function createOptimalTripPlan(destinations, duration) {
         sukhothai: 1,
         chonburi: 2,
         kanchanaburi: 2,
-        lopburi: 1
+        lopburi: 1,
+        huahin: 2,
+        kohsamui: 3,
+        chiangrai: 2,
+        pattaya: 2
     };
     
     // Optimize route to minimize travel time

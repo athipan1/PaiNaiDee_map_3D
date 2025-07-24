@@ -140,6 +140,38 @@
                 </button>
             </div>
             <div class="button-row">
+                <button onclick="focusLocation('huahin')" aria-label="Focus on Hua Hin">
+                    🏖️ หัวหิน
+                </button>
+                <button class="favorite-btn" onclick="toggleFavorite('huahin')" aria-label="Add Hua Hin to favorites" data-location="huahin">
+                    ⭐
+                </button>
+            </div>
+            <div class="button-row">
+                <button onclick="focusLocation('kohsamui')" aria-label="Focus on Koh Samui">
+                    🥥 เกาะสมุย
+                </button>
+                <button class="favorite-btn" onclick="toggleFavorite('kohsamui')" aria-label="Add Koh Samui to favorites" data-location="kohsamui">
+                    ⭐
+                </button>
+            </div>
+            <div class="button-row">
+                <button onclick="focusLocation('chiangrai')" aria-label="Focus on Chiang Rai">
+                    ⛩️ เชียงราย
+                </button>
+                <button class="favorite-btn" onclick="toggleFavorite('chiangrai')" aria-label="Add Chiang Rai to favorites" data-location="chiangrai">
+                    ⭐
+                </button>
+            </div>
+            <div class="button-row">
+                <button onclick="focusLocation('pattaya')" aria-label="Focus on Pattaya">
+                    🌃 พัทยา
+                </button>
+                <button class="favorite-btn" onclick="toggleFavorite('pattaya')" aria-label="Add Pattaya to favorites" data-location="pattaya">
+                    ⭐
+                </button>
+            </div>
+            <div class="button-row">
                 <button onclick="focusLocation('world')" aria-label="Show world view">
                     🌍 โลก
                 </button>
@@ -196,6 +228,22 @@
                                 <input type="checkbox" value="lopburi">
                                 <span>🐵 ลพบุรี</span>
                             </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="huahin">
+                                <span>🏖️ หัวหิน</span>
+                            </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="kohsamui">
+                                <span>🥥 เกาะสมุย</span>
+                            </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="chiangrai">
+                                <span>⛩️ เชียงราย</span>
+                            </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="pattaya">
+                                <span>🌃 พัทยา</span>
+                            </label>
                         </div>
                         <div class="trip-duration-selector">
                             <label for="tripDuration">ระยะเวลาเที่ยว:</label>
@@ -228,6 +276,10 @@
                         <option value="chonburi">🏖️ ชลบุรี</option>
                         <option value="kanchanaburi">🌉 กาญจนบุรี</option>
                         <option value="lopburi">🐵 ลพบุรี</option>
+                        <option value="huahin">🏖️ หัวหิน</option>
+                        <option value="kohsamui">🥥 เกาะสมุย</option>
+                        <option value="chiangrai">⛩️ เชียงราย</option>
+                        <option value="pattaya">🌃 พัทยา</option>
                     </select>
                     <select id="toLocation" class="route-select">
                         <option value="">ไป / To</option>
@@ -240,6 +292,10 @@
                         <option value="chonburi">🏖️ ชลบุรี</option>
                         <option value="kanchanaburi">🌉 กาญจนบุรี</option>
                         <option value="lopburi">🐵 ลพบุรี</option>
+                        <option value="huahin">🏖️ หัวหิน</option>
+                        <option value="kohsamui">🥥 เกาะสมุย</option>
+                        <option value="chiangrai">⛩️ เชียงราย</option>
+                        <option value="pattaya">🌃 พัทยา</option>
                     </select>
                     <button onclick="calculateRoute()" class="route-btn">🚗 คำนวณ</button>
                 </div>
@@ -313,6 +369,30 @@
                      role="button"
                      tabindex="0"
                      aria-label="Lopburi location marker"></div>
+                <div class="marker huahin" 
+                     data-name="🏖️ หัวหิน (Hua Hin)" 
+                     onclick="showInfo('huahin')"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Hua Hin location marker"></div>
+                <div class="marker kohsamui" 
+                     data-name="🥥 เกาะสมุย (Koh Samui)" 
+                     onclick="showInfo('kohsamui')"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Koh Samui location marker"></div>
+                <div class="marker chiangrai" 
+                     data-name="⛩️ เชียงราย (Chiang Rai)" 
+                     onclick="showInfo('chiangrai')"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Chiang Rai location marker"></div>
+                <div class="marker pattaya" 
+                     data-name="🌃 พัทยา (Pattaya)" 
+                     onclick="showInfo('pattaya')"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Pattaya location marker"></div>
                 <div class="marker europe" 
                      data-name="🏛️ ยุโรป (Europe)" 
                      onclick="showInfo('europe')"
