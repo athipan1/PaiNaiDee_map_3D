@@ -443,22 +443,7 @@ const locations = {
     }
 };
 
-// Initialize the application
-document.addEventListener('DOMContentLoaded', function() {
-    showLoadingSpinner();
-    initializeEnhanced3D();
-    initializeTheme();
-    initializeLanguage();
-    initializeSearch();
-    initializeFavorites();
-    initializeKeyboardNavigation();
-    initializeFontLoading();
-    updateWeatherInfo();
-    updateInterfaceLanguage();
-    setTimeout(hideLoadingSpinner, 1000);
-    updateStatus(getText('globeCreated'), getText('globeCreated'));
-    console.log('🗺️ PaiNaiDee Enhanced 3D Map loaded successfully!');
-});
+// Initialize the application - removed duplicate, consolidated into initializeMap()
 
 // Font loading with fallback handling
 function initializeFontLoading() {
@@ -2157,15 +2142,31 @@ function updateStatus(textTh, textEn) {
 }
 
 function initializeMap() {
+    // Show loading spinner immediately
+    showLoadingSpinner();
+    
+    // Initialize core features first
+    initializeTheme();
+    initializeLanguage();
+    initializeFontLoading();
+    
     // Self-contained enhanced 3D map
     initializeEnhanced3D();
     
-    // Initialize enhanced UX/UI features
+    // Initialize other UI features
+    initializeSearch();
+    initializeFavorites();
+    initializeKeyboardNavigation();
+    updateWeatherInfo();
+    updateInterfaceLanguage();
+    
+    // Initialize enhanced UX/UI features after short delay
     setTimeout(() => {
         initializeEnhancedUX();
+        hideLoadingSpinner();
+        updateStatus('🌍 สร้างโลก 3D ปรับปรุงแล้วสำเร็จ!', '🌍 Enhanced 3D Globe created successfully!');
+        console.log('🗺️ PaiNaiDee Enhanced 3D Map loaded successfully!');
     }, 1000);
-    
-    updateStatus('🌍 สร้างโลก 3D ปรับปรุงแล้วสำเร็จ!', '🌍 Enhanced 3D Globe created successfully!');
     
     // Show welcome notification
     setTimeout(() => {

@@ -1,6 +1,6 @@
-# This is a basic workflow to help you get started with Actions
+# PaiNaiDee 3D Map CI/CD Pipeline
 
-name: CI
+name: Build and Deploy
 
 # Controls when the workflow will run
 on:
@@ -15,8 +15,8 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  # This workflow contains jobs for validation and deployment
+  validate:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -25,12 +25,79 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      # Validate HTML structure
+      - name: Validate HTML
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          echo "🔍 Validating HTML structure..."
+          # Check if index.html exists and has basic structure
+          if [ -f "index.html" ]; then
+            echo "✅ index.html found"
+            grep -q "<!DOCTYPE html>" index.html && echo "✅ HTML5 DOCTYPE found" || exit 1
+            grep -q "<title>" index.html && echo "✅ Title tag found" || exit 1
+            echo "✅ HTML validation passed"
+          else
+            echo "❌ index.html not found"
+            exit 1
+          fi
+
+      # Validate JavaScript syntax
+      - name: Validate JavaScript
+        run: |
+          echo "🔍 Validating JavaScript files..."
+          if [ -f "script.js" ]; then
+            echo "✅ script.js found"
+            # Basic syntax check using node
+            node -c script.js && echo "✅ JavaScript syntax valid" || exit 1
+          else
+            echo "❌ script.js not found"
+            exit 1
+          fi
+
+      # Check CSS files
+      - name: Validate CSS
+        run: |
+          echo "🔍 Checking CSS files..."
+          if [ -f "styles.css" ]; then
+            echo "✅ styles.css found"
+            # Basic check for CSS content
+            [ -s "styles.css" ] && echo "✅ CSS file is not empty" || exit 1
+          else
+            echo "❌ styles.css not found"
+            exit 1
+          fi
+
+      # Test application startup
+      - name: Test Application Startup
+        run: |
+          echo "🚀 Testing application startup..."
+          # Start a simple HTTP server in background
+          python3 -m http.server 8080 &
+          SERVER_PID=$!
+          
+          # Wait for server to start
+          sleep 2
+          
+          # Test if the application loads
+          curl -s http://localhost:8080 | grep -q "PaiNaiDee 3D Map" && echo "✅ Application loads successfully" || exit 1
+          
+          # Clean up
+          kill $SERVER_PID
+          echo "✅ Application startup test completed"
+
+  # Deploy job (can be extended for actual deployment)
+  deploy:
+    runs-on: ubuntu-latest
+    needs: validate
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Deploy Ready
+        run: |
+          echo "🚀 Application is ready for deployment!"
+          echo "📊 Project Statistics:"
+          echo "   - HTML files: $(find . -name "*.html" | wc -l)"
+          echo "   - CSS files: $(find . -name "*.css" | wc -l)"
+          echo "   - JS files: $(find . -name "*.js" | wc -l)"
+          echo "✅ All checks passed - Ready to deploy PaiNaiDee 3D Map!"
