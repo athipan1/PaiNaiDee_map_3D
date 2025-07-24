@@ -566,25 +566,46 @@ button:focus {
         radial-gradient(circle at 30% 30%, #FFFF00, #FFD700);
     border: 2px solid #FFA500;
     box-shadow: 
-        0 0 20px rgba(255, 215, 0, 0.9),
-        inset 0 0 10px rgba(255, 255, 255, 0.5);
-    animation: markerPulse 2s ease-in-out infinite;
+        0 0 15px rgba(255, 215, 0, 0.7),
+        inset 0 0 8px rgba(255, 255, 255, 0.5);
+    animation: markerPulseGentle 3s ease-in-out infinite;
     cursor: pointer;
     z-index: 100;
     transform-origin: center;
     transition: all var(--transition-normal);
+    /* Enhanced clickability with larger click area */
+    border: 3px solid transparent;
+    background-clip: padding-box;
 }
 
 .marker::before {
     content: '';
     position: absolute;
-    top: -10px;
-    left: -10px;
-    right: -10px;
-    bottom: -10px;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
     border-radius: 50%;
     z-index: -1;
     background: transparent;
+    /* Larger click area for better mobile experience */
+}
+
+/* Stable click state - pause animation on hover for precise clicking */
+.marker:hover {
+    transform: scale(1.3);
+    box-shadow: 
+        0 0 25px rgba(255, 215, 0, 1),
+        inset 0 0 12px rgba(255, 255, 255, 0.8);
+    animation-play-state: paused;
+    z-index: 200;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Active state for better touch feedback */
+.marker:active {
+    transform: scale(1.1);
+    transition: transform 0.1s ease;
 }
 
 .marker:focus {
@@ -686,14 +707,7 @@ button:focus {
     animation-delay: 5s;
 }
 
-.marker:hover {
-    transform: scale(1.5);
-    box-shadow: 
-        0 0 30px rgba(255, 215, 0, 1),
-        inset 0 0 15px rgba(255, 255, 255, 0.8);
-    animation-play-state: paused;
-    z-index: 200;
-}
+
 
 .marker::after {
     content: attr(data-name);
@@ -744,8 +758,20 @@ button:focus {
         box-shadow: 0 0 20px rgba(255, 215, 0, 0.9);
     }
     50% { 
-        transform: scale(1.1);
+        transform: scale(1.05);
         box-shadow: 0 0 25px rgba(255, 215, 0, 1);
+    }
+}
+
+/* Enhanced marker pulse - gentler animation for better clickability */
+@keyframes markerPulseGentle {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+    }
+    50% { 
+        transform: scale(1.02);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.9);
     }
 }
 
@@ -1557,6 +1583,198 @@ button:focus {
     animation: comparisonPulse 1s ease-in-out infinite;
     border: 3px solid #FFD700;
     z-index: 200;
+}
+
+/* ========================================
+   ENHANCED UX/UI IMPROVEMENTS
+   ======================================== */
+
+/* Enhanced Loading States */
+.loading-skeleton {
+    background: linear-gradient(90deg, var(--glass-bg) 25%, rgba(255,255,255,0.1) 50%, var(--glass-bg) 75%);
+    background-size: 200% 100%;
+    animation: loading-shimmer 1.5s infinite;
+    border-radius: var(--radius-md);
+}
+
+@keyframes loading-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Smooth Button Transitions with Modern Shadows */
+button:not(.theme-toggle):not(.language-toggle) {
+    position: relative;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: var(--font-primary);
+    letter-spacing: 0.025em;
+    overflow: hidden;
+}
+
+button:not(.theme-toggle):not(.language-toggle):hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 
+        0 10px 30px rgba(72, 177, 232, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Enhanced Favorite Button Animation */
+.favorite-btn {
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.favorite-btn:hover {
+    transform: rotate(10deg) scale(1.2);
+}
+
+.favorite-btn.favorited {
+    animation: favorite-bounce 0.6s ease;
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+}
+
+@keyframes favorite-bounce {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.3) rotate(-5deg); }
+    50% { transform: scale(1.1) rotate(5deg); }
+    75% { transform: scale(1.2) rotate(-2deg); }
+}
+
+/* Enhanced Focus Styles for Accessibility */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(72, 177, 232, 0.2);
+}
+
+/* Mobile-First Touch Improvements */
+@media (max-width: 768px) {
+    /* Larger touch targets */
+    button {
+        min-height: 44px;
+        min-width: 44px;
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+    
+    .marker {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .marker::before {
+        top: -20px;
+        left: -20px;
+        right: -20px;
+        bottom: -20px;
+    }
+    
+    /* Better mobile spacing */
+    .controls, .info-panel {
+        margin: var(--spacing-md);
+        max-width: none;
+    }
+}
+
+/* Smooth Page Transitions */
+.page-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced Status Bar */
+.status {
+    animation: status-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes status-glow {
+    from { 
+        box-shadow: 0 4px 20px rgba(72, 177, 232, 0.3);
+    }
+    to { 
+        box-shadow: 0 4px 30px rgba(72, 177, 232, 0.5);
+    }
+}
+
+/* Interactive Element Hover Effects */
+.interactive-element {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.interactive-element:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+/* Enhanced Search Input */
+.search-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    position: relative;
+}
+
+.search-input:focus {
+    background: rgba(255, 255, 255, 0.08);
+    transform: scale(1.02);
+    box-shadow: 
+        0 0 0 3px rgba(72, 177, 232, 0.2),
+        0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Theme Toggle Enhancements */
+.theme-toggle, .language-toggle {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.theme-toggle:hover, .language-toggle:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    border-color: var(--accent-color);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .marker {
+        animation: none;
+    }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    :root {
+        --accent-color: #0066cc;
+        --glass-border: rgba(255, 255, 255, 0.8);
+    }
+    
+    button {
+        border: 2px solid currentColor;
+    }
+}
+
+/* Progressive Enhancement for Modern Browsers */
+@supports (backdrop-filter: blur()) {
+    .enhanced-glass {
+        backdrop-filter: blur(20px) saturate(1.8);
+        background: rgba(255, 255, 255, 0.05);
+    }
 }
 
 @keyframes comparisonPulse {

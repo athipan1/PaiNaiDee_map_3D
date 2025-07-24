@@ -2159,7 +2159,18 @@ function updateStatus(textTh, textEn) {
 function initializeMap() {
     // Self-contained enhanced 3D map
     initializeEnhanced3D();
+    
+    // Initialize enhanced UX/UI features
+    setTimeout(() => {
+        initializeEnhancedUX();
+    }, 1000);
+    
     updateStatus('🌍 สร้างโลก 3D ปรับปรุงแล้วสำเร็จ!', '🌍 Enhanced 3D Globe created successfully!');
+    
+    // Show welcome notification
+    setTimeout(() => {
+        showNotification(getText('globeCreated'), 'success');
+    }, 2000);
 }
 
 // Add all dynamic CSS animations in a single style element to avoid conflicts
@@ -2193,6 +2204,311 @@ consolidatedStyle.textContent = `
     }
 `;
 document.head.appendChild(consolidatedStyle);
+
+// ========================================
+// ENHANCED UX/UI IMPROVEMENTS
+// ========================================
+
+// Enhanced marker click handling for better stability
+function enhanceMarkerInteractions() {
+    const markers = document.querySelectorAll('.marker');
+    
+    markers.forEach(marker => {
+        // Add larger click area
+        const clickArea = document.createElement('div');
+        clickArea.style.cssText = `
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            cursor: pointer;
+            z-index: 101;
+        `;
+        marker.appendChild(clickArea);
+        
+        // Pause animation on hover for stable clicking
+        marker.addEventListener('mouseenter', () => {
+            marker.style.animationPlayState = 'paused';
+        });
+        
+        marker.addEventListener('mouseleave', () => {
+            marker.style.animationPlayState = 'running';
+        });
+        
+        // Add ripple effect on click
+        marker.addEventListener('click', (e) => {
+            createRippleEffect(e.target, e.clientX, e.clientY);
+        });
+    });
+}
+
+// Create ripple effect for better click feedback
+function createRippleEffect(element, x, y) {
+    const ripple = document.createElement('div');
+    const rect = element.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    
+    ripple.style.cssText = `
+        position: absolute;
+        width: ${size}px;
+        height: ${size}px;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        transform: scale(0);
+        animation: ripple 0.6s linear;
+        pointer-events: none;
+        left: ${x - rect.left - size/2}px;
+        top: ${y - rect.top - size/2}px;
+        z-index: 1000;
+    `;
+    
+    element.appendChild(ripple);
+    
+    setTimeout(() => {
+        ripple.remove();
+    }, 600);
+}
+
+// Enhanced favorite button animations
+function enhanceFavoriteButtons() {
+    const favoriteButtons = document.querySelectorAll('.favorite-btn');
+    
+    favoriteButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Add bounce animation
+            this.style.animation = 'favorite-bounce 0.6s ease';
+            
+            // Toggle favorited state
+            const locationKey = this.dataset.location;
+            const isFavorited = favorites.includes(locationKey);
+            
+            if (!isFavorited) {
+                // Add sparkle effect
+                createSparkleEffect(this);
+                this.innerHTML = '⭐';
+                showNotification(getText('addedFavorite'), 'success');
+            } else {
+                this.innerHTML = '☆';
+                showNotification(getText('removedFavorite'), 'info');
+            }
+            
+            setTimeout(() => {
+                this.style.animation = '';
+            }, 600);
+        });
+    });
+}
+
+// Create sparkle effect for favorite actions
+function createSparkleEffect(element) {
+    const sparkles = ['✨', '⭐', '💫'];
+    const rect = element.getBoundingClientRect();
+    
+    for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+            const sparkle = document.createElement('div');
+            sparkle.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
+            sparkle.style.cssText = `
+                position: fixed;
+                left: ${rect.left + Math.random() * rect.width}px;
+                top: ${rect.top + Math.random() * rect.height}px;
+                font-size: 1rem;
+                pointer-events: none;
+                z-index: 1000;
+                animation: sparkle-float 1s ease-out forwards;
+            `;
+            document.body.appendChild(sparkle);
+            
+            setTimeout(() => sparkle.remove(), 1000);
+        }, i * 100);
+    }
+}
+
+// Enhanced notification system
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        color: var(--panel-text);
+        padding: var(--spacing-md) var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        z-index: 1200;
+        transform: translateX(400px);
+        transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        font-weight: 500;
+    `;
+    
+    if (type === 'success') {
+        notification.style.borderColor = '#4ade80';
+    } else if (type === 'error') {
+        notification.style.borderColor = '#f87171';
+    }
+    
+    document.body.appendChild(notification);
+    
+    // Animate in
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Animate out
+    setTimeout(() => {
+        notification.style.transform = 'translateX(400px)';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Enhanced loading states
+function showLoadingState(element, text = 'Loading...') {
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.className = 'loading-overlay';
+    loadingOverlay.innerHTML = `
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+        </div>
+        <div class="loading-text">${text}</div>
+    `;
+    
+    loadingOverlay.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+        border-radius: inherit;
+    `;
+    
+    element.style.position = 'relative';
+    element.appendChild(loadingOverlay);
+    
+    return loadingOverlay;
+}
+
+// Enhanced button interactions
+function enhanceButtonInteractions() {
+    const buttons = document.querySelectorAll('button:not(.enhanced)');
+    
+    buttons.forEach(button => {
+        button.classList.add('enhanced');
+        
+        // Add loading state capability
+        button.addEventListener('click', function(e) {
+            if (this.classList.contains('loading')) return;
+            
+            // Add ripple effect
+            const rect = this.getBoundingClientRect();
+            const ripple = document.createElement('div');
+            ripple.style.cssText = `
+                position: absolute;
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 50%;
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                pointer-events: none;
+                left: ${e.clientX - rect.left - 10}px;
+                top: ${e.clientY - rect.top - 10}px;
+                width: 20px;
+                height: 20px;
+                z-index: 1;
+            `;
+            
+            this.style.position = 'relative';
+            this.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+        });
+    });
+}
+
+// Initialize enhanced interactions
+function initializeEnhancedUX() {
+    enhanceMarkerInteractions();
+    enhanceFavoriteButtons();
+    enhanceButtonInteractions();
+    
+    // Add interactive classes to elements
+    document.querySelectorAll('.info-panel, .controls, button').forEach(el => {
+        el.classList.add('interactive-element');
+    });
+    
+    // Initialize search input enhancements
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.style.transform = 'scale(1.02)';
+        });
+        
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.style.transform = 'scale(1)';
+        });
+    }
+    
+    console.log('🎨 Enhanced UX/UI features initialized!');
+}
+
+// Add CSS animations for enhanced features
+const enhancedAnimations = document.createElement('style');
+enhancedAnimations.textContent = `
+    @keyframes ripple {
+        to {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+    
+    @keyframes sparkle-float {
+        0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-50px) rotate(180deg);
+            opacity: 0;
+        }
+    }
+    
+    .loading-overlay .spinner {
+        width: 30px;
+        height: 30px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-top: 3px solid var(--accent-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 10px;
+    }
+    
+    .loading-text {
+        color: white;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+`;
+document.head.appendChild(enhancedAnimations);
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeMap);
