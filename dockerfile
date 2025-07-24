@@ -1,0 +1,14 @@
+# ใช้ base image เป็น nginx ที่มีขนาดเล็ก
+FROM nginx:alpine
+
+# ลบไฟล์ default ที่ nginx ใส่มา
+RUN rm -rf /usr/share/nginx/html/*
+
+# คัดลอกไฟล์ทุกอย่างในโปรเจกต์ไปไว้ใน web root ของ nginx
+COPY . /usr/share/nginx/html
+
+# เปิดพอร์ต 80
+EXPOSE 80
+
+# สั่ง nginx ทำงานใน foreground
+CMD ["nginx", "-g", "daemon off;"]
