@@ -11,6 +11,8 @@
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>">
     
+    <!-- Self-contained 3D Map (no external dependencies) -->
+    
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -41,25 +43,17 @@
             </div>
         </div>
         
-        <div id="globe">
-            <div class="continents"></div>
-            <!-- Thai Locations -->
-            <div class="marker" style="top: 40%; left: 60%;" 
-                 data-name="🏛️ กรุงเทพฯ (Bangkok)" 
-                 onclick="showInfo('bangkok')"></div>
-            <div class="marker" style="top: 35%; left: 58%;" 
-                 data-name="🏔️ เชียงใหม่ (Chiang Mai)" 
-                 onclick="showInfo('chiangmai')"></div>
-            <div class="marker" style="top: 55%; left: 58%;" 
-                 data-name="🏝️ ภูเก็ต (Phuket)" 
-                 onclick="showInfo('phuket')"></div>
-            <!-- World Locations -->
-            <div class="marker" style="top: 30%; left: 45%;" 
-                 data-name="🏛️ ยุโรป (Europe)" 
-                 onclick="showInfo('europe')"></div>
-            <div class="marker" style="top: 35%; left: 25%;" 
-                 data-name="🗽 อเมริกา (America)" 
-                 onclick="showInfo('america')"></div>
+        <div id="globe3D">
+            <div class="globe-sphere">
+                <div class="continents-layer"></div>
+                <div class="atmosphere"></div>
+                <!-- Enhanced markers with proper coordinates -->
+                <div class="marker bangkok" data-name="🏛️ กรุงเทพฯ (Bangkok)" onclick="showInfo('bangkok')"></div>
+                <div class="marker chiangmai" data-name="🏔️ เชียงใหม่ (Chiang Mai)" onclick="showInfo('chiangmai')"></div>
+                <div class="marker phuket" data-name="🏝️ ภูเก็ต (Phuket)" onclick="showInfo('phuket')"></div>
+                <div class="marker europe" data-name="🏛️ ยุโรป (Europe)" onclick="showInfo('europe')"></div>
+                <div class="marker america" data-name="🗽 อเมริกา (America)" onclick="showInfo('america')"></div>
+            </div>
         </div>
         
         <div class="status" id="status">
