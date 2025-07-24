@@ -30,6 +30,11 @@
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
         <span id="themeIcon">🌙</span>
     </button>
+    
+    <!-- Language toggle button -->
+    <button class="language-toggle" id="languageToggle" aria-label="Toggle language">
+        <span id="languageIcon">🇬🇧</span>
+    </button>
 
     <div id="mapContainer">
         <!-- Info Panel -->
@@ -61,7 +66,7 @@
                 <div class="search-results" id="searchResults"></div>
             </div>
             
-            <!-- Location buttons with favorites -->
+            <!-- Location buttons with favorites - Enhanced with more Thai destinations -->
             <div class="button-row">
                 <button onclick="focusLocation('bangkok')" aria-label="Focus on Bangkok">
                     🏛️ กรุงเทพฯ
@@ -83,6 +88,30 @@
                     🏝️ ภูเก็ต
                 </button>
                 <button class="favorite-btn" onclick="toggleFavorite('phuket')" aria-label="Add Phuket to favorites" data-location="phuket">
+                    ⭐
+                </button>
+            </div>
+            <div class="button-row">
+                <button onclick="focusLocation('ayutthaya')" aria-label="Focus on Ayutthaya">
+                    🏺 อยุธยา
+                </button>
+                <button class="favorite-btn" onclick="toggleFavorite('ayutthaya')" aria-label="Add Ayutthaya to favorites" data-location="ayutthaya">
+                    ⭐
+                </button>
+            </div>
+            <div class="button-row">
+                <button onclick="focusLocation('krabi')" aria-label="Focus on Krabi">
+                    🌊 กระบี่
+                </button>
+                <button class="favorite-btn" onclick="toggleFavorite('krabi')" aria-label="Add Krabi to favorites" data-location="krabi">
+                    ⭐
+                </button>
+            </div>
+            <div class="button-row">
+                <button onclick="focusLocation('sukhothai')" aria-label="Focus on Sukhothai">
+                    🏛️ สุโขทัย
+                </button>
+                <button class="favorite-btn" onclick="toggleFavorite('sukhothai')" aria-label="Add Sukhothai to favorites" data-location="sukhothai">
                     ⭐
                 </button>
             </div>
@@ -112,7 +141,7 @@
             <div class="globe-sphere" tabindex="0" role="button" aria-label="Interactive globe - use mouse to rotate">
                 <div class="continents-layer"></div>
                 <div class="atmosphere"></div>
-                <!-- Enhanced markers with proper coordinates -->
+                <!-- Enhanced markers with new Thai destinations -->
                 <div class="marker bangkok" 
                      data-name="🏛️ กรุงเทพฯ (Bangkok)" 
                      onclick="showInfo('bangkok')"
@@ -131,6 +160,24 @@
                      role="button"
                      tabindex="0"
                      aria-label="Phuket location marker"></div>
+                <div class="marker ayutthaya" 
+                     data-name="🏺 อยุธยา (Ayutthaya)" 
+                     onclick="showInfo('ayutthaya')"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Ayutthaya location marker"></div>
+                <div class="marker krabi" 
+                     data-name="🌊 กระบี่ (Krabi)" 
+                     onclick="showInfo('krabi')"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Krabi location marker"></div>
+                <div class="marker sukhothai" 
+                     data-name="🏛️ สุโขทัย (Sukhothai)" 
+                     onclick="showInfo('sukhothai')"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Sukhothai location marker"></div>
                 <div class="marker europe" 
                      data-name="🏛️ ยุโรป (Europe)" 
                      onclick="showInfo('europe')"

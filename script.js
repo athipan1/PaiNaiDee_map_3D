@@ -10,7 +10,77 @@ let userPreferences = JSON.parse(localStorage.getItem('painaidee-preferences')) 
     language: 'th'
 };
 
-// Enhanced Thai locations with more detailed information
+// Language system
+const texts = {
+    th: {
+        welcome: "ยินดีต้อนรับสู่แผนที่ 3 มิติ!",
+        showing: "กำลังแสดง: โลกและประเทศไทย",
+        clickGold: "คลิกจุดทองเพื่อสำรวจ",
+        autoRotate: "โลกหมุนอัตโนมัติ",
+        weatherLoading: "กำลังโหลดข้อมูลสภาพอากาศ...",
+        attractions: "สถานที่ท่องเที่ยว",
+        searchPlaceholder: "ค้นหาสถานที่...",
+        world: "โลก",
+        stopPlay: "หยุด/เล่น",
+        fastSlow: "เร็ว/ช้า",
+        favorites: "รายการโปรด",
+        distance: "ระยะทาง",
+        addedFavorite: "เพิ่มในรายการโปรดแล้ว!",
+        removedFavorite: "ลบออกจากรายการโปรดแล้ว!",
+        noResults: "ไม่พบผลลัพธ์",
+        globeCreated: "สร้างโลก 3D ปรับปรุงแล้วสำเร็จ!",
+        exploring: "กำลังสำรวจโลก...",
+        weather: "สภาพอากาศ",
+        bestTime: "ช่วงเวลาที่เหมาะสม",
+        travelTips: "เคล็ดลับการเดินทาง",
+        description: "คำอธิบาย",
+        attractionsTitle: "สถานที่น่าสนใจ",
+        km: "กิโลเมตร"
+    },
+    en: {
+        welcome: "Welcome to the 3D Interactive Globe!",
+        showing: "Showing: World and Thailand",
+        clickGold: "Click golden dots to explore",
+        autoRotate: "Globe auto-rotating",
+        weatherLoading: "Loading weather information...",
+        attractions: "Tourist Attractions",
+        searchPlaceholder: "Search location...",
+        world: "World",
+        stopPlay: "Stop/Play",
+        fastSlow: "Fast/Slow",
+        favorites: "Favorites",
+        distance: "Distance",
+        addedFavorite: "Added to favorites!",
+        removedFavorite: "Removed from favorites!",
+        noResults: "No results found",
+        globeCreated: "Enhanced 3D Globe created successfully!",
+        exploring: "Exploring the World...",
+        weather: "Weather",
+        bestTime: "Best Time",
+        travelTips: "Travel Tips",
+        description: "Description",
+        attractionsTitle: "Attractions",
+        km: "kilometers"
+    }
+};
+
+// Distance calculation function
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Earth's radius in kilometers
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return Math.round(R * c);
+}
+
+function getText(key) {
+    return texts[userPreferences.language] ? texts[userPreferences.language][key] || key : key;
+}
+
+// Enhanced Thai locations with more destinations and detailed information
 const locations = {
     bangkok: {
         name: "กรุงเทพมหานคร",
@@ -19,15 +89,17 @@ const locations = {
         descriptionEn: "Capital city of Thailand, rich in temples and culture, and the economic and tourism center",
         emoji: "🏛️",
         coordinates: [100.5018, 13.7563],
-        attractions: ["วัดพระแก้ว", "พระบรมมหาราชวัง", "วัดโพธิ์", "ตลาดจตุจักร"],
-        attractionsEn: ["Wat Phra Kaew", "Grand Palace", "Wat Pho", "Chatuchak Market"],
+        attractions: ["วัดพระแก้ว", "พระบรมมหาราชวัง", "วัดโพธิ์", "ตลาดจตุจักร", "วัดอรุณ", "เยาวราช"],
+        attractionsEn: ["Wat Phra Kaew", "Grand Palace", "Wat Pho", "Chatuchak Market", "Wat Arun", "Chinatown"],
         photos: [
             { name: "Grand Palace", emoji: "🏰" },
             { name: "Wat Arun", emoji: "🕌" },
-            { name: "Floating Market", emoji: "🛶" }
+            { name: "Floating Market", emoji: "🛶" },
+            { name: "Tuk Tuk", emoji: "🛺" }
         ],
         weather: "30°C ☀️",
-        bestTime: "November - February"
+        bestTime: "November - February",
+        travelTips: "ใช้รถไฟฟ้า BTS และ MRT เดินทางสะดวก / Use BTS and MRT for convenient travel"
     },
     chiangmai: {
         name: "เชียงใหม่", 
@@ -36,15 +108,17 @@ const locations = {
         descriptionEn: "City of mountains and Lanna culture with cool weather and beautiful nature",
         emoji: "🏔️",
         coordinates: [98.9817, 18.7883],
-        attractions: ["ดอยสุเทพ", "วัดพระธาตุ", "ตลาดวอร์กกิ้งสตรีท", "อุทยานแห่งชาติดอยอินทนนท์"],
-        attractionsEn: ["Doi Suthep", "Wat Phra That", "Walking Street", "Doi Inthanon National Park"],
+        attractions: ["ดอยสุเทพ", "วัดพระธาตุ", "ตลาดวอร์กกิ้งสตรีท", "อุทยานแห่งชาติดอยอินทนนท์", "บ้านช้าง", "ตลาดนัดเสาร์อาทิตย์"],
+        attractionsEn: ["Doi Suthep", "Wat Phra That", "Walking Street", "Doi Inthanon National Park", "Elephant Sanctuary", "Weekend Market"],
         photos: [
             { name: "Doi Suthep", emoji: "⛰️" },
             { name: "Night Bazaar", emoji: "🌃" },
-            { name: "Elephant Sanctuary", emoji: "🐘" }
+            { name: "Elephant Sanctuary", emoji: "🐘" },
+            { name: "Lanna Temple", emoji: "🏯" }
         ],
         weather: "25°C 🌤️",
-        bestTime: "October - March"
+        bestTime: "October - March",
+        travelTips: "เช่ารถจักรยานยนต์สำรวจเมืองเก่า / Rent a motorbike to explore the old city"
     },
     phuket: {
         name: "ภูเก็ต",
@@ -53,15 +127,74 @@ const locations = {
         descriptionEn: "Pearl of Andaman with crystal clear sea and white sandy beaches, a world-famous tourist destination",
         emoji: "🏝️",
         coordinates: [98.3923, 7.8804],
-        attractions: ["หาดป่าตอง", "เกาะพีพี", "หาดกะตะ", "บิ๊กบุดดา"],
-        attractionsEn: ["Patong Beach", "Phi Phi Islands", "Kata Beach", "Big Buddha"],
+        attractions: ["หาดป่าตอง", "เกาะพีพี", "หาดกะตะ", "บิ๊กบุดดา", "เมืองเก่าภูเก็ต", "หาดไนหาน"],
+        attractionsEn: ["Patong Beach", "Phi Phi Islands", "Kata Beach", "Big Buddha", "Phuket Old Town", "Nai Harn Beach"],
         photos: [
             { name: "Patong Beach", emoji: "🏖️" },
             { name: "Phi Phi Islands", emoji: "🏝️" },
-            { name: "Sunset View", emoji: "🌅" }
+            { name: "Sunset View", emoji: "🌅" },
+            { name: "Longtail Boat", emoji: "⛵" }
         ],
         weather: "28°C 🌊",
-        bestTime: "November - April"
+        bestTime: "November - April",
+        travelTips: "จองทัวร์เกาะล่วงหน้า / Book island tours in advance"
+    },
+    ayutthaya: {
+        name: "พระนครศรีอยุธยา",
+        nameEn: "Ayutthaya",
+        description: "อดีตราชธานีของไทย มรดกโลกที่เต็มไปด้วยซากปรักหักพังของวัดและพระราชวัง",
+        descriptionEn: "Former capital of Thailand, UNESCO World Heritage site with ancient temple ruins and palaces",
+        emoji: "🏺",
+        coordinates: [100.5692, 14.3532],
+        attractions: ["วัดมหาธาตุ", "วัดพระศรีสรรเพชญ์", "วัดชัยวัฒนาราม", "พระราชวังหลวง", "ตลาดน้ำอยุธยา"],
+        attractionsEn: ["Wat Mahathat", "Wat Phra Si Sanphet", "Wat Chaiwatthanaram", "Royal Palace", "Ayutthaya Floating Market"],
+        photos: [
+            { name: "Buddha Head in Tree", emoji: "🌳" },
+            { name: "Ancient Ruins", emoji: "🏛️" },
+            { name: "Temple Complex", emoji: "🕌" },
+            { name: "Historical Site", emoji: "📿" }
+        ],
+        weather: "29°C ☀️",
+        bestTime: "November - February",
+        travelTips: "เช่าจักรยานเที่ยวชมซากปรักหักพัง / Rent bicycles to explore the ruins"
+    },
+    krabi: {
+        name: "กระบี่",
+        nameEn: "Krabi",
+        description: "จังหวัดที่มีธรรมชาติสวยงาม หาดทรายขาว น้ำทะเลใส และหน้าผาปูนขาวที่งดงาม",
+        descriptionEn: "Province with beautiful nature, white sand beaches, crystal clear sea, and stunning limestone cliffs",
+        emoji: "🌊",
+        coordinates: [98.9063, 8.0863],
+        attractions: ["อ่าวไร่เลย์", "เกาะพีพี", "เกาะฮ่องอิสลาม", "ถ้ำพระนาง", "น้ำตกน้ำหยดธรรมชาติ"],
+        attractionsEn: ["Railay Bay", "Phi Phi Islands", "Hong Island", "Phra Nang Cave", "Namtok Namyod Nature"],
+        photos: [
+            { name: "Railay Beach", emoji: "🏖️" },
+            { name: "Rock Climbing", emoji: "🧗" },
+            { name: "Sea Kayaking", emoji: "🛶" },
+            { name: "Limestone Cliffs", emoji: "⛰️" }
+        ],
+        weather: "27°C 🌴",
+        bestTime: "November - April",
+        travelTips: "ลองปีนหน้าผาและพายเรือคายัค / Try rock climbing and sea kayaking"
+    },
+    sukhothai: {
+        name: "สุโขทัย",
+        nameEn: "Sukhothai",
+        description: "อุทยานประวัติศาสตร์สุโขทัย เมืองแรกของไทย มรดกโลกที่อนุรักษ์ซากปรักหักพังโบราณ",
+        descriptionEn: "Sukhothai Historical Park, first capital of Thailand, UNESCO site preserving ancient ruins",
+        emoji: "🏛️",
+        coordinates: [99.8230, 17.0238],
+        attractions: ["วัดมหาธาตุ", "วัดศรีชุม", "วัดสระศรี", "วัดศรีสวาย", "ประตูนาคนาต"],
+        attractionsEn: ["Wat Mahathat", "Wat Sri Chum", "Wat Sa Sri", "Wat Sri Sawai", "Nakonart Gate"],
+        photos: [
+            { name: "Giant Buddha", emoji: "🧘" },
+            { name: "Ancient Pagoda", emoji: "🗼" },
+            { name: "Lotus Pond", emoji: "🪷" },
+            { name: "Historical Park", emoji: "🏞️" }
+        ],
+        weather: "28°C ☀️",
+        bestTime: "November - February",
+        travelTips: "เช่าจักรยานเที่ยวในอุทยาน / Rent a bicycle to tour the historical park"
     },
     europe: {
         name: "ยุโรป",
@@ -70,15 +203,17 @@ const locations = {
         descriptionEn: "Continent of history and art with beautiful architecture and diverse cultures",
         emoji: "🏛️",
         coordinates: [10.0, 54.0],
-        attractions: ["หอไอเฟล", "โคลอสเซี่ยม", "สะพานลอนดอน", "พิพิธภัณฑ์ลูฟร์"],
-        attractionsEn: ["Eiffel Tower", "Colosseum", "Tower Bridge", "Louvre Museum"],
+        attractions: ["หอไอเฟล", "โคลอสเซี่ยม", "สะพานลอนดอน", "พิพิธภัณฑ์ลูฟร์", "พระราชวังวีเมอร์", "บิ๊กเบน"],
+        attractionsEn: ["Eiffel Tower", "Colosseum", "Tower Bridge", "Louvre Museum", "Buckingham Palace", "Big Ben"],
         photos: [
             { name: "Eiffel Tower", emoji: "🗼" },
             { name: "Colosseum", emoji: "🏟️" },
-            { name: "Big Ben", emoji: "🕰️" }
+            { name: "Big Ben", emoji: "🕰️" },
+            { name: "Louvre", emoji: "🖼️" }
         ],
         weather: "15°C 🌤️",
-        bestTime: "April - October"
+        bestTime: "April - October",
+        travelTips: "ซื้อ Eurail Pass สำหรับเดินทางข้ามประเทศ / Get Eurail Pass for cross-country travel"
     },
     america: {
         name: "อเมริกา",
@@ -87,15 +222,17 @@ const locations = {
         descriptionEn: "Land of dreams and opportunities with modern cities and impressive nature",
         emoji: "🗽",
         coordinates: [-95.0, 37.0],
-        attractions: ["เทพีเสรีภาพ", "แกรนด์แคนยอน", "ไทม์สแควร์", "โลกดิสนีย์"],
-        attractionsEn: ["Statue of Liberty", "Grand Canyon", "Times Square", "Disney World"],
+        attractions: ["เทพีเสรีภาพ", "แกรนด์แคนยอน", "ไทม์สแควร์", "โลกดิสนีย์", "โกลเดนเกต", "เยลโลสโตน"],
+        attractionsEn: ["Statue of Liberty", "Grand Canyon", "Times Square", "Disney World", "Golden Gate", "Yellowstone"],
         photos: [
             { name: "Statue of Liberty", emoji: "🗽" },
             { name: "Grand Canyon", emoji: "🏔️" },
-            { name: "Times Square", emoji: "🌃" }
+            { name: "Times Square", emoji: "🌃" },
+            { name: "Golden Gate", emoji: "🌉" }
         ],
         weather: "20°C 🌤️",
-        bestTime: "Year Round"
+        bestTime: "Year Round",
+        travelTips: "วางแผนเดินทางล่วงหน้าเนื่องจากขนาดใหญ่ / Plan trips in advance due to vast distances"
     }
 };
 
@@ -104,13 +241,15 @@ document.addEventListener('DOMContentLoaded', function() {
     showLoadingSpinner();
     initializeEnhanced3D();
     initializeTheme();
+    initializeLanguage();
     initializeSearch();
     initializeFavorites();
     initializeKeyboardNavigation();
     initializeFontLoading();
     updateWeatherInfo();
+    updateInterfaceLanguage();
     setTimeout(hideLoadingSpinner, 1000);
-    updateStatus('🌍 สร้างโลก 3D ปรับปรุงแล้วสำเร็จ!', '🌍 Enhanced 3D Globe created successfully!');
+    updateStatus(getText('globeCreated'), getText('globeCreated'));
     console.log('🗺️ PaiNaiDee Enhanced 3D Map loaded successfully!');
 });
 
@@ -141,7 +280,109 @@ function hideLoadingSpinner() {
     }
 }
 
-// Theme management
+// Language management
+function initializeLanguage() {
+    const languageToggle = document.getElementById('languageToggle');
+    const languageIcon = document.getElementById('languageIcon');
+    
+    // Set initial language icon
+    languageIcon.textContent = userPreferences.language === 'th' ? '🇬🇧' : '🇹🇭';
+    
+    languageToggle.addEventListener('click', toggleLanguage);
+}
+
+function toggleLanguage() {
+    const currentLang = userPreferences.language;
+    const newLang = currentLang === 'th' ? 'en' : 'th';
+    const languageIcon = document.getElementById('languageIcon');
+    
+    userPreferences.language = newLang;
+    localStorage.setItem('painaidee-preferences', JSON.stringify(userPreferences));
+    
+    // Update language icon
+    languageIcon.textContent = newLang === 'th' ? '🇬🇧' : '🇹🇭';
+    
+    // Update interface language
+    updateInterfaceLanguage();
+    
+    showNotification(
+        newLang === 'th' ? 'เปลี่ยนเป็นภาษาไทยแล้ว' : 'Changed to English',
+        'info'
+    );
+}
+
+function updateInterfaceLanguage() {
+    // Update static text elements
+    const infoPanel = document.querySelector('.info-panel');
+    if (infoPanel) {
+        const welcomeText = infoPanel.querySelector('p strong');
+        if (welcomeText) {
+            welcomeText.textContent = getText('welcome');
+        }
+        
+        const descriptionTexts = infoPanel.querySelectorAll('.info-stats p');
+        if (descriptionTexts.length >= 3) {
+            descriptionTexts[0].innerHTML = `📍 ${getText('showing')}`;
+            descriptionTexts[1].innerHTML = `🎮 ${getText('clickGold')}`;
+            descriptionTexts[2].innerHTML = `🌍 ${getText('autoRotate')}`;
+        }
+    }
+    
+    // Update search placeholder
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.placeholder = `🔍 ${getText('searchPlaceholder')}`;
+    }
+    
+    // Update controls heading
+    const controlsHeading = document.querySelector('.controls h3');
+    if (controlsHeading) {
+        controlsHeading.textContent = `🧭 ${getText('attractions')}`;
+    }
+    
+    // Update button texts
+    updateButtonTexts();
+    
+    // Update favorites section if visible
+    const favoritesHeading = document.querySelector('.favorites-section h4');
+    if (favoritesHeading) {
+        favoritesHeading.textContent = `⭐ ${getText('favorites')}`;
+    }
+}
+
+function updateButtonTexts() {
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+        const text = button.textContent.trim();
+        
+        // Update location buttons based on current language
+        if (text.includes('กรุงเทพฯ') || text.includes('Bangkok')) {
+            const location = locations.bangkok;
+            button.textContent = `🏛️ ${getCurrentLocationName(location)}`;
+        } else if (text.includes('เชียงใหม่') || text.includes('Chiang Mai')) {
+            const location = locations.chiangmai;
+            button.textContent = `🏔️ ${getCurrentLocationName(location)}`;
+        } else if (text.includes('ภูเก็ต') || text.includes('Phuket')) {
+            const location = locations.phuket;
+            button.textContent = `🏝️ ${getCurrentLocationName(location)}`;
+        } else if (text.includes('อยุธยา') || text.includes('Ayutthaya')) {
+            const location = locations.ayutthaya;
+            button.textContent = `🏺 ${getCurrentLocationName(location)}`;
+        } else if (text.includes('กระบี่') || text.includes('Krabi')) {
+            const location = locations.krabi;
+            button.textContent = `🌊 ${getCurrentLocationName(location)}`;
+        } else if (text.includes('สุโขทัย') || text.includes('Sukhothai')) {
+            const location = locations.sukhothai;
+            button.textContent = `🏛️ ${getCurrentLocationName(location)}`;
+        } else if (text.includes('โลก') || text.includes('World')) {
+            button.textContent = `🌍 ${getText('world')}`;
+        } else if (text.includes('หยุด/เล่น') || text.includes('Stop/Play')) {
+            button.textContent = `⏸️ ${getText('stopPlay')}`;
+        } else if (text.includes('เร็ว/ช้า') || text.includes('Fast/Slow')) {
+            button.textContent = `⚡ ${getText('fastSlow')}`;
+        }
+    });
+}
 function initializeTheme() {
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
@@ -331,12 +572,17 @@ function addMarkerClickHandling() {
             if (location && locations[location]) {
                 // Temporarily stabilize the marker
                 marker.style.animation = 'none';
+                marker.style.transform = 'scale(1.2)';
+                marker.style.zIndex = '300';
+                
                 setTimeout(() => {
-                    marker.style.animation = '';
-                }, 1000);
+                    marker.style.transform = '';
+                    marker.style.zIndex = '100';
+                    marker.style.animation = 'markerPulse 2s ease-in-out infinite';
+                }, 800);
                 
                 showInfo(location);
-                updateStatus(`🎯 เปิดข้อมูล: ${locations[location].name}`, `🎯 Opening info: ${locations[location].nameEn}`);
+                updateStatus(`🎯 ${getText('description')}: ${getCurrentLocationName(locations[location])}`, `🎯 Opening info: ${getCurrentLocationName(locations[location])}`);
             }
         }
     });
@@ -347,6 +593,7 @@ function addMarkerClickHandling() {
         if (marker) {
             marker.style.transform = 'scale(1.3)';
             marker.style.zIndex = '200';
+            marker.style.animation = 'none'; // Stop animation on hover for stability
         }
     });
     
@@ -355,6 +602,7 @@ function addMarkerClickHandling() {
         if (marker) {
             marker.style.transform = '';
             marker.style.zIndex = '100';
+            marker.style.animation = 'markerPulse 2s ease-in-out infinite'; // Resume animation
         }
     });
 }
@@ -495,13 +743,13 @@ function displaySearchResults(filteredLocations) {
     searchResults.innerHTML = '';
     
     if (filteredLocations.length === 0) {
-        searchResults.innerHTML = '<div class="search-result-item">ไม่พบผลลัพธ์ / No results found</div>';
+        searchResults.innerHTML = `<div class="search-result-item">${getText('noResults')}</div>`;
     } else {
         filteredLocations.forEach(key => {
             const location = locations[key];
             const item = document.createElement('div');
             item.className = 'search-result-item';
-            item.innerHTML = `${location.emoji} ${location.name} (${location.nameEn})`;
+            item.innerHTML = `${location.emoji} ${getCurrentLocationName(location)}`;
             item.addEventListener('click', () => {
                 focusLocation(key);
                 searchResults.style.display = 'none';
@@ -525,10 +773,10 @@ function toggleFavorite(locationKey) {
     
     if (index === -1) {
         favorites.push(locationKey);
-        showNotification('เพิ่มในรายการโปรดแล้ว! Added to favorites!', 'success');
+        showNotification(getText('addedFavorite'), 'success');
     } else {
         favorites.splice(index, 1);
-        showNotification('ลบออกจากรายการโปรดแล้ว! Removed from favorites!', 'info');
+        showNotification(getText('removedFavorite'), 'info');
     }
     
     localStorage.setItem('painaidee-favorites', JSON.stringify(favorites));
@@ -662,17 +910,26 @@ function handleKeyboardNavigation(e) {
         return;
     }
     
-    // Number keys for quick location access
+    // Number keys for quick location access - Enhanced with new destinations
     const locationKeys = {
         '1': 'bangkok',
         '2': 'chiangmai', 
         '3': 'phuket',
-        '4': 'world'
+        '4': 'ayutthaya',
+        '5': 'krabi',
+        '6': 'sukhothai',
+        '7': 'europe',
+        '8': 'america',
+        '9': 'world'
     };
     
     if (locationKeys[e.key]) {
         focusLocation(locationKeys[e.key]);
-        showNotification(`🎯 ไปยัง: ${locations[locationKeys[e.key]]?.name || 'โลก'} / Going to: ${locations[locationKeys[e.key]]?.nameEn || 'World'}`, 'info');
+        const locationName = locations[locationKeys[e.key]] ? getCurrentLocationName(locations[locationKeys[e.key]]) : getText('world');
+        showNotification(
+            userPreferences.language === 'th' ? `🎯 ไปยัง: ${locationName}` : `🎯 Going to: ${locationName}`,
+            'info'
+        );
         return;
     }
     
@@ -741,31 +998,47 @@ function showInfo(location) {
     
     if (!modal || !modalTitle || !modalBody || !modalGallery) {
         // Fallback to alert if modal elements don't exist
-        const attractions = info.attractions ? `\n\n🎯 สถานที่น่าสนใจ:\n${info.attractions.join(', ')}` : '';
-        const message = `${info.emoji} ${info.name} (${info.nameEn})\n\n📍 ${info.description}\n🌍 ${info.descriptionEn}${attractions}`;
+        const attractions = info.attractions ? `\n\n🎯 ${getText('attractionsTitle')}:\n${info.attractions.join(', ')}` : '';
+        const message = `${info.emoji} ${getCurrentLocationName(info)}\n\n📍 ${getCurrentLocationDescription(info)}${attractions}`;
         alert(message);
         focusLocation(location);
         return;
     }
     
-    modalTitle.textContent = `${info.emoji} ${info.name} (${info.nameEn})`;
+    modalTitle.textContent = `${info.emoji} ${getCurrentLocationName(info)}`;
+    
+    // Calculate distance from Bangkok (reference point)
+    let distanceInfo = '';
+    if (location !== 'bangkok' && locations.bangkok && info.coordinates) {
+        const distance = calculateDistance(
+            locations.bangkok.coordinates[1], locations.bangkok.coordinates[0],
+            info.coordinates[1], info.coordinates[0]
+        );
+        distanceInfo = `
+            <div class="distance-info" style="background: var(--card-bg); padding: var(--spacing-md); border-radius: var(--radius-lg); margin: var(--spacing-md) 0;">
+                <p><strong>📏 ${getText('distance')} ${getText('description')} ${locations.bangkok.name}:</strong> ${distance} ${getText('km')}</p>
+            </div>
+        `;
+    }
     
     modalBody.innerHTML = `
         <div class="location-details">
-            <p><strong>📍 คำอธิบาย / Description:</strong></p>
-            <p>${info.description}</p>
-            <p><em>${info.descriptionEn}</em></p>
+            <p><strong>📍 ${getText('description')}:</strong></p>
+            <p>${getCurrentLocationDescription(info)}</p>
             
-            <p><strong>🎯 สถานที่น่าสนใจ / Attractions:</strong></p>
+            ${distanceInfo}
+            
+            <p><strong>🎯 ${getText('attractionsTitle')}:</strong></p>
             <ul>
                 ${info.attractions ? info.attractions.map((attraction, index) => 
-                    `<li>${attraction}${info.attractionsEn && info.attractionsEn[index] ? ` (${info.attractionsEn[index]})` : ''}</li>`
-                ).join('') : '<li>ข้อมูลสถานที่ท่องเที่ยว / Tourist information coming soon</li>'}
+                    `<li>${getCurrentAttractionName(info, index)}</li>`
+                ).join('') : `<li>${getText('noResults')}</li>`}
             </ul>
             
-            <div class="weather-info">
-                <p><strong>🌤️ สภาพอากาศ / Weather:</strong> ${info.weather || 'N/A'}</p>
-                <p><strong>📅 ช่วงเวลาที่เหมาะสม / Best Time:</strong> ${info.bestTime || 'Year Round'}</p>
+            <div class="weather-info" style="background: var(--card-bg); padding: var(--spacing-md); border-radius: var(--radius-lg); margin: var(--spacing-md) 0;">
+                <p><strong>🌤️ ${getText('weather')}:</strong> ${info.weather || 'N/A'}</p>
+                <p><strong>📅 ${getText('bestTime')}:</strong> ${info.bestTime || 'Year Round'}</p>
+                ${info.travelTips ? `<p><strong>💡 ${getText('travelTips')}:</strong> ${info.travelTips}</p>` : ''}
             </div>
         </div>
     `;
@@ -779,7 +1052,7 @@ function showInfo(location) {
             </div>
         `).join('');
     } else {
-        modalGallery.innerHTML = '<p>🖼️ ภาพประกอบจะมาเร็วๆ นี้ / Photos coming soon</p>';
+        modalGallery.innerHTML = `<p>🖼️ ${userPreferences.language === 'th' ? 'ภาพประกอบจะมาเร็วๆ นี้' : 'Photos coming soon'}</p>`;
     }
     
     modal.style.display = 'flex';
@@ -788,19 +1061,37 @@ function showInfo(location) {
     // Focus location on map
     focusLocation(location);
     
-    // Add click effect to marker with improved handling
+    // Stabilize marker click with improved handling
     const marker = document.querySelector(`.marker.${location}`);
     if (marker) {
-        // Temporarily pause the animation for stable interaction
-        marker.style.animationPlayState = 'paused';
-        marker.style.transform = 'scale(2)';
+        // Stop animation temporarily for stable interaction
+        marker.style.animation = 'none';
+        marker.style.transform = 'scale(1.5)';
+        marker.style.zIndex = '300';
         setTimeout(() => {
-            marker.style.transform = 'scale(1)';
-            marker.style.animationPlayState = 'running';
-        }, 500);
+            marker.style.transform = '';
+            marker.style.zIndex = '100';
+            marker.style.animation = 'markerPulse 2s ease-in-out infinite';
+        }, 1000);
     }
     
-    updateStatus(`📍 กำลังดู: ${info.name}`, `📍 Viewing: ${info.nameEn}`);
+    updateStatus(`📍 ${getText('description')}: ${getCurrentLocationName(info)}`, `📍 Viewing: ${getCurrentLocationName(info)}`);
+}
+
+// Helper functions for multilingual support
+function getCurrentLocationName(info) {
+    return userPreferences.language === 'en' ? info.nameEn : info.name;
+}
+
+function getCurrentLocationDescription(info) {
+    return userPreferences.language === 'en' ? info.descriptionEn : info.description;
+}
+
+function getCurrentAttractionName(info, index) {
+    if (userPreferences.language === 'en' && info.attractionsEn && info.attractionsEn[index]) {
+        return info.attractionsEn[index];
+    }
+    return info.attractions[index];
 }
 
 function closeModal() {
