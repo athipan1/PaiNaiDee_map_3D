@@ -110,11 +110,10 @@ body {
     transition: background var(--transition-normal);
 }
 
-/* Theme toggle button */
-.theme-toggle {
+/* Theme and Language toggle buttons */
+.theme-toggle, .language-toggle {
     position: fixed;
     top: var(--spacing-lg);
-    right: var(--spacing-lg);
     z-index: var(--z-modal);
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
@@ -128,7 +127,15 @@ body {
     box-shadow: 0 8px 32px var(--shadow-color);
 }
 
-.theme-toggle:hover {
+.theme-toggle {
+    right: var(--spacing-lg);
+}
+
+.language-toggle {
+    right: calc(var(--spacing-lg) + 80px);
+}
+
+.theme-toggle:hover, .language-toggle:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 40px var(--shadow-color);
 }
@@ -511,7 +518,7 @@ button:focus {
         0 0 0 3px var(--accent-color);
 }
 
-/* Enhanced marker positioning based on coordinates */
+/* Enhanced marker positioning for all Thai destinations */
 .marker.bangkok {
     top: 40%;
     left: 65%;
@@ -530,16 +537,34 @@ button:focus {
     animation-delay: 1s;
 }
 
+.marker.ayutthaya {
+    top: 38%;
+    left: 64%;
+    animation-delay: 1.5s;
+}
+
+.marker.krabi {
+    top: 52%;
+    left: 62%;
+    animation-delay: 2s;
+}
+
+.marker.sukhothai {
+    top: 33%;
+    left: 64%;
+    animation-delay: 2.5s;
+}
+
 .marker.europe {
     top: 25%;
     left: 48%;
-    animation-delay: 1.5s;
+    animation-delay: 3s;
 }
 
 .marker.america {
     top: 30%;
     left: 25%;
-    animation-delay: 2s;
+    animation-delay: 3.5s;
 }
 
 .marker:hover {
@@ -825,6 +850,11 @@ button:focus {
     .theme-toggle {
         top: var(--spacing-md);
         right: var(--spacing-md);
+    }
+    
+    .language-toggle {
+        top: var(--spacing-md);
+        right: calc(var(--spacing-md) + 60px);
     }
     
     .button-row {
