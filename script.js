@@ -220,23 +220,7 @@ function createRippleEffect(e) {
     updateStatus('🎯 สำรวจพื้นผิวโลก!', '🎯 Exploring Earth surface!');
 }
 
-// Add ripple animation to CSS dynamically
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes rippleExpand {
-        0% {
-            width: 4px;
-            height: 4px;
-            opacity: 1;
-        }
-        100% {
-            width: 60px;
-            height: 60px;
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
+// Dynamic styles will be added at the end of the file to avoid conflicts
 
 function toggleRotation() {
     isRotating = !isRotating;
@@ -321,9 +305,22 @@ function initializeMap() {
     updateStatus('🌍 สร้างโลก 3D ปรับปรุงแล้วสำเร็จ!', '🌍 Enhanced 3D Globe created successfully!');
 }
 
-// Add additional CSS for marker focus animation
-const additionalStyle = document.createElement('style');
-additionalStyle.textContent = `
+// Add all dynamic CSS animations in a single style element to avoid conflicts
+const consolidatedStyle = document.createElement('style');
+consolidatedStyle.textContent = `
+    @keyframes rippleExpand {
+        0% {
+            width: 4px;
+            height: 4px;
+            opacity: 1;
+        }
+        100% {
+            width: 60px;
+            height: 60px;
+            opacity: 0;
+        }
+    }
+    
     @keyframes markerFocus {
         0%, 100% { 
             transform: scale(1);
@@ -338,7 +335,7 @@ additionalStyle.textContent = `
         transition: transform 0.2s ease;
     }
 `;
-document.head.appendChild(additionalStyle);
+document.head.appendChild(consolidatedStyle);
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeMap);
