@@ -302,6 +302,47 @@
                 <div class="route-result" id="routeResult" style="display: none;"></div>
             </div>
             
+            <!-- Location Comparison Feature -->
+            <div class="comparison-section" id="comparisonSection">
+                <h4>⚖️ เปรียบเทียบสถานที่ / Location Comparison</h4>
+                <div class="comparison-controls">
+                    <select id="compareLocation1" class="route-select">
+                        <option value="">เลือกสถานที่ที่ 1 / Select Location 1</option>
+                        <option value="bangkok">🏛️ กรุงเทพฯ</option>
+                        <option value="chiangmai">🏔️ เชียงใหม่</option>
+                        <option value="phuket">🏝️ ภูเก็ต</option>
+                        <option value="ayutthaya">🏺 อยุธยา</option>
+                        <option value="krabi">🌊 กระบี่</option>
+                        <option value="sukhothai">🏛️ สุโขทัย</option>
+                        <option value="chonburi">🏖️ ชลบุรี</option>
+                        <option value="kanchanaburi">🌉 กาญจนบุรี</option>
+                        <option value="lopburi">🐵 ลพบุรี</option>
+                        <option value="huahin">🏖️ หัวหิน</option>
+                        <option value="kohsamui">🥥 เกาะสมุย</option>
+                        <option value="chiangrai">⛩️ เชียงราย</option>
+                        <option value="pattaya">🌃 พัทยา</option>
+                    </select>
+                    <select id="compareLocation2" class="route-select">
+                        <option value="">เลือกสถานที่ที่ 2 / Select Location 2</option>
+                        <option value="bangkok">🏛️ กรุงเทพฯ</option>
+                        <option value="chiangmai">🏔️ เชียงใหม่</option>
+                        <option value="phuket">🏝️ ภูเก็ต</option>
+                        <option value="ayutthaya">🏺 อยุธยา</option>
+                        <option value="krabi">🌊 กระบี่</option>
+                        <option value="sukhothai">🏛️ สุโขทัย</option>
+                        <option value="chonburi">🏖️ ชลบุรี</option>
+                        <option value="kanchanaburi">🌉 กาญจนบุรี</option>
+                        <option value="lopburi">🐵 ลพบุรี</option>
+                        <option value="huahin">🏖️ หัวหิน</option>
+                        <option value="kohsamui">🥥 เกาะสมุย</option>
+                        <option value="chiangrai">⛩️ เชียงราย</option>
+                        <option value="pattaya">🌃 พัทยา</option>
+                    </select>
+                    <button onclick="compareLocations()" class="route-btn">⚖️ เปรียบเทียบ</button>
+                </div>
+                <div class="comparison-result" id="comparisonResult" style="display: none;"></div>
+            </div>
+            
             <!-- Favorites section -->
             <div class="favorites-section" id="favoritesSection" style="display: none;">
                 <h4>⭐ รายการโปรด / Favorites</h4>

@@ -1457,6 +1457,9 @@ function displayTripPlan(tripPlan) {
         `;
     });
     
+    // Enhanced budget breakdown
+    const budgetBreakdown = calculateDetailedBudget(tripPlan);
+    
     itineraryHTML += `
         <div class="trip-summary">
             <h5>${isThaiLang ? '📊 สรุปการเดินทาง' : '📊 Trip Summary'}</h5>
@@ -1466,11 +1469,101 @@ function displayTripPlan(tripPlan) {
                 <div><strong>${isThaiLang ? 'ระยะทาง:' : 'Total Distance:'}</strong> ${tripPlan.totalDistance}km</div>
                 <div><strong>${isThaiLang ? 'ค่าใช้จ่าย:' : 'Est. Cost:'}</strong> ฿${tripPlan.totalCost.toLocaleString()}</div>
             </div>
+            
+            <div class="budget-breakdown">
+                <h6>${isThaiLang ? '💰 รายละเอียดค่าใช้จ่าย' : '💰 Detailed Budget Breakdown'}</h6>
+                <div class="budget-items">
+                    <div class="budget-item">
+                        <span>🚗 ${isThaiLang ? 'การเดินทาง' : 'Transportation'}:</span>
+                        <span>฿${budgetBreakdown.transportation.toLocaleString()}</span>
+                    </div>
+                    <div class="budget-item">
+                        <span>🏨 ${isThaiLang ? 'ที่พัก' : 'Accommodation'}:</span>
+                        <span>฿${budgetBreakdown.accommodation.toLocaleString()}</span>
+                    </div>
+                    <div class="budget-item">
+                        <span>🍽️ ${isThaiLang ? 'อาหาร' : 'Food & Dining'}:</span>
+                        <span>฿${budgetBreakdown.food.toLocaleString()}</span>
+                    </div>
+                    <div class="budget-item">
+                        <span>🎯 ${isThaiLang ? 'กิจกรรม' : 'Activities'}:</span>
+                        <span>฿${budgetBreakdown.activities.toLocaleString()}</span>
+                    </div>
+                    <div class="budget-item">
+                        <span>🛍️ ${isThaiLang ? 'ช้อปปิ้ง' : 'Shopping'}:</span>
+                        <span>฿${budgetBreakdown.shopping.toLocaleString()}</span>
+                    </div>
+                    <div class="budget-item total-budget">
+                        <span><strong>${isThaiLang ? 'รวมทั้งหมด' : 'Total'}:</strong></span>
+                        <span><strong>฿${budgetBreakdown.total.toLocaleString()}</strong></span>
+                    </div>
+                </div>
+                
+                <div class="budget-tips">
+                    <h6>${isThaiLang ? '💡 เคล็ดลับประหยัด' : '💡 Money Saving Tips'}</h6>
+                    <ul>
+                        <li>${isThaiLang ? 'จองล่วงหน้าเพื่อราคาดีกว่า' : 'Book in advance for better prices'}</li>
+                        <li>${isThaiLang ? 'ใช้ระบบขนส่งสาธารณะ' : 'Use public transportation'}</li>
+                        <li>${isThaiLang ? 'ลองอาหารท้องถิ่น' : 'Try local street food'}</li>
+                        <li>${isThaiLang ? 'เปรียบเทียบราคาที่พัก' : 'Compare accommodation prices'}</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     `;
     
     tripResult.innerHTML = itineraryHTML;
     tripResult.style.display = 'block';
+}
+
+// Enhanced budget calculation with detailed breakdown
+function calculateDetailedBudget(tripPlan) {
+    const days = tripPlan.totalDays;
+    
+    // Budget categories per person per day (in THB)
+    const dailyRates = {
+        accommodation: {
+            budget: 800,      // Hostels, budget hotels
+            mid: 2000,        // Mid-range hotels
+            luxury: 5000      // Luxury hotels
+        },
+        food: {
+            budget: 500,      // Street food, local restaurants
+            mid: 1200,        // Nice restaurants
+            luxury: 2500      // Fine dining
+        },
+        activities: {
+            budget: 300,      // Free/cheap activities
+            mid: 800,         // Tours, attractions
+            luxury: 2000      // Premium experiences
+        },
+        shopping: {
+            budget: 200,      // Souvenirs
+            mid: 800,         // Shopping
+            luxury: 2000      // Luxury shopping
+        }
+    };
+    
+    // Determine budget level based on total destinations (more destinations = higher budget)
+    const budgetLevel = tripPlan.totalDestinations <= 2 ? 'budget' : 
+                       tripPlan.totalDestinations <= 4 ? 'mid' : 'luxury';
+    
+    const accommodation = dailyRates.accommodation[budgetLevel] * days;
+    const food = dailyRates.food[budgetLevel] * days;
+    const activities = dailyRates.activities[budgetLevel] * days;
+    const shopping = dailyRates.shopping[budgetLevel] * days;
+    const transportation = tripPlan.totalCost; // Already calculated transportation cost
+    
+    const total = accommodation + food + activities + shopping + transportation;
+    
+    return {
+        transportation,
+        accommodation,
+        food,
+        activities,
+        shopping,
+        total
+    };
 }
 
 // Animate through trip destinations on the globe
@@ -1598,6 +1691,338 @@ function displayRoute(route) {
     `;
     
     routeResult.style.display = 'block';
+    
+    // Add visual route line on the globe
+    addRouteVisualization(route.from, route.to);
+}
+
+// New function to add visual route lines on the globe
+function addRouteVisualization(fromLocation, toLocation) {
+    // Remove any existing route lines
+    clearRouteLines();
+    
+    // Find location keys
+    const fromKey = Object.keys(locations).find(key => locations[key] === fromLocation);
+    const toKey = Object.keys(locations).find(key => locations[key] === toLocation);
+    
+    // Get marker elements
+    const fromMarker = document.querySelector(`.marker.${fromKey}`);
+    const toMarker = document.querySelector(`.marker.${toKey}`);
+    
+    if (!fromMarker || !toMarker) return;
+    
+    // Get globe container
+    const globe = document.querySelector('.globe-sphere');
+    if (!globe) return;
+    
+    // Create route line container
+    const routeContainer = document.createElement('div');
+    routeContainer.className = 'route-container';
+    routeContainer.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 50;
+    `;
+    
+    // Create animated route line
+    const routeLine = document.createElement('div');
+    routeLine.className = 'route-line';
+    
+    // Get marker positions (from CSS positioning)
+    const fromStyle = window.getComputedStyle(fromMarker);
+    const toStyle = window.getComputedStyle(toMarker);
+    
+    const fromX = parseFloat(fromStyle.left);
+    const fromY = parseFloat(fromStyle.top);
+    const toX = parseFloat(toStyle.left);
+    const toY = parseFloat(toStyle.top);
+    
+    // Calculate distance and angle
+    const deltaX = toX - fromX;
+    const deltaY = toY - fromY;
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+    
+    // Style the route line
+    routeLine.style.cssText = `
+        position: absolute;
+        left: ${fromX}%;
+        top: ${fromY}%;
+        width: ${distance}%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent-color), #FFD700, var(--accent-color));
+        transform: rotate(${angle}deg);
+        transform-origin: left center;
+        border-radius: 2px;
+        animation: routeGlow 2s ease-in-out infinite, routePulse 3s ease-in-out infinite;
+        box-shadow: 0 0 10px var(--accent-color);
+    `;
+    
+    // Add travel direction arrow
+    const arrow = document.createElement('div');
+    arrow.className = 'route-arrow';
+    arrow.style.cssText = `
+        position: absolute;
+        right: -8px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-left: 8px solid var(--accent-color);
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        animation: arrowBlink 1.5s ease-in-out infinite;
+    `;
+    
+    routeLine.appendChild(arrow);
+    routeContainer.appendChild(routeLine);
+    globe.appendChild(routeContainer);
+    
+    // Auto-remove route line after 10 seconds
+    setTimeout(() => {
+        clearRouteLines();
+    }, 10000);
+}
+
+// Function to clear existing route lines
+function clearRouteLines() {
+    const globe = document.querySelector('.globe-sphere');
+    if (globe) {
+        const existingRoutes = globe.querySelectorAll('.route-container');
+        existingRoutes.forEach(route => route.remove());
+    }
+}
+
+// Enhanced Location Comparison Feature
+function compareLocations() {
+    const location1Key = document.getElementById('compareLocation1').value;
+    const location2Key = document.getElementById('compareLocation2').value;
+    const comparisonResult = document.getElementById('comparisonResult');
+    
+    if (!location1Key || !location2Key) {
+        showNotification(
+            userPreferences.language === 'th' ? 'กรุณาเลือกสถานที่ 2 แห่งเพื่อเปรียบเทียบ' : 'Please select 2 locations to compare',
+            'warning'
+        );
+        return;
+    }
+    
+    if (location1Key === location2Key) {
+        showNotification(
+            userPreferences.language === 'th' ? 'กรุณาเลือกสถานที่ที่แตกต่างกัน' : 'Please select different locations',
+            'warning'
+        );
+        return;
+    }
+    
+    const location1 = locations[location1Key];
+    const location2 = locations[location2Key];
+    const isThaiLang = userPreferences.language === 'th';
+    
+    // Calculate distance between locations
+    const distance = location1.coordinates && location2.coordinates ? 
+        calculateDistance(
+            location1.coordinates[1], location1.coordinates[0],
+            location2.coordinates[1], location2.coordinates[0]
+        ) : 'N/A';
+    
+    // Generate comparison data
+    const comparison = generateLocationComparison(location1, location2);
+    
+    const comparisonHTML = `
+        <h5>${isThaiLang ? '⚖️ เปรียบเทียบสถานที่' : '⚖️ Location Comparison'}</h5>
+        
+        <div class="comparison-cards">
+            <div class="comparison-card">
+                <div class="location-header">
+                    <h6>${location1.emoji} ${isThaiLang ? location1.name : location1.nameEn}</h6>
+                </div>
+                <div class="comparison-details">
+                    <div class="detail-item">
+                        <span class="detail-label">${isThaiLang ? 'สภาพอากาศ:' : 'Weather:'}</span>
+                        <span>${location1.weather || 'N/A'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">${isThaiLang ? 'ช่วงเวลาที่ดี:' : 'Best Time:'}</span>
+                        <span>${location1.bestTime || 'N/A'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">${isThaiLang ? 'สถานที่ท่องเที่ยว:' : 'Attractions:'}</span>
+                        <span>${location1.attractions ? location1.attractions.length : 0} ${isThaiLang ? 'แห่ง' : 'places'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">${isThaiLang ? 'ประเภท:' : 'Type:'}</span>
+                        <span>${comparison.location1.type}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">${isThaiLang ? 'ค่าใช้จ่าย:' : 'Cost Level:'}</span>
+                        <span>${comparison.location1.costLevel}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="vs-divider">
+                <div class="vs-circle">VS</div>
+                <div class="distance-info">
+                    📏 ${distance !== 'N/A' ? distance + ' km' : 'N/A'}
+                </div>
+            </div>
+            
+            <div class="comparison-card">
+                <div class="location-header">
+                    <h6>${location2.emoji} ${isThaiLang ? location2.name : location2.nameEn}</h6>
+                </div>
+                <div class="comparison-details">
+                    <div class="detail-item">
+                        <span class="detail-label">${isThaiLang ? 'สภาพอากาศ:' : 'Weather:'}</span>
+                        <span>${location2.weather || 'N/A'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">${isThaiLang ? 'ช่วงเวลาที่ดี:' : 'Best Time:'}</span>
+                        <span>${location2.bestTime || 'N/A'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">${isThaiLang ? 'สถานที่ท่องเที่ยว:' : 'Attractions:'}</span>
+                        <span>${location2.attractions ? location2.attractions.length : 0} ${isThaiLang ? 'แห่ง' : 'places'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">${isThaiLang ? 'ประเภท:' : 'Type:'}</span>
+                        <span>${comparison.location2.type}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">${isThaiLang ? 'ค่าใช้จ่าย:' : 'Cost Level:'}</span>
+                        <span>${comparison.location2.costLevel}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="comparison-summary">
+            <h6>${isThaiLang ? '💡 คำแนะนำ' : '💡 Recommendations'}</h6>
+            <div class="recommendation-list">
+                ${comparison.recommendations.map(rec => `<div class="recommendation-item">• ${rec}</div>`).join('')}
+            </div>
+        </div>
+    `;
+    
+    comparisonResult.innerHTML = comparisonHTML;
+    comparisonResult.style.display = 'block';
+    
+    // Visual feedback: highlight compared locations on globe
+    highlightComparedLocations(location1Key, location2Key);
+    
+    showNotification(
+        isThaiLang ? 'เปรียบเทียบสถานที่เสร็จแล้ว!' : 'Location comparison completed!',
+        'success'
+    );
+}
+
+// Generate comparison data with recommendations
+function generateLocationComparison(loc1, loc2) {
+    const isThaiLang = userPreferences.language === 'th';
+    
+    // Categorize locations
+    const categorizeLocation = (location) => {
+        const name = location.name.toLowerCase();
+        if (name.includes('กรุงเทพ') || name.includes('bangkok')) {
+            return {
+                type: isThaiLang ? 'เมืองหลวง/วัฒนธรรม' : 'Capital/Cultural',
+                costLevel: isThaiLang ? 'ปานกลาง-สูง' : 'Medium-High'
+            };
+        } else if (name.includes('ภูเก็ต') || name.includes('กระบี่') || name.includes('เกาะสมุย')) {
+            return {
+                type: isThaiLang ? 'ชายทะเล/เกาะ' : 'Beach/Island',
+                costLevel: isThaiLang ? 'สูง' : 'High'
+            };
+        } else if (name.includes('เชียงใหม่') || name.includes('เชียงราย')) {
+            return {
+                type: isThaiLang ? 'ภูเขา/ธรรมชาติ' : 'Mountain/Nature',
+                costLevel: isThaiLang ? 'ปานกลาง' : 'Medium'
+            };
+        } else if (name.includes('อยุธยา') || name.includes('สุโขทัย')) {
+            return {
+                type: isThaiLang ? 'ประวัติศาสตร์' : 'Historical',
+                costLevel: isThaiLang ? 'ต่ำ-ปานกลาง' : 'Low-Medium'
+            };
+        } else {
+            return {
+                type: isThaiLang ? 'ทั่วไป' : 'General',
+                costLevel: isThaiLang ? 'ปานกลาง' : 'Medium'
+            };
+        }
+    };
+    
+    const cat1 = categorizeLocation(loc1);
+    const cat2 = categorizeLocation(loc2);
+    
+    // Generate recommendations
+    const recommendations = [];
+    
+    if (cat1.type !== cat2.type) {
+        recommendations.push(
+            isThaiLang ? 'สถานที่ทั้งสองแห่งมีลักษณะแตกต่างกัน เหมาะสำหรับการเดินทางที่หลากหลาย' :
+            'These locations offer different experiences, perfect for diverse travel'
+        );
+    }
+    
+    if (loc1.attractions && loc2.attractions) {
+        if (loc1.attractions.length > loc2.attractions.length) {
+            recommendations.push(
+                isThaiLang ? `${loc1.name} มีสถานที่ท่องเที่ยวมากกว่า` :
+                `${loc1.nameEn} has more attractions to visit`
+            );
+        } else if (loc2.attractions.length > loc1.attractions.length) {
+            recommendations.push(
+                isThaiLang ? `${loc2.name} มีสถานที่ท่องเที่ยวมากกว่า` :
+                `${loc2.nameEn} has more attractions to visit`
+            );
+        }
+    }
+    
+    recommendations.push(
+        isThaiLang ? 'แนะนำให้ตรวจสอบสภาพอากาศก่อนเดินทาง' :
+        'Check weather conditions before traveling'
+    );
+    
+    if (cat1.costLevel !== cat2.costLevel) {
+        recommendations.push(
+            isThaiLang ? 'ระดับค่าใช้จ่ายแตกต่างกัน แนะนำให้วางแผนงบประมาณ' :
+            'Different cost levels - plan your budget accordingly'
+        );
+    }
+    
+    return {
+        location1: cat1,
+        location2: cat2,
+        recommendations
+    };
+}
+
+// Highlight compared locations on the globe
+function highlightComparedLocations(loc1Key, loc2Key) {
+    // Clear any existing highlights
+    document.querySelectorAll('.marker').forEach(marker => {
+        marker.classList.remove('comparison-highlight');
+    });
+    
+    // Add highlight to compared locations
+    const marker1 = document.querySelector(`.marker.${loc1Key}`);
+    const marker2 = document.querySelector(`.marker.${loc2Key}`);
+    
+    if (marker1 && marker2) {
+        marker1.classList.add('comparison-highlight');
+        marker2.classList.add('comparison-highlight');
+        
+        // Remove highlights after 5 seconds
+        setTimeout(() => {
+            marker1.classList.remove('comparison-highlight');
+            marker2.classList.remove('comparison-highlight');
+        }, 5000);
+    }
 }
 
 // Enhanced modal system for location information
