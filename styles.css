@@ -1,0 +1,218 @@
+/* PaiNaiDee 3D Map Styles */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    overflow: hidden;
+}
+
+#mapContainer {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: linear-gradient(to bottom, #87CEEB 0%, #98FB98 50%, #8FBC8F 100%);
+}
+
+.info-panel {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(42, 42, 42, 0.95);
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    max-width: 320px;
+    z-index: 1000;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.info-panel h1 {
+    margin: 0 0 15px 0;
+    font-size: 20px;
+    color: #48b1e8;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.info-panel p {
+    margin: 8px 0;
+    line-height: 1.4;
+}
+
+.controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(42, 42, 42, 0.95);
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    z-index: 1000;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.controls h3 {
+    margin: 0 0 15px 0;
+    color: #48b1e8;
+    font-size: 16px;
+}
+
+button {
+    background: linear-gradient(135deg, #48b1e8, #369ce8);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 3px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(72, 177, 232, 0.3);
+}
+
+button:hover {
+    background: linear-gradient(135deg, #369ce8, #2980b9);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(72, 177, 232, 0.4);
+}
+
+.button-row {
+    display: flex;
+    gap: 5px;
+    margin: 5px 0;
+}
+
+#globe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: 
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 50%),
+        linear-gradient(45deg, #4a90e2 0%, #357abd 50%, #1e5f99 100%);
+    box-shadow: 
+        0 0 50px rgba(74, 144, 226, 0.6),
+        inset 0 0 100px rgba(0, 0, 0, 0.3);
+    animation: rotate 20s linear infinite;
+    cursor: grab;
+    overflow: hidden;
+}
+
+#globe:active {
+    cursor: grabbing;
+}
+
+.continents {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(ellipse 80px 40px at 45% 35%, #228B22 30%, transparent 50%),
+        radial-gradient(ellipse 60px 30px at 55% 45%, #228B22 30%, transparent 50%),
+        radial-gradient(ellipse 100px 50px at 30% 60%, #228B22 30%, transparent 50%),
+        radial-gradient(ellipse 90px 45px at 70% 25%, #228B22 30%, transparent 50%),
+        radial-gradient(ellipse 120px 60px at 60% 70%, #228B22 30%, transparent 50%);
+    border-radius: 50%;
+    animation: rotateContinents 20s linear infinite;
+}
+
+.marker {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #FFD700;
+    border: 3px solid #FFA500;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+    animation: pulse 2s ease-in-out infinite;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.marker:hover {
+    transform: translate(-50%, -50%) scale(1.3);
+}
+
+.marker::after {
+    content: attr(data-name);
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.marker:hover::after {
+    opacity: 1;
+}
+
+@keyframes rotate {
+    from { transform: translate(-50%, -50%) rotateY(0deg); }
+    to { transform: translate(-50%, -50%) rotateY(360deg); }
+}
+
+@keyframes rotateContinents {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(360deg); }
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        transform: translate(-50%, -50%) scale(1);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+    }
+    50% { 
+        transform: translate(-50%, -50%) scale(1.1);
+        box-shadow: 0 0 25px rgba(255, 215, 0, 1);
+    }
+}
+
+.status {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    #globe {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .info-panel, .controls {
+        max-width: 280px;
+        padding: 15px;
+    }
+    
+    .button-row {
+        flex-direction: column;
+    }
+}
