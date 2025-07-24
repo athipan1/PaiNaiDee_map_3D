@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,53 +11,155 @@
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>">
     
-    <!-- Self-contained 3D Map (no external dependencies) -->
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Loading spinner -->
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Theme toggle button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <span id="themeIcon">🌙</span>
+    </button>
+
     <div id="mapContainer">
-        <div class="info-panel">
+        <!-- Info Panel -->
+        <section class="info-panel" role="banner">
             <h1>🗺️ PaiNaiDee 3D Map</h1>
             <p><strong>ยินดีต้อนรับสู่แผนที่ 3 มิติ!</strong></p>
             <p>Welcome to the 3D Interactive Globe!</p>
-            <p>📍 กำลังแสดง: โลกและประเทศไทย</p>
-            <p>🎮 คลิกจุดทองเพื่อสำรวจ</p>
-            <p>🌍 โลกหมุนอัตโนมัติ</p>
-        </div>
+            <div class="info-stats">
+                <p>📍 กำลังแสดง: โลกและประเทศไทย</p>
+                <p>🎮 คลิกจุดทองเพื่อสำรวจ</p>
+                <p>🌍 โลกหมุนอัตโนมัติ</p>
+                <p id="weatherInfo">🌤️ กำลังโหลดข้อมูลสภาพอากาศ...</p>
+            </div>
+        </section>
         
-        <div class="controls">
+        <!-- Controls Panel -->
+        <section class="controls" role="navigation" aria-label="Map controls">
             <h3>🧭 สถานที่ท่องเที่ยว</h3>
+            
+            <!-- Search functionality -->
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="searchInput"
+                    placeholder="🔍 ค้นหาสถานที่... / Search location..."
+                    aria-label="Search locations"
+                >
+                <div class="search-results" id="searchResults"></div>
+            </div>
+            
+            <!-- Location buttons with favorites -->
             <div class="button-row">
-                <button onclick="focusLocation('bangkok')">🏛️ กรุงเทพฯ</button>
-                <button onclick="focusLocation('chiangmai')">🏔️ เชียงใหม่</button>
+                <button onclick="focusLocation('bangkok')" aria-label="Focus on Bangkok">
+                    🏛️ กรุงเทพฯ
+                </button>
+                <button class="favorite-btn" onclick="toggleFavorite('bangkok')" aria-label="Add Bangkok to favorites" data-location="bangkok">
+                    ⭐
+                </button>
             </div>
             <div class="button-row">
-                <button onclick="focusLocation('phuket')">🏝️ ภูเก็ต</button>
-                <button onclick="focusLocation('world')">🌍 โลก</button>
+                <button onclick="focusLocation('chiangmai')" aria-label="Focus on Chiang Mai">
+                    🏔️ เชียงใหม่
+                </button>
+                <button class="favorite-btn" onclick="toggleFavorite('chiangmai')" aria-label="Add Chiang Mai to favorites" data-location="chiangmai">
+                    ⭐
+                </button>
             </div>
             <div class="button-row">
-                <button onclick="toggleRotation()">⏸️ หยุด/เล่น</button>
-                <button onclick="changeSpeed()">⚡ เร็ว/ช้า</button>
+                <button onclick="focusLocation('phuket')" aria-label="Focus on Phuket">
+                    🏝️ ภูเก็ต
+                </button>
+                <button class="favorite-btn" onclick="toggleFavorite('phuket')" aria-label="Add Phuket to favorites" data-location="phuket">
+                    ⭐
+                </button>
             </div>
-        </div>
+            <div class="button-row">
+                <button onclick="focusLocation('world')" aria-label="Show world view">
+                    🌍 โลก
+                </button>
+            </div>
+            <div class="button-row">
+                <button onclick="toggleRotation()" aria-label="Toggle rotation">
+                    ⏸️ หยุด/เล่น
+                </button>
+                <button onclick="changeSpeed()" aria-label="Change rotation speed">
+                    ⚡ เร็ว/ช้า
+                </button>
+            </div>
+            
+            <!-- Favorites section -->
+            <div class="favorites-section" id="favoritesSection" style="display: none;">
+                <h4>⭐ รายการโปรด / Favorites</h4>
+                <div class="favorites-list" id="favoritesList"></div>
+            </div>
+        </section>
         
-        <div id="globe3D">
-            <div class="globe-sphere">
+        <!-- 3D Globe -->
+        <main id="globe3D" role="main" aria-label="Interactive 3D globe">
+            <div class="globe-sphere" tabindex="0" role="button" aria-label="Interactive globe - use mouse to rotate">
                 <div class="continents-layer"></div>
                 <div class="atmosphere"></div>
                 <!-- Enhanced markers with proper coordinates -->
-                <div class="marker bangkok" data-name="🏛️ กรุงเทพฯ (Bangkok)" onclick="showInfo('bangkok')"></div>
-                <div class="marker chiangmai" data-name="🏔️ เชียงใหม่ (Chiang Mai)" onclick="showInfo('chiangmai')"></div>
-                <div class="marker phuket" data-name="🏝️ ภูเก็ต (Phuket)" onclick="showInfo('phuket')"></div>
-                <div class="marker europe" data-name="🏛️ ยุโรป (Europe)" onclick="showInfo('europe')"></div>
-                <div class="marker america" data-name="🗽 อเมริกา (America)" onclick="showInfo('america')"></div>
+                <div class="marker bangkok" 
+                     data-name="🏛️ กรุงเทพฯ (Bangkok)" 
+                     onclick="showInfo('bangkok')"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Bangkok location marker"></div>
+                <div class="marker chiangmai" 
+                     data-name="🏔️ เชียงใหม่ (Chiang Mai)" 
+                     onclick="showInfo('chiangmai')"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Chiang Mai location marker"></div>
+                <div class="marker phuket" 
+                     data-name="🏝️ ภูเก็ต (Phuket)" 
+                     onclick="showInfo('phuket')"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Phuket location marker"></div>
+                <div class="marker europe" 
+                     data-name="🏛️ ยุโรป (Europe)" 
+                     onclick="showInfo('europe')"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Europe location marker"></div>
+                <div class="marker america" 
+                     data-name="🗽 อเมริกา (America)" 
+                     onclick="showInfo('america')"
+                     role="button"
+                     tabindex="0"
+                     aria-label="America location marker"></div>
             </div>
-        </div>
+        </main>
         
-        <div class="status" id="status">
+        <!-- Status bar -->
+        <footer class="status" id="status" role="status" aria-live="polite">
             🌍 กำลังสำรวจโลก... | Exploring the World...
+        </footer>
+    </div>
+
+    <!-- Location info modal -->
+    <div class="modal-overlay" id="modalOverlay" style="display: none;">
+        <div class="location-modal" id="locationModal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+            <button class="modal-close" onclick="closeModal()" aria-label="Close modal">×</button>
+            <div class="modal-content">
+                <h2 id="modalTitle"></h2>
+                <div class="modal-body" id="modalBody"></div>
+                <div class="modal-gallery" id="modalGallery"></div>
+            </div>
         </div>
     </div>
 
