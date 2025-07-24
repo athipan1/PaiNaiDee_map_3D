@@ -2565,6 +2565,15 @@ function startAutoTour() {
     const nextLocation = () => {
         if (currentTourIndex < tourLocations.length) {
             const location = tourLocations[currentTourIndex];
+            
+            // Add tour progress notification
+            showNotification(
+                userPreferences.language === 'th' ? 
+                `🎯 ทัวร์แนะนำ (${currentTourIndex + 1}/${tourLocations.length}): ${locations[location].name}` : 
+                `🎯 Guided Tour (${currentTourIndex + 1}/${tourLocations.length}): ${locations[location].nameEn}`,
+                'info'
+            );
+            
             focusLocation(location);
             
             // Show info after focusing
@@ -2574,16 +2583,26 @@ function startAutoTour() {
             
             currentTourIndex++;
             
-            // Move to next location after 5 seconds
-            setTimeout(nextLocation, 5000);
-        } else {
-            // Tour completed
-            showNotification(
-                userPreferences.language === 'th' ? 
-                '✨ ทัวร์แนะนำเสร็จสิ้น! สำรวจต่อได้ตามใจชอบ' : 
-                '✨ Guided tour completed! Explore freely now',
-                'success'
-            );
+            // Move to next location after 6 seconds (increased time for better user experience)
+            if (currentTourIndex < tourLocations.length) {
+                setTimeout(nextLocation, 6000);
+            } else {
+                // Tour completed - wait a bit then show completion message
+                setTimeout(() => {
+                    // Close any open modal first
+                    const modal = document.querySelector('.modal');
+                    if (modal) {
+                        modal.style.display = 'none';
+                    }
+                    
+                    showNotification(
+                        userPreferences.language === 'th' ? 
+                        '✨ ทัวร์แนะนำเสร็จสิ้น! สำรวจต่อได้ตามใจชอบ' : 
+                        '✨ Guided tour completed! Explore freely now',
+                        'success'
+                    );
+                }, 6000);
+            }
         }
     };
     
@@ -2594,7 +2613,8 @@ function startAutoTour() {
         'info'
     );
     
-    nextLocation();
+    // Start the tour after a short delay
+    setTimeout(nextLocation, 1000);
 }
 
 function skipToMap() {
