@@ -26,6 +26,71 @@
         <div class="spinner"></div>
     </div>
 
+    <!-- Enhanced Welcome Screen -->
+    <div class="welcome-overlay" id="welcomeOverlay">
+        <div class="welcome-container">
+            <div class="welcome-header">
+                <h1 class="welcome-title">🗺️ ยินดีต้อนรับสู่ PaiNaiDee 3D Map</h1>
+                <h2 class="welcome-subtitle">Welcome to PaiNaiDee 3D Interactive Globe</h2>
+                <div class="welcome-description">
+                    <p class="welcome-text-th">
+                        สำรวจโลก 3 มิติแบบอินเทอแรคทีฟ พร้อมข้อมูลสถานที่ท่องเที่ยวในประเทศไทยและทั่วโลก
+                    </p>
+                    <p class="welcome-text-en">
+                        Explore the world in 3D with interactive locations across Thailand and around the globe
+                    </p>
+                </div>
+            </div>
+            
+            <div class="welcome-features">
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">🌍</div>
+                        <h3>Interactive 3D Globe</h3>
+                        <p>โลก 3 มิติแบบหมุนได้</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📍</div>
+                        <h3>Rich Location Info</h3>
+                        <p>ข้อมูลสถานที่ครบครัน</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">✈️</div>
+                        <h3>Trip Planning</h3>
+                        <p>วางแผนการเดินทาง</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">⭐</div>
+                        <h3>Favorites & Search</h3>
+                        <p>รายการโปรดและค้นหา</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="welcome-actions">
+                <button class="start-button" id="startExploring" onclick="startExploring()">
+                    <span class="start-icon">🚀</span>
+                    <span class="start-text-th">เริ่มต้นสำรวจ</span>
+                    <span class="start-text-en">Start Exploring</span>
+                </button>
+                
+                <div class="welcome-options">
+                    <button class="option-button" id="startTourButton" onclick="startGuidedTour()">
+                        <span>🎯 เริ่มทัวร์แนะนำ / Start Guided Tour</span>
+                    </button>
+                    <button class="option-button" id="skipToMapButton" onclick="skipToMap()">
+                        <span>⚡ ข้ามไปที่แผนที่ / Skip to Map</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="welcome-footer">
+                <p>💡 <span class="tip-th">เคล็ดลับ:</span> <span class="tip-en">Tip:</span> ใช้เมาส์หมุนโลก และคลิกที่จุดสีทองเพื่อดูข้อมูล</p>
+                <p>Use mouse to rotate globe and click golden dots for information</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Theme toggle button -->
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
         <span id="themeIcon">🌙</span>
