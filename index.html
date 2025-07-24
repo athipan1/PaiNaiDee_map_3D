@@ -116,6 +116,30 @@
                 </button>
             </div>
             <div class="button-row">
+                <button onclick="focusLocation('chonburi')" aria-label="Focus on Chonburi">
+                    🏖️ ชลบุรี
+                </button>
+                <button class="favorite-btn" onclick="toggleFavorite('chonburi')" aria-label="Add Chonburi to favorites" data-location="chonburi">
+                    ⭐
+                </button>
+            </div>
+            <div class="button-row">
+                <button onclick="focusLocation('kanchanaburi')" aria-label="Focus on Kanchanaburi">
+                    🌉 กาญจนบุรี
+                </button>
+                <button class="favorite-btn" onclick="toggleFavorite('kanchanaburi')" aria-label="Add Kanchanaburi to favorites" data-location="kanchanaburi">
+                    ⭐
+                </button>
+            </div>
+            <div class="button-row">
+                <button onclick="focusLocation('lopburi')" aria-label="Focus on Lopburi">
+                    🐵 ลพบุรี
+                </button>
+                <button class="favorite-btn" onclick="toggleFavorite('lopburi')" aria-label="Add Lopburi to favorites" data-location="lopburi">
+                    ⭐
+                </button>
+            </div>
+            <div class="button-row">
                 <button onclick="focusLocation('world')" aria-label="Show world view">
                     🌍 โลก
                 </button>
@@ -127,6 +151,39 @@
                 <button onclick="changeSpeed()" aria-label="Change rotation speed">
                     ⚡ เร็ว/ช้า
                 </button>
+            </div>
+            
+            <!-- Route Planning section -->
+            <div class="route-planning-section" id="routePlanningSection">
+                <h4>🗺️ วางแผนเส้นทาง / Route Planning</h4>
+                <div class="route-inputs">
+                    <select id="fromLocation" class="route-select">
+                        <option value="">จาก / From</option>
+                        <option value="bangkok">🏛️ กรุงเทพฯ</option>
+                        <option value="chiangmai">🏔️ เชียงใหม่</option>
+                        <option value="phuket">🏝️ ภูเก็ต</option>
+                        <option value="ayutthaya">🏺 อยุธยา</option>
+                        <option value="krabi">🌊 กระบี่</option>
+                        <option value="sukhothai">🏛️ สุโขทัย</option>
+                        <option value="chonburi">🏖️ ชลบุรี</option>
+                        <option value="kanchanaburi">🌉 กาญจนบุรี</option>
+                        <option value="lopburi">🐵 ลพบุรี</option>
+                    </select>
+                    <select id="toLocation" class="route-select">
+                        <option value="">ไป / To</option>
+                        <option value="bangkok">🏛️ กรุงเทพฯ</option>
+                        <option value="chiangmai">🏔️ เชียงใหม่</option>
+                        <option value="phuket">🏝️ ภูเก็ต</option>
+                        <option value="ayutthaya">🏺 อยุธยา</option>
+                        <option value="krabi">🌊 กระบี่</option>
+                        <option value="sukhothai">🏛️ สุโขทัย</option>
+                        <option value="chonburi">🏖️ ชลบุรี</option>
+                        <option value="kanchanaburi">🌉 กาญจนบุรี</option>
+                        <option value="lopburi">🐵 ลพบุรี</option>
+                    </select>
+                    <button onclick="calculateRoute()" class="route-btn">🚗 คำนวณ</button>
+                </div>
+                <div class="route-result" id="routeResult" style="display: none;"></div>
             </div>
             
             <!-- Favorites section -->
@@ -178,6 +235,24 @@
                      role="button"
                      tabindex="0"
                      aria-label="Sukhothai location marker"></div>
+                <div class="marker chonburi" 
+                     data-name="🏖️ ชลบุรี (Chonburi)" 
+                     onclick="showInfo('chonburi')"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Chonburi location marker"></div>
+                <div class="marker kanchanaburi" 
+                     data-name="🌉 กาญจนบุรี (Kanchanaburi)" 
+                     onclick="showInfo('kanchanaburi')"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Kanchanaburi location marker"></div>
+                <div class="marker lopburi" 
+                     data-name="🐵 ลพบุรี (Lopburi)" 
+                     onclick="showInfo('lopburi')"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Lopburi location marker"></div>
                 <div class="marker europe" 
                      data-name="🏛️ ยุโรป (Europe)" 
                      onclick="showInfo('europe')"

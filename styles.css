@@ -555,16 +555,34 @@ button:focus {
     animation-delay: 2.5s;
 }
 
+.marker.chonburi {
+    top: 42%;
+    left: 66%;
+    animation-delay: 3s;
+}
+
+.marker.kanchanaburi {
+    top: 39%;
+    left: 63%;
+    animation-delay: 3.5s;
+}
+
+.marker.lopburi {
+    top: 37%;
+    left: 65%;
+    animation-delay: 4s;
+}
+
 .marker.europe {
     top: 25%;
     left: 48%;
-    animation-delay: 3s;
+    animation-delay: 4.5s;
 }
 
 .marker.america {
     top: 30%;
     left: 25%;
-    animation-delay: 3.5s;
+    animation-delay: 5s;
 }
 
 .marker:hover {
@@ -772,6 +790,81 @@ button:focus {
     object-fit: cover;
     border-radius: var(--radius-md);
     margin-bottom: var(--spacing-sm);
+}
+
+/* Route Planning section */
+.route-planning-section {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--glass-border);
+}
+
+.route-planning-section h4 {
+    color: var(--accent-color);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-md);
+}
+
+.route-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.route-select {
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    color: var(--panel-text);
+    padding: var(--spacing-md);
+    font-size: var(--font-size-sm);
+    backdrop-filter: blur(10px);
+    transition: all var(--transition-normal);
+}
+
+.route-select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(72, 177, 232, 0.1);
+}
+
+.route-btn {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    margin: 0;
+    padding: var(--spacing-md);
+    min-width: auto;
+    width: 100%;
+}
+
+.route-btn:hover {
+    background: linear-gradient(135deg, #ee5a52, #e63946);
+}
+
+.route-result {
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    backdrop-filter: blur(10px);
+    margin-top: var(--spacing-md);
+}
+
+.route-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+}
+
+.route-info-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.route-info-item strong {
+    color: var(--accent-color);
 }
 
 /* Favorites section */

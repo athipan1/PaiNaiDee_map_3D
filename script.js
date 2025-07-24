@@ -64,7 +64,7 @@ const texts = {
     }
 };
 
-// Distance calculation function
+// Enhanced distance calculation with route planning
 function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // Earth's radius in kilometers
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -74,6 +74,80 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
               Math.sin(dLon/2) * Math.sin(dLon/2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     return Math.round(R * c);
+}
+
+// Travel time calculation based on distance and transport type
+function calculateTravelTime(distance, transportType = 'car') {
+    const speeds = {
+        car: 60,      // km/h average including traffic
+        bus: 50,      // km/h intercity bus
+        train: 80,    // km/h train
+        plane: 500    // km/h for flights
+    };
+    
+    const speed = speeds[transportType] || speeds.car;
+    const timeHours = distance / speed;
+    
+    if (timeHours < 1) {
+        return `${Math.round(timeHours * 60)} minutes`;
+    } else if (timeHours < 24) {
+        const hours = Math.floor(timeHours);
+        const minutes = Math.round((timeHours - hours) * 60);
+        return minutes > 0 ? `${hours}h ${minutes}m` : `${hours}h`;
+    } else {
+        const days = Math.floor(timeHours / 24);
+        const hours = Math.round(timeHours % 24);
+        return `${days}d ${hours}h`;
+    }
+}
+
+// Route planning system
+function planRoute(fromLocation, toLocation) {
+    const from = locations[fromLocation];
+    const to = locations[toLocation];
+    
+    if (!from || !to || !from.coordinates || !to.coordinates) {
+        return null;
+    }
+    
+    const distance = calculateDistance(
+        from.coordinates[1], from.coordinates[0],
+        to.coordinates[1], to.coordinates[0]
+    );
+    
+    // Determine best transport type based on distance
+    let recommendedTransport = 'car';
+    if (distance > 500) {
+        recommendedTransport = 'plane';
+    } else if (distance > 200) {
+        recommendedTransport = 'bus';
+    }
+    
+    const travelTime = calculateTravelTime(distance, recommendedTransport);
+    
+    return {
+        from: from,
+        to: to,
+        distance: distance,
+        travelTime: travelTime,
+        recommendedTransport: recommendedTransport,
+        estimatedCost: estimateTravelCost(distance, recommendedTransport)
+    };
+}
+
+// Travel cost estimation
+function estimateTravelCost(distance, transportType) {
+    const baseCosts = {
+        car: { base: 500, perKm: 3 },      // Fuel + tolls (THB)
+        bus: { base: 150, perKm: 1.5 },    // Bus ticket (THB)
+        train: { base: 200, perKm: 2 },    // Train ticket (THB)
+        plane: { base: 2000, perKm: 0.5 }  // Flight (THB)
+    };
+    
+    const cost = baseCosts[transportType] || baseCosts.car;
+    const totalCost = cost.base + (distance * cost.perKm);
+    
+    return Math.round(totalCost);
 }
 
 function getText(key) {
@@ -195,6 +269,63 @@ const locations = {
         weather: "28°C ☀️",
         bestTime: "November - February",
         travelTips: "เช่าจักรยานเที่ยวในอุทยาน / Rent a bicycle to tour the historical park"
+    },
+    chonburi: {
+        name: "ชลบุรี",
+        nameEn: "Chonburi",
+        description: "เมืองท่องเที่ยวชายทะเลที่มีทั้งหาดพัทยาและเกาะล้าน พร้อมกิจกรรมทางน้ำที่หลากหลาย",
+        descriptionEn: "Coastal tourist city featuring Pattaya Beach and Koh Larn with diverse water activities",
+        emoji: "🏖️",
+        coordinates: [100.9847, 13.3611],
+        attractions: ["หาดพัทยา", "เกาะล้าน", "สวนนงนุช", "ตลาดลอยน้ำสี่ภาค", "วัดใหญ่อินทราราม"],
+        attractionsEn: ["Pattaya Beach", "Koh Larn", "Nong Nooch Garden", "Four Regions Floating Market", "Wat Yai Inthararam"],
+        photos: [
+            { name: "Pattaya Beach", emoji: "🏖️" },
+            { name: "Coral Island", emoji: "🐠" },
+            { name: "Water Sports", emoji: "🏄" },
+            { name: "Floating Market", emoji: "🛶" }
+        ],
+        weather: "30°C 🌊",
+        bestTime: "November - March",
+        travelTips: "หลีกเลี่ยงช่วงวันหยุดยาว เนื่องจากคนเยอะ / Avoid long holidays due to crowds"
+    },
+    kanchanaburi: {
+        name: "กาญจนบุรี",
+        nameEn: "Kanchanaburi",
+        description: "เมืองประวัติศาสตร์ริมแควน้อย มีสะพานข้ามแควใหญ่และธรรมชาติที่งดงาม",
+        descriptionEn: "Historic city by the River Kwai with the famous bridge and beautiful nature",
+        emoji: "🌉",
+        coordinates: [99.5328, 14.0227],
+        attractions: ["สะพานข้ามแควใหญ่", "อุทยานแห่งชาติเอราวัณ", "ถ้ำกระแซ", "พิพิธภัณฑ์สงคราม", "ตลาดน้ำดอนวาย"],
+        attractionsEn: ["Bridge over River Kwai", "Erawan National Park", "Kaeng Krachan Cave", "War Museum", "Don Wai Floating Market"],
+        photos: [
+            { name: "Historic Bridge", emoji: "🌉" },
+            { name: "Erawan Falls", emoji: "💧" },
+            { name: "Train Ride", emoji: "🚂" },
+            { name: "River View", emoji: "🏞️" }
+        ],
+        weather: "29°C 🌤️",
+        bestTime: "December - February",
+        travelTips: "ขึ้นรถไฟสาย Death Railway ชมวิวธรรมชาติ / Take the Death Railway train for scenic views"
+    },
+    lopburi: {
+        name: "ลพบุรี",
+        nameEn: "Lopburi",
+        description: "เมืองลิงแห่งประเทศไทย เต็มไปด้วยโบราณสถานขอมและวัฒนธรรมที่น่าสนใจ",
+        descriptionEn: "Thailand's monkey city filled with ancient Khmer ruins and fascinating culture",
+        emoji: "🐵",
+        coordinates: [100.6531, 14.7995],
+        attractions: ["พระปรางค์สามยอด", "วัดพระศรีรัตนมหาธาตุ", "พระราชวังสมเด็จพระนารายณ์", "ศาลเจ้าแม่ชีจินดา"],
+        attractionsEn: ["Phra Prang Sam Yot", "Wat Phra Sri Rattana Mahathat", "King Narai Palace", "Mae Chi Jinda Shrine"],
+        photos: [
+            { name: "Monkey Temple", emoji: "🐵" },
+            { name: "Khmer Ruins", emoji: "🏯" },
+            { name: "Ancient Palace", emoji: "🏰" },
+            { name: "Historic Site", emoji: "📿" }
+        ],
+        weather: "31°C ☀️",
+        bestTime: "November - January",
+        travelTips: "ระวังลิงแย่งอาหาร เก็บของมีค่าให้ดี / Beware of monkeys snatching food, secure valuables"
     },
     europe: {
         name: "ยุโรป",
@@ -918,9 +1049,10 @@ function handleKeyboardNavigation(e) {
         '4': 'ayutthaya',
         '5': 'krabi',
         '6': 'sukhothai',
-        '7': 'europe',
-        '8': 'america',
-        '9': 'world'
+        '7': 'chonburi',
+        '8': 'kanchanaburi',
+        '9': 'lopburi',
+        '0': 'world'
     };
     
     if (locationKeys[e.key]) {
@@ -984,6 +1116,115 @@ function manualRotateGlobe(key) {
     }
     
     globe.style.transform = `rotateY(${currentY}deg) rotateX(${currentX}deg)`;
+}
+
+// Route calculation function
+function calculateRoute() {
+    const fromSelect = document.getElementById('fromLocation');
+    const toSelect = document.getElementById('toLocation');
+    const routeResult = document.getElementById('routeResult');
+    
+    const fromLocation = fromSelect.value;
+    const toLocation = toSelect.value;
+    
+    if (!fromLocation || !toLocation) {
+        showNotification(
+            userPreferences.language === 'th' ? 'กรุณาเลือกจุดเริ่มต้นและปลายทาง' : 'Please select origin and destination',
+            'warning'
+        );
+        return;
+    }
+    
+    if (fromLocation === toLocation) {
+        showNotification(
+            userPreferences.language === 'th' ? 'จุดเริ่มต้นและปลายทางต้องไม่เหมือนกัน' : 'Origin and destination must be different',
+            'warning'
+        );
+        return;
+    }
+    
+    const route = planRoute(fromLocation, toLocation);
+    
+    if (!route) {
+        showNotification(
+            userPreferences.language === 'th' ? 'ไม่สามารถคำนวณเส้นทางได้' : 'Cannot calculate route',
+            'error'
+        );
+        return;
+    }
+    
+    displayRoute(route);
+    
+    // Show route on globe by focusing both locations
+    focusLocation(fromLocation);
+    setTimeout(() => focusLocation(toLocation), 1000);
+    
+    showNotification(
+        userPreferences.language === 'th' ? 'คำนวณเส้นทางสำเร็จ!' : 'Route calculated successfully!',
+        'success'
+    );
+}
+
+// Display route information
+function displayRoute(route) {
+    const routeResult = document.getElementById('routeResult');
+    
+    const transportIcons = {
+        car: '🚗',
+        bus: '🚌', 
+        train: '🚆',
+        plane: '✈️'
+    };
+    
+    const transportNames = {
+        th: {
+            car: 'รถยนต์',
+            bus: 'รถบัส',
+            train: 'รถไฟ',
+            plane: 'เครื่องบิน'
+        },
+        en: {
+            car: 'Car',
+            bus: 'Bus',
+            train: 'Train',
+            plane: 'Plane'
+        }
+    };
+    
+    const currentLang = userPreferences.language;
+    const isThaiLang = currentLang === 'th';
+    
+    routeResult.innerHTML = `
+        <h5>${isThaiLang ? '📍 เส้นทางการเดินทาง' : '📍 Travel Route'}</h5>
+        <div class="route-info">
+            <div class="route-info-item">
+                <strong>${isThaiLang ? 'จาก:' : 'From:'}</strong>
+                <span>${route.from.emoji} ${isThaiLang ? route.from.name : route.from.nameEn}</span>
+            </div>
+            <div class="route-info-item">
+                <strong>${isThaiLang ? 'ไป:' : 'To:'}</strong>
+                <span>${route.to.emoji} ${isThaiLang ? route.to.name : route.to.nameEn}</span>
+            </div>
+            <div class="route-info-item">
+                <strong>${isThaiLang ? 'ระยะทาง:' : 'Distance:'}</strong>
+                <span>📏 ${route.distance} ${isThaiLang ? 'กิโลเมตร' : 'km'}</span>
+            </div>
+            <div class="route-info-item">
+                <strong>${isThaiLang ? 'เวลาเดินทาง:' : 'Travel Time:'}</strong>
+                <span>⏱️ ${route.travelTime}</span>
+            </div>
+            <div class="route-info-item">
+                <strong>${isThaiLang ? 'แนะนำ:' : 'Recommended:'}</strong>
+                <span>${transportIcons[route.recommendedTransport]} ${transportNames[currentLang][route.recommendedTransport]}</span>
+            </div>
+            <div class="route-info-item">
+                <strong>${isThaiLang ? 'ค่าใช้จ่าย:' : 'Est. Cost:'}</strong>
+                <span>💰 ฿${route.estimatedCost.toLocaleString()}</span>
+            </div>
+        </div>
+    `;
+    
+    routeResult.style.display = 'block';
 }
 
 // Enhanced modal system for location information
