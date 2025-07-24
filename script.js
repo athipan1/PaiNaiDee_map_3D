@@ -2511,5 +2511,148 @@ enhancedAnimations.textContent = `
 `;
 document.head.appendChild(enhancedAnimations);
 
+// Enhanced startup and welcome experience functions
+function startExploring() {
+    const welcomeOverlay = document.getElementById('welcomeOverlay');
+    const mainContainer = document.getElementById('mapContainer');
+    
+    markWelcomeSeen();
+    
+    // Add fade out animation to welcome screen
+    welcomeOverlay.classList.add('fade-out');
+    
+    // Show the main map after animation
+    setTimeout(() => {
+        welcomeOverlay.style.display = 'none';
+        mainContainer.style.opacity = '1';
+        mainContainer.style.pointerEvents = 'auto';
+        
+        // Start globe rotation and show notification
+        isRotating = true;
+        updateStatus(
+            `🚀 ${getText('exploring')} | เริ่มต้นการสำรวจแล้ว!`,
+            `🚀 ${getText('exploring')} | Exploration started!`
+        );
+        
+        // Show welcome notification
+        showNotification(
+            userPreferences.language === 'th' ? 
+            '🎉 ยินดีต้อนรับ! เริ่มสำรวจโลก 3D ได้เลย' : 
+            '🎉 Welcome! Start exploring the 3D world',
+            'success'
+        );
+        
+        console.log('🚀 Welcome experience completed - Starting exploration!');
+    }, 800);
+}
+
+function startGuidedTour() {
+    // Start the guided tour experience
+    startExploring();
+    
+    // Begin automated tour after a short delay
+    setTimeout(() => {
+        startAutoTour();
+    }, 1500);
+}
+
+function startAutoTour() {
+    const tourLocations = ['bangkok', 'chiangmai', 'phuket'];
+    let currentTourIndex = 0;
+    
+    const nextLocation = () => {
+        if (currentTourIndex < tourLocations.length) {
+            const location = tourLocations[currentTourIndex];
+            focusLocation(location);
+            
+            // Show info after focusing
+            setTimeout(() => {
+                showInfo(location);
+            }, 1000);
+            
+            currentTourIndex++;
+            
+            // Move to next location after 5 seconds
+            setTimeout(nextLocation, 5000);
+        } else {
+            // Tour completed
+            showNotification(
+                userPreferences.language === 'th' ? 
+                '✨ ทัวร์แนะนำเสร็จสิ้น! สำรวจต่อได้ตามใจชอบ' : 
+                '✨ Guided tour completed! Explore freely now',
+                'success'
+            );
+        }
+    };
+    
+    showNotification(
+        userPreferences.language === 'th' ? 
+        '🎯 เริ่มทัวร์แนะนำแล้ว...' : 
+        '🎯 Starting guided tour...',
+        'info'
+    );
+    
+    nextLocation();
+}
+
+function skipToMap() {
+    const welcomeOverlay = document.getElementById('welcomeOverlay');
+    const mainContainer = document.getElementById('mapContainer');
+    
+    // Quick fade out animation
+    welcomeOverlay.classList.add('fade-out');
+    
+    setTimeout(() => {
+        welcomeOverlay.style.display = 'none';
+        mainContainer.style.opacity = '1';
+        mainContainer.style.pointerEvents = 'auto';
+        
+        console.log('⚡ Skipped to map directly');
+    }, 400);
+}
+
+// Enhanced initialization with welcome screen
+function initializeEnhancedStartup() {
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const welcomeOverlay = document.getElementById('welcomeOverlay');
+    const mainContainer = document.getElementById('mapContainer');
+    
+    // Initially hide the main container
+    mainContainer.style.opacity = '0';
+    mainContainer.style.pointerEvents = 'none';
+    
+    // Show loading spinner first
+    loadingSpinner.style.display = 'flex';
+    
+    // Hide loading spinner after 2 seconds and show welcome screen
+    setTimeout(() => {
+        loadingSpinner.classList.add('fade-out');
+        
+        setTimeout(() => {
+            loadingSpinner.style.display = 'none';
+            welcomeOverlay.style.display = 'flex';
+            
+            console.log('🎨 Enhanced welcome screen displayed!');
+        }, 500);
+    }, 2000);
+    
+    // Check if user has seen welcome before
+    const hasSeenWelcome = localStorage.getItem('painaidee-seen-welcome');
+    if (hasSeenWelcome === 'true') {
+        // Skip welcome for returning users but still show loading
+        setTimeout(() => {
+            skipToMap();
+        }, 2500);
+    }
+}
+
+// Save welcome seen status
+function markWelcomeSeen() {
+    localStorage.setItem('painaidee-seen-welcome', 'true');
+}
+
 // Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', initializeMap);
+document.addEventListener('DOMContentLoaded', function() {
+    initializeMap();
+    initializeEnhancedStartup();
+});
