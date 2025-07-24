@@ -555,16 +555,34 @@ button:focus {
     animation-delay: 2.5s;
 }
 
+.marker.chonburi {
+    top: 42%;
+    left: 66%;
+    animation-delay: 3s;
+}
+
+.marker.kanchanaburi {
+    top: 39%;
+    left: 63%;
+    animation-delay: 3.5s;
+}
+
+.marker.lopburi {
+    top: 37%;
+    left: 65%;
+    animation-delay: 4s;
+}
+
 .marker.europe {
     top: 25%;
     left: 48%;
-    animation-delay: 3s;
+    animation-delay: 4.5s;
 }
 
 .marker.america {
     top: 30%;
     left: 25%;
-    animation-delay: 3.5s;
+    animation-delay: 5s;
 }
 
 .marker:hover {
@@ -772,6 +790,220 @@ button:focus {
     object-fit: cover;
     border-radius: var(--radius-md);
     margin-bottom: var(--spacing-sm);
+}
+
+/* Trip Planning Wizard */
+.trip-wizard-section {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--glass-border);
+}
+
+.trip-wizard-section h4 {
+    color: var(--accent-color);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-md);
+}
+
+.trip-wizard-container {
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    backdrop-filter: blur(10px);
+}
+
+.destination-checkboxes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-sm);
+    margin: var(--spacing-md) 0;
+}
+
+.destination-checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-md);
+    transition: background-color var(--transition-normal);
+}
+
+.destination-checkbox:hover {
+    background-color: var(--glass-bg);
+}
+
+.destination-checkbox input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--accent-color);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: all var(--transition-normal);
+}
+
+.destination-checkbox input[type="checkbox"]:checked {
+    background: var(--accent-color);
+}
+
+.destination-checkbox input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: -1px;
+    left: 2px;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.trip-duration-selector {
+    margin: var(--spacing-md) 0;
+}
+
+.trip-duration-selector label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    font-weight: 500;
+    color: var(--accent-color);
+}
+
+.trip-wizard-btn {
+    background: linear-gradient(135deg, #4ecdc4, #44a08d);
+    margin: 0;
+    padding: var(--spacing-md);
+    min-width: auto;
+    width: 100%;
+}
+
+.trip-wizard-btn:hover {
+    background: linear-gradient(135deg, #44a08d, #26d0ce);
+}
+
+.trip-plan-result {
+    margin-top: var(--spacing-md);
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    backdrop-filter: blur(10px);
+}
+
+.trip-day {
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--glass-bg);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--accent-color);
+}
+
+.trip-day-header {
+    font-weight: 600;
+    color: var(--accent-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.trip-day-details {
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+}
+
+.trip-summary {
+    background: var(--glass-bg);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-lg);
+    margin-top: var(--spacing-md);
+    border: 1px solid var(--accent-color);
+}
+
+.trip-summary h5 {
+    color: var(--accent-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.trip-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+}
+
+/* Route Planning section */
+.route-planning-section {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--glass-border);
+}
+
+.route-planning-section h4 {
+    color: var(--accent-color);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-md);
+}
+
+.route-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.route-select {
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    color: var(--panel-text);
+    padding: var(--spacing-md);
+    font-size: var(--font-size-sm);
+    backdrop-filter: blur(10px);
+    transition: all var(--transition-normal);
+}
+
+.route-select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(72, 177, 232, 0.1);
+}
+
+.route-btn {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    margin: 0;
+    padding: var(--spacing-md);
+    min-width: auto;
+    width: 100%;
+}
+
+.route-btn:hover {
+    background: linear-gradient(135deg, #ee5a52, #e63946);
+}
+
+.route-result {
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    backdrop-filter: blur(10px);
+    margin-top: var(--spacing-md);
+}
+
+.route-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+}
+
+.route-info-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.route-info-item strong {
+    color: var(--accent-color);
 }
 
 /* Favorites section */

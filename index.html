@@ -116,6 +116,30 @@
                 </button>
             </div>
             <div class="button-row">
+                <button onclick="focusLocation('chonburi')" aria-label="Focus on Chonburi">
+                    🏖️ ชลบุรี
+                </button>
+                <button class="favorite-btn" onclick="toggleFavorite('chonburi')" aria-label="Add Chonburi to favorites" data-location="chonburi">
+                    ⭐
+                </button>
+            </div>
+            <div class="button-row">
+                <button onclick="focusLocation('kanchanaburi')" aria-label="Focus on Kanchanaburi">
+                    🌉 กาญจนบุรี
+                </button>
+                <button class="favorite-btn" onclick="toggleFavorite('kanchanaburi')" aria-label="Add Kanchanaburi to favorites" data-location="kanchanaburi">
+                    ⭐
+                </button>
+            </div>
+            <div class="button-row">
+                <button onclick="focusLocation('lopburi')" aria-label="Focus on Lopburi">
+                    🐵 ลพบุรี
+                </button>
+                <button class="favorite-btn" onclick="toggleFavorite('lopburi')" aria-label="Add Lopburi to favorites" data-location="lopburi">
+                    ⭐
+                </button>
+            </div>
+            <div class="button-row">
                 <button onclick="focusLocation('world')" aria-label="Show world view">
                     🌍 โลก
                 </button>
@@ -127,6 +151,99 @@
                 <button onclick="changeSpeed()" aria-label="Change rotation speed">
                     ⚡ เร็ว/ช้า
                 </button>
+            </div>
+            
+            <!-- Trip Planning Wizard -->
+            <div class="trip-wizard-section" id="tripWizardSection">
+                <h4>✈️ วางแผนทริป / Trip Planner</h4>
+                <div class="trip-wizard-container">
+                    <div class="trip-wizard-step" id="tripStep1">
+                        <p>เลือกสถานที่ที่ต้องการเที่ยว:</p>
+                        <div class="destination-checkboxes" id="destinationCheckboxes">
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="bangkok">
+                                <span>🏛️ กรุงเทพฯ</span>
+                            </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="chiangmai">
+                                <span>🏔️ เชียงใหม่</span>
+                            </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="phuket">
+                                <span>🏝️ ภูเก็ต</span>
+                            </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="ayutthaya">
+                                <span>🏺 อยุธยา</span>
+                            </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="krabi">
+                                <span>🌊 กระบี่</span>
+                            </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="sukhothai">
+                                <span>🏛️ สุโขทัย</span>
+                            </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="chonburi">
+                                <span>🏖️ ชลบุรี</span>
+                            </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="kanchanaburi">
+                                <span>🌉 กาญจนบุรี</span>
+                            </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="lopburi">
+                                <span>🐵 ลพบุรี</span>
+                            </label>
+                        </div>
+                        <div class="trip-duration-selector">
+                            <label for="tripDuration">ระยะเวลาเที่ยว:</label>
+                            <select id="tripDuration" class="route-select">
+                                <option value="3">3 วัน</option>
+                                <option value="5" selected>5 วัน</option>
+                                <option value="7">7 วัน</option>
+                                <option value="10">10 วัน</option>
+                                <option value="14">14 วัน</option>
+                            </select>
+                        </div>
+                        <button onclick="generateTripPlan()" class="trip-wizard-btn">🗺️ สร้างแผนการเดินทาง</button>
+                    </div>
+                    <div class="trip-plan-result" id="tripPlanResult" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Route Planning section -->
+            <div class="route-planning-section" id="routePlanningSection">
+                <h4>🗺️ วางแผนเส้นทาง / Route Planning</h4>
+                <div class="route-inputs">
+                    <select id="fromLocation" class="route-select">
+                        <option value="">จาก / From</option>
+                        <option value="bangkok">🏛️ กรุงเทพฯ</option>
+                        <option value="chiangmai">🏔️ เชียงใหม่</option>
+                        <option value="phuket">🏝️ ภูเก็ต</option>
+                        <option value="ayutthaya">🏺 อยุธยา</option>
+                        <option value="krabi">🌊 กระบี่</option>
+                        <option value="sukhothai">🏛️ สุโขทัย</option>
+                        <option value="chonburi">🏖️ ชลบุรี</option>
+                        <option value="kanchanaburi">🌉 กาญจนบุรี</option>
+                        <option value="lopburi">🐵 ลพบุรี</option>
+                    </select>
+                    <select id="toLocation" class="route-select">
+                        <option value="">ไป / To</option>
+                        <option value="bangkok">🏛️ กรุงเทพฯ</option>
+                        <option value="chiangmai">🏔️ เชียงใหม่</option>
+                        <option value="phuket">🏝️ ภูเก็ต</option>
+                        <option value="ayutthaya">🏺 อยุธยา</option>
+                        <option value="krabi">🌊 กระบี่</option>
+                        <option value="sukhothai">🏛️ สุโขทัย</option>
+                        <option value="chonburi">🏖️ ชลบุรี</option>
+                        <option value="kanchanaburi">🌉 กาญจนบุรี</option>
+                        <option value="lopburi">🐵 ลพบุรี</option>
+                    </select>
+                    <button onclick="calculateRoute()" class="route-btn">🚗 คำนวณ</button>
+                </div>
+                <div class="route-result" id="routeResult" style="display: none;"></div>
             </div>
             
             <!-- Favorites section -->
@@ -178,6 +295,24 @@
                      role="button"
                      tabindex="0"
                      aria-label="Sukhothai location marker"></div>
+                <div class="marker chonburi" 
+                     data-name="🏖️ ชลบุรี (Chonburi)" 
+                     onclick="showInfo('chonburi')"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Chonburi location marker"></div>
+                <div class="marker kanchanaburi" 
+                     data-name="🌉 กาญจนบุรี (Kanchanaburi)" 
+                     onclick="showInfo('kanchanaburi')"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Kanchanaburi location marker"></div>
+                <div class="marker lopburi" 
+                     data-name="🐵 ลพบุรี (Lopburi)" 
+                     onclick="showInfo('lopburi')"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Lopburi location marker"></div>
                 <div class="marker europe" 
                      data-name="🏛️ ยุโรป (Europe)" 
                      onclick="showInfo('europe')"
