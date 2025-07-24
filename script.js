@@ -107,11 +107,24 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeSearch();
     initializeFavorites();
     initializeKeyboardNavigation();
+    initializeFontLoading();
     updateWeatherInfo();
     setTimeout(hideLoadingSpinner, 1000);
     updateStatus('🌍 สร้างโลก 3D ปรับปรุงแล้วสำเร็จ!', '🌍 Enhanced 3D Globe created successfully!');
     console.log('🗺️ PaiNaiDee Enhanced 3D Map loaded successfully!');
 });
+
+// Font loading with fallback handling
+function initializeFontLoading() {
+    // Check if Inter font loaded successfully, fallback to system fonts if not
+    if (document.fonts && document.fonts.check) {
+        const interLoaded = document.fonts.check('1rem Inter');
+        if (!interLoaded) {
+            console.log('ℹ️ Inter font not loaded, using system fonts as fallback');
+            document.body.style.fontFamily = 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        }
+    }
+}
 
 // Loading spinner functions
 function showLoadingSpinner() {
@@ -174,6 +187,9 @@ function initializeEnhanced3D() {
     // Add interactive click effects
     addClickEffects();
     
+    // Add stable marker click handling
+    addMarkerClickHandling();
+    
     console.log('🗺️ PaiNaiDee Enhanced 3D Map loaded successfully!');
     console.log('สร้างแผนที่ 3 มิติปรับปรุงแล้วสำเร็จ! Created Enhanced 3D Map successfully!');
 }
@@ -195,9 +211,16 @@ function addEnhancedMouseControls() {
     let startX, startY;
     let currentRotationY = 0;
     let currentRotationX = -10;
+    let dragStartTime = 0;
     
     globe.addEventListener('mousedown', (e) => {
+        // Don't interfere with marker clicks
+        if (e.target.classList.contains('marker')) {
+            return;
+        }
+        
         isDragging = true;
+        dragStartTime = Date.now();
         startX = e.clientX;
         startY = e.clientY;
         globe.style.cursor = 'grabbing';
@@ -220,10 +243,16 @@ function addEnhancedMouseControls() {
         }
     });
     
-    document.addEventListener('mouseup', () => {
+    document.addEventListener('mouseup', (e) => {
         if (isDragging) {
+            const dragDuration = Date.now() - dragStartTime;
             isDragging = false;
             globe.style.cursor = 'grab';
+            
+            // If it was a very short drag (likely a click), don't prevent marker clicks
+            if (dragDuration < 200) {
+                e.stopPropagation();
+            }
             
             if (isRotating) {
                 // Resume rotation with current position
@@ -288,6 +317,48 @@ function addTouchSupport() {
     });
 }
 
+function addMarkerClickHandling() {
+    // Use event delegation for more reliable marker clicking
+    globe.addEventListener('click', (e) => {
+        // Check if click was on a marker or its area
+        const marker = e.target.closest('.marker');
+        if (marker) {
+            e.stopPropagation();
+            e.preventDefault();
+            
+            // Get location from marker classes
+            const location = Array.from(marker.classList).find(cls => cls !== 'marker');
+            if (location && locations[location]) {
+                // Temporarily stabilize the marker
+                marker.style.animation = 'none';
+                setTimeout(() => {
+                    marker.style.animation = '';
+                }, 1000);
+                
+                showInfo(location);
+                updateStatus(`🎯 เปิดข้อมูล: ${locations[location].name}`, `🎯 Opening info: ${locations[location].nameEn}`);
+            }
+        }
+    });
+    
+    // Add hover effects for better user feedback
+    globe.addEventListener('mouseover', (e) => {
+        const marker = e.target.closest('.marker');
+        if (marker) {
+            marker.style.transform = 'scale(1.3)';
+            marker.style.zIndex = '200';
+        }
+    });
+    
+    globe.addEventListener('mouseout', (e) => {
+        const marker = e.target.closest('.marker');
+        if (marker) {
+            marker.style.transform = '';
+            marker.style.zIndex = '100';
+        }
+    });
+}
+
 function addClickEffects() {
     globe.addEventListener('click', (e) => {
         // Only if not clicking on a marker
@@ -329,8 +400,13 @@ function createRippleEffect(e) {
 function toggleRotation() {
     isRotating = !isRotating;
     
-    const button = event.target;
-    button.textContent = isRotating ? '⏸️ หยุด/เล่น' : '▶️ หยุด/เล่น';
+    // Find the toggle button and update its text
+    const toggleButtons = document.querySelectorAll('button');
+    toggleButtons.forEach(button => {
+        if (button.textContent.includes('หยุด/เล่น')) {
+            button.textContent = isRotating ? '⏸️ หยุด/เล่น' : '▶️ หยุด/เล่น';
+        }
+    });
     
     updateGlobeRotation();
     
@@ -501,22 +577,33 @@ function updateFavoritesDisplay() {
     });
 }
 
-// Weather information (simulated)
+// Weather information (simulated) with error handling
 function updateWeatherInfo() {
     const weatherInfo = document.getElementById('weatherInfo');
     if (!weatherInfo) return;
     
-    // Simulate weather API call
-    setTimeout(() => {
-        const weatherData = {
-            bangkok: "30°C ☀️ แจ่มใส",
-            chiangmai: "25°C 🌤️ เย็นสบาย", 
-            phuket: "28°C 🌊 ลมทะเล"
-        };
-        
-        const randomLocation = Object.keys(weatherData)[Math.floor(Math.random() * 3)];
-        weatherInfo.innerHTML = `🌤️ ${locations[randomLocation].name}: ${weatherData[randomLocation]}`;
-    }, 2000);
+    // Simulate weather API call with error handling
+    try {
+        setTimeout(() => {
+            const weatherData = {
+                bangkok: "30°C ☀️ แจ่มใส",
+                chiangmai: "25°C 🌤️ เย็นสบาย", 
+                phuket: "28°C 🌊 ลมทะเล"
+            };
+            
+            const randomLocation = Object.keys(weatherData)[Math.floor(Math.random() * 3)];
+            const locationInfo = locations[randomLocation];
+            
+            if (locationInfo && weatherData[randomLocation]) {
+                weatherInfo.innerHTML = `🌤️ ${locationInfo.name}: ${weatherData[randomLocation]}`;
+            } else {
+                weatherInfo.innerHTML = `🌤️ สภาพอากาศ: ปกติดี / Weather: Normal`;
+            }
+        }, 2000);
+    } catch (error) {
+        console.warn('Weather update failed:', error);
+        weatherInfo.innerHTML = `🌤️ สภาพอากาศ: ไม่สามารถโหลดได้ / Weather: Unable to load`;
+    }
 }
 
 // Notification system
@@ -570,6 +657,11 @@ function handleKeyboardNavigation(e) {
         return;
     }
     
+    // Don't interfere with input fields
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        return;
+    }
+    
     // Number keys for quick location access
     const locationKeys = {
         '1': 'bangkok',
@@ -580,6 +672,7 @@ function handleKeyboardNavigation(e) {
     
     if (locationKeys[e.key]) {
         focusLocation(locationKeys[e.key]);
+        showNotification(`🎯 ไปยัง: ${locations[locationKeys[e.key]]?.name || 'โลก'} / Going to: ${locations[locationKeys[e.key]]?.nameEn || 'World'}`, 'info');
         return;
     }
     
@@ -587,6 +680,16 @@ function handleKeyboardNavigation(e) {
     if (e.key === ' ' && e.target === document.body) {
         e.preventDefault();
         toggleRotation();
+        return;
+    }
+    
+    // Enter key to open focused marker info
+    if (e.key === 'Enter' && e.target.classList.contains('marker')) {
+        e.preventDefault();
+        const location = Array.from(e.target.classList).find(cls => cls !== 'marker');
+        if (location) {
+            showInfo(location);
+        }
         return;
     }
     
@@ -685,13 +788,16 @@ function showInfo(location) {
     // Focus location on map
     focusLocation(location);
     
-    // Add click effect to marker
+    // Add click effect to marker with improved handling
     const marker = document.querySelector(`.marker.${location}`);
     if (marker) {
+        // Temporarily pause the animation for stable interaction
+        marker.style.animationPlayState = 'paused';
         marker.style.transform = 'scale(2)';
         setTimeout(() => {
             marker.style.transform = 'scale(1)';
-        }, 200);
+            marker.style.animationPlayState = 'running';
+        }, 500);
     }
     
     updateStatus(`📍 กำลังดู: ${info.name}`, `📍 Viewing: ${info.nameEn}`);
@@ -709,13 +815,15 @@ function closeModal() {
 
 function updateStatus(textTh, textEn) {
     const status = document.getElementById('status');
-    status.textContent = `${textTh} | ${textEn}`;
-    
-    // Add a brief animation to the status
-    status.style.transform = 'scale(1.05)';
-    setTimeout(() => {
-        status.style.transform = 'scale(1)';
-    }, 200);
+    if (status) {
+        status.textContent = `${textTh} | ${textEn}`;
+        
+        // Add a brief animation to the status
+        status.style.transform = 'scale(1.05)';
+        setTimeout(() => {
+            status.style.transform = 'scale(1)';
+        }, 200);
+    }
 }
 
 function initializeMap() {
