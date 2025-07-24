@@ -41,25 +41,83 @@
             </div>
         </div>
         
-        <div id="globe">
-            <div class="continents"></div>
-            <!-- Thai Locations -->
-            <div class="marker" style="top: 40%; left: 60%;" 
-                 data-name="🏛️ กรุงเทพฯ (Bangkok)" 
-                 onclick="showInfo('bangkok')"></div>
-            <div class="marker" style="top: 35%; left: 58%;" 
-                 data-name="🏔️ เชียงใหม่ (Chiang Mai)" 
-                 onclick="showInfo('chiangmai')"></div>
-            <div class="marker" style="top: 55%; left: 58%;" 
-                 data-name="🏝️ ภูเก็ต (Phuket)" 
-                 onclick="showInfo('phuket')"></div>
-            <!-- World Locations -->
-            <div class="marker" style="top: 30%; left: 45%;" 
-                 data-name="🏛️ ยุโรป (Europe)" 
-                 onclick="showInfo('europe')"></div>
-            <div class="marker" style="top: 35%; left: 25%;" 
-                 data-name="🗽 อเมริกา (America)" 
-                 onclick="showInfo('america')"></div>
+        <div id="enhanced3DGlobe">
+            <!-- Enhanced 3D Globe with real-looking continents -->
+            <div class="globe-sphere">
+                <!-- Atmosphere effect -->
+                <div class="atmosphere"></div>
+                
+                <!-- Continent layers for realistic appearance -->
+                <div class="continent-layer">
+                    <!-- Asia -->
+                    <div class="continent asia" data-name="เอเชีย"></div>
+                    <!-- Europe -->
+                    <div class="continent europe" data-name="ยุโรป"></div>
+                    <!-- North America -->
+                    <div class="continent north-america" data-name="อเมริกาเหนือ"></div>
+                    <!-- South America -->
+                    <div class="continent south-america" data-name="อเมริกาใต้"></div>
+                    <!-- Africa -->
+                    <div class="continent africa" data-name="แอฟริกา"></div>
+                    <!-- Australia -->
+                    <div class="continent australia" data-name="ออสเตรเลีย"></div>
+                    <!-- Antarctica -->
+                    <div class="continent antarctica" data-name="แอนตาร์กติกา"></div>
+                </div>
+                
+                <!-- Location markers -->
+                <div class="markers-layer">
+                    <!-- Thai Locations -->
+                    <div class="enhanced-marker thailand-marker" 
+                         style="top: 35%; left: 73%;" 
+                         data-location="bangkok"
+                         data-name="🏛️ กรุงเทพฯ (Bangkok)" 
+                         onclick="showInfo('bangkok')">
+                         <div class="marker-pulse"></div>
+                         <div class="marker-core"></div>
+                    </div>
+                    <div class="enhanced-marker thailand-marker" 
+                         style="top: 28%; left: 71%;" 
+                         data-location="chiangmai"
+                         data-name="🏔️ เชียงใหม่ (Chiang Mai)" 
+                         onclick="showInfo('chiangmai')">
+                         <div class="marker-pulse"></div>
+                         <div class="marker-core"></div>
+                    </div>
+                    <div class="enhanced-marker thailand-marker" 
+                         style="top: 55%; left: 71%;" 
+                         data-location="phuket"
+                         data-name="🏝️ ภูเก็ต (Phuket)" 
+                         onclick="showInfo('phuket')">
+                         <div class="marker-pulse"></div>
+                         <div class="marker-core"></div>
+                    </div>
+                    
+                    <!-- World Locations -->
+                    <div class="enhanced-marker world-marker" 
+                         style="top: 25%; left: 50%;" 
+                         data-location="europe"
+                         data-name="🏛️ ยุโรป (Europe)" 
+                         onclick="showInfo('europe')">
+                         <div class="marker-pulse"></div>
+                         <div class="marker-core"></div>
+                    </div>
+                    <div class="enhanced-marker world-marker" 
+                         style="top: 30%; left: 20%;" 
+                         data-location="america"
+                         data-name="🗽 อเมริกา (America)" 
+                         onclick="showInfo('america')">
+                         <div class="marker-pulse"></div>
+                         <div class="marker-core"></div>
+                    </div>
+                </div>
+                
+                <!-- Cloud layer for realism -->
+                <div class="clouds-layer"></div>
+                
+                <!-- Lighting effect -->
+                <div class="lighting-overlay"></div>
+            </div>
         </div>
         
         <div class="status" id="status">

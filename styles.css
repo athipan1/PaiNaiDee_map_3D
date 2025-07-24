@@ -92,90 +92,326 @@ button:hover {
     margin: 5px 0;
 }
 
-#globe {
+#enhanced3DGlobe {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 400px;
-    height: 400px;
+    width: 500px;
+    height: 500px;
+    perspective: 1000px;
+}
+
+.globe-sphere {
+    position: relative;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     background: 
-        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 50%),
-        linear-gradient(45deg, #4a90e2 0%, #357abd 50%, #1e5f99 100%);
+        radial-gradient(circle at 30% 30%, rgba(100, 180, 255, 0.8) 0%, transparent 70%),
+        radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        linear-gradient(45deg, 
+            #1e3c72 0%, 
+            #2a5298 25%, 
+            #1e3c72 50%, 
+            #2a5298 75%, 
+            #1e3c72 100%);
     box-shadow: 
-        0 0 50px rgba(74, 144, 226, 0.6),
-        inset 0 0 100px rgba(0, 0, 0, 0.3);
-    animation: rotate 20s linear infinite;
-    cursor: grab;
+        0 0 80px rgba(30, 60, 114, 0.8),
+        inset 0 0 80px rgba(0, 0, 0, 0.3),
+        inset -20px -20px 50px rgba(0, 0, 0, 0.2);
+    animation: globeRotate 25s linear infinite;
+    transform-style: preserve-3d;
     overflow: hidden;
 }
 
-#globe:active {
-    cursor: grabbing;
+.atmosphere {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(135, 206, 235, 0.3) 0%, rgba(135, 206, 235, 0.1) 70%, transparent 100%);
+    z-index: -1;
 }
 
-.continents {
+.continent-layer {
     position: absolute;
     width: 100%;
     height: 100%;
-    background-image: 
-        radial-gradient(ellipse 80px 40px at 45% 35%, #228B22 30%, transparent 50%),
-        radial-gradient(ellipse 60px 30px at 55% 45%, #228B22 30%, transparent 50%),
-        radial-gradient(ellipse 100px 50px at 30% 60%, #228B22 30%, transparent 50%),
-        radial-gradient(ellipse 90px 45px at 70% 25%, #228B22 30%, transparent 50%),
-        radial-gradient(ellipse 120px 60px at 60% 70%, #228B22 30%, transparent 50%);
     border-radius: 50%;
-    animation: rotateContinents 20s linear infinite;
+    overflow: hidden;
 }
 
-.marker {
+.continent {
+    position: absolute;
+    background: #228B22;
+    border-radius: 30px;
+    opacity: 0.9;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Enhanced continent shapes */
+.asia {
+    width: 180px;
+    height: 120px;
+    top: 25%;
+    left: 65%;
+    border-radius: 40% 60% 50% 70%;
+    background: linear-gradient(45deg, #228B22, #32CD32, #228B22);
+}
+
+.europe {
+    width: 80px;
+    height: 90px;
+    top: 20%;
+    left: 45%;
+    border-radius: 50% 40% 60% 50%;
+    background: linear-gradient(135deg, #228B22, #32CD32);
+}
+
+.north-america {
+    width: 120px;
+    height: 130px;
+    top: 15%;
+    left: 10%;
+    border-radius: 60% 40% 50% 70%;
+    background: linear-gradient(90deg, #228B22, #32CD32, #228B22);
+}
+
+.south-america {
+    width: 70px;
+    height: 140px;
+    top: 45%;
+    left: 18%;
+    border-radius: 40% 60% 30% 80%;
+    background: linear-gradient(180deg, #228B22, #32CD32);
+}
+
+.africa {
+    width: 90px;
+    height: 160px;
+    top: 30%;
+    left: 47%;
+    border-radius: 50% 50% 40% 60%;
+    background: linear-gradient(45deg, #228B22, #32CD32, #228B22);
+}
+
+.australia {
+    width: 80px;
+    height: 50px;
+    top: 70%;
+    left: 75%;
+    border-radius: 60% 40% 50% 50%;
+    background: linear-gradient(90deg, #228B22, #32CD32);
+}
+
+.antarctica {
+    width: 300px;
+    height: 40px;
+    top: 85%;
+    left: 20%;
+    border-radius: 50%;
+    background: linear-gradient(90deg, #E0E0E0, #F0F0F0, #E0E0E0);
+}
+
+.markers-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+}
+
+.enhanced-marker {
     position: absolute;
     width: 20px;
     height: 20px;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    z-index: 101;
+    transition: all 0.3s ease;
+}
+
+.marker-pulse {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border: 2px solid;
+    border-radius: 50%;
+    animation: markerPulse 2s ease-in-out infinite;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+}
+
+.marker-core {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.thailand-marker .marker-pulse {
+    border-color: #FFD700;
+}
+
+.thailand-marker .marker-core {
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+}
+
+.world-marker .marker-pulse {
+    border-color: #FF6B6B;
+}
+
+.world-marker .marker-core {
+    background: linear-gradient(45deg, #FF6B6B, #FF5252);
+}
+
+.enhanced-marker:hover {
+    transform: translate(-50%, -50%) scale(1.5);
+}
+
+.enhanced-marker:hover .marker-pulse {
+    animation-duration: 0.5s;
+}
+
+.enhanced-marker::after {
+    content: attr(data-name);
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(20, 20, 20, 0.9));
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.enhanced-marker:hover::after {
+    opacity: 1;
+}
+
+.clouds-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: 
+        radial-gradient(ellipse 120px 60px at 20% 30%, rgba(255, 255, 255, 0.2) 30%, transparent 60%),
+        radial-gradient(ellipse 100px 50px at 70% 20%, rgba(255, 255, 255, 0.15) 30%, transparent 60%),
+        radial-gradient(ellipse 80px 40px at 80% 60%, rgba(255, 255, 255, 0.1) 30%, transparent 60%),
+        radial-gradient(ellipse 90px 45px at 30% 70%, rgba(255, 255, 255, 0.12) 30%, transparent 60%);
+    animation: cloudsRotate 40s linear infinite;
+    pointer-events: none;
+}
+
+.lighting-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: 
+        radial-gradient(ellipse 200px 100px at 75% 25%, rgba(255, 255, 255, 0.4) 0%, transparent 50%),
+        linear-gradient(135deg, transparent 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.4) 100%);
+    pointer-events: none;
+}
+
+@keyframes globeRotate {
+    from { transform: rotateY(0deg) rotateX(-10deg); }
+    to { transform: rotateY(360deg) rotateX(-10deg); }
+}
+
+@keyframes cloudsRotate {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(360deg); }
+}
+
+@keyframes markerPulse {
+    0%, 100% { 
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    50% { 
+        transform: translate(-50%, -50%) scale(1.5);
+        opacity: 0.7;
+    }
+}
+
+/* Hide Cesium default controls to maintain our custom interface */
+.cesium-viewer-toolbar,
+.cesium-viewer-geocoderContainer,
+.cesium-viewer-homeButton,
+.cesium-viewer-sceneModePicker,
+.cesium-viewer-projectionPicker,
+.cesium-viewer-navigationHelpButton,
+.cesium-viewer-vrButton,
+.cesium-viewer-fullscreenButton,
+.cesium-viewer-bottom-container,
+.cesium-widget-credits {
+    display: none !important;
+}
+
+/* Location markers for 3D globe */
+.location-marker {
+    position: absolute;
+    width: 12px;
+    height: 12px;
     background: #FFD700;
-    border: 3px solid #FFA500;
+    border: 2px solid #FFA500;
     border-radius: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
     animation: pulse 2s ease-in-out infinite;
     cursor: pointer;
-    z-index: 100;
+    z-index: 1000;
+    pointer-events: auto;
 }
 
-.marker:hover {
-    transform: translate(-50%, -50%) scale(1.3);
+.location-marker:hover {
+    transform: translate(-50%, -50%) scale(1.5);
 }
 
-.marker::after {
+.location-marker::after {
     content: attr(data-name);
     position: absolute;
-    bottom: 25px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.8);
     color: white;
-    padding: 5px 10px;
+    padding: 4px 8px;
     border-radius: 4px;
-    font-size: 12px;
+    font-size: 11px;
     white-space: nowrap;
     opacity: 0;
     transition: opacity 0.3s;
     pointer-events: none;
 }
 
-.marker:hover::after {
+.location-marker:hover::after {
     opacity: 1;
 }
 
-@keyframes rotate {
-    from { transform: translate(-50%, -50%) rotateY(0deg); }
-    to { transform: translate(-50%, -50%) rotateY(360deg); }
+/* Custom animation for rotating effect */
+@keyframes cesiumRotate {
+    from { transform: translate(-50%, -50%) rotateZ(0deg); }
+    to { transform: translate(-50%, -50%) rotateZ(360deg); }
 }
 
-@keyframes rotateContinents {
-    from { transform: rotateY(0deg); }
-    to { transform: rotateY(360deg); }
+.rotating {
+    animation: cesiumRotate 30s linear infinite;
 }
 
 @keyframes pulse {
