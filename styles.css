@@ -491,6 +491,18 @@ button:focus {
     transition: all var(--transition-normal);
 }
 
+.marker::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border-radius: 50%;
+    z-index: -1;
+    background: transparent;
+}
+
 .marker:focus {
     outline: none;
     box-shadow: 
@@ -535,6 +547,8 @@ button:focus {
     box-shadow: 
         0 0 30px rgba(255, 215, 0, 1),
         inset 0 0 15px rgba(255, 255, 255, 0.8);
+    animation-play-state: paused;
+    z-index: 200;
 }
 
 .marker::after {
@@ -586,8 +600,8 @@ button:focus {
         box-shadow: 0 0 20px rgba(255, 215, 0, 0.9);
     }
     50% { 
-        transform: scale(1.2);
-        box-shadow: 0 0 30px rgba(255, 215, 0, 1);
+        transform: scale(1.1);
+        box-shadow: 0 0 25px rgba(255, 215, 0, 1);
     }
 }
 
