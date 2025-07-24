@@ -1118,6 +1118,226 @@ function manualRotateGlobe(key) {
     globe.style.transform = `rotateY(${currentY}deg) rotateX(${currentX}deg)`;
 }
 
+// Trip planning system
+function generateTripPlan() {
+    const checkboxes = document.querySelectorAll('#destinationCheckboxes input[type="checkbox"]:checked');
+    const selectedDestinations = Array.from(checkboxes).map(cb => cb.value);
+    const tripDuration = parseInt(document.getElementById('tripDuration').value);
+    
+    if (selectedDestinations.length === 0) {
+        showNotification(
+            userPreferences.language === 'th' ? 'กรุณาเลือกสถานที่อย่างน้อย 1 แห่ง' : 'Please select at least 1 destination',
+            'warning'
+        );
+        return;
+    }
+    
+    if (selectedDestinations.length > tripDuration) {
+        showNotification(
+            userPreferences.language === 'th' ? 'จำนวนสถานที่มากเกินไปสำหรับระยะเวลาที่เลือก' : 'Too many destinations for selected duration',
+            'warning'
+        );
+        return;
+    }
+    
+    const tripPlan = createOptimalTripPlan(selectedDestinations, tripDuration);
+    displayTripPlan(tripPlan);
+    
+    // Animate through the destinations on the globe
+    animateTripRoute(selectedDestinations);
+    
+    showNotification(
+        userPreferences.language === 'th' ? 'สร้างแผนการเดินทางสำเร็จ!' : 'Trip plan created successfully!',
+        'success'
+    );
+}
+
+// Create optimal trip plan with suggested itinerary
+function createOptimalTripPlan(destinations, duration) {
+    // Get recommended days for each destination
+    const recommendedDays = {
+        bangkok: 2,
+        chiangmai: 3,
+        phuket: 3,
+        ayutthaya: 1,
+        krabi: 3,
+        sukhothai: 1,
+        chonburi: 2,
+        kanchanaburi: 2,
+        lopburi: 1
+    };
+    
+    // Optimize route to minimize travel time
+    const optimizedOrder = optimizeDestinationOrder(destinations);
+    
+    // Calculate days allocation
+    const totalRecommendedDays = optimizedOrder.reduce((sum, dest) => sum + recommendedDays[dest], 0);
+    const scaleFactor = duration / totalRecommendedDays;
+    
+    let currentDay = 1;
+    const itinerary = [];
+    let totalDistance = 0;
+    let totalCost = 0;
+    
+    for (let i = 0; i < optimizedOrder.length; i++) {
+        const destination = optimizedOrder[i];
+        const location = locations[destination];
+        const allocatedDays = Math.max(1, Math.round(recommendedDays[destination] * scaleFactor));
+        
+        // Calculate travel from previous destination
+        let travelInfo = null;
+        if (i > 0) {
+            const previousDest = optimizedOrder[i - 1];
+            const route = planRoute(previousDest, destination);
+            if (route) {
+                totalDistance += route.distance;
+                totalCost += route.estimatedCost;
+                travelInfo = route;
+            }
+        }
+        
+        itinerary.push({
+            destination: destination,
+            location: location,
+            startDay: currentDay,
+            endDay: currentDay + allocatedDays - 1,
+            days: allocatedDays,
+            travelInfo: travelInfo
+        });
+        
+        currentDay += allocatedDays;
+    }
+    
+    return {
+        itinerary: itinerary,
+        totalDays: duration,
+        totalDestinations: destinations.length,
+        totalDistance: totalDistance,
+        totalCost: totalCost,
+        optimizedOrder: optimizedOrder
+    };
+}
+
+// Optimize destination order to minimize travel distance
+function optimizeDestinationOrder(destinations) {
+    if (destinations.length <= 1) return destinations;
+    
+    // Simple nearest neighbor algorithm starting from Bangkok if included
+    let startPoint = destinations.includes('bangkok') ? 'bangkok' : destinations[0];
+    let remaining = destinations.filter(d => d !== startPoint);
+    let route = [startPoint];
+    
+    while (remaining.length > 0) {
+        let currentLocation = route[route.length - 1];
+        let nearest = null;
+        let shortestDistance = Infinity;
+        
+        remaining.forEach(dest => {
+            const current = locations[currentLocation];
+            const target = locations[dest];
+            
+            if (current && target && current.coordinates && target.coordinates) {
+                const distance = calculateDistance(
+                    current.coordinates[1], current.coordinates[0],
+                    target.coordinates[1], target.coordinates[0]
+                );
+                
+                if (distance < shortestDistance) {
+                    shortestDistance = distance;
+                    nearest = dest;
+                }
+            }
+        });
+        
+        if (nearest) {
+            route.push(nearest);
+            remaining = remaining.filter(d => d !== nearest);
+        } else {
+            // Fallback: add remaining destinations in original order
+            route.push(...remaining);
+            break;
+        }
+    }
+    
+    return route;
+}
+
+// Display trip plan
+function displayTripPlan(tripPlan) {
+    const tripResult = document.getElementById('tripPlanResult');
+    const isThaiLang = userPreferences.language === 'th';
+    
+    let itineraryHTML = `
+        <h5>${isThaiLang ? '🗓️ แผนการเดินทาง' : '🗓️ Trip Itinerary'}</h5>
+    `;
+    
+    tripPlan.itinerary.forEach((item, index) => {
+        const dayText = item.days === 1 ? 
+            `${isThaiLang ? 'วันที่' : 'Day'} ${item.startDay}` : 
+            `${isThaiLang ? 'วันที่' : 'Days'} ${item.startDay}-${item.endDay}`;
+        
+        let travelHTML = '';
+        if (item.travelInfo && index > 0) {
+            const transport = item.travelInfo.recommendedTransport;
+            const transportIcons = { car: '🚗', bus: '🚌', train: '🚆', plane: '✈️' };
+            travelHTML = `
+                <div style="margin-bottom: var(--spacing-sm); font-size: var(--font-size-xs); color: var(--accent-color);">
+                    ${transportIcons[transport]} ${isThaiLang ? 'เดินทาง' : 'Travel'}: ${item.travelInfo.distance}km, ${item.travelInfo.travelTime}
+                </div>
+            `;
+        }
+        
+        itineraryHTML += `
+            <div class="trip-day">
+                <div class="trip-day-header">${dayText}: ${item.location.emoji} ${isThaiLang ? item.location.name : item.location.nameEn}</div>
+                ${travelHTML}
+                <div class="trip-day-details">
+                    <p><strong>${isThaiLang ? 'กิจกรรมแนะนำ:' : 'Recommended Activities:'}</strong></p>
+                    <ul>
+                        ${item.location.attractions ? item.location.attractions.slice(0, 3).map((attraction, i) => 
+                            `<li>${isThaiLang ? attraction : (item.location.attractionsEn && item.location.attractionsEn[i] ? item.location.attractionsEn[i] : attraction)}</li>`
+                        ).join('') : `<li>${isThaiLang ? 'สำรวจเมือง' : 'Explore the city'}</li>`}
+                    </ul>
+                    ${item.location.travelTips ? `<p><small>💡 ${item.location.travelTips}</small></p>` : ''}
+                </div>
+            </div>
+        `;
+    });
+    
+    itineraryHTML += `
+        <div class="trip-summary">
+            <h5>${isThaiLang ? '📊 สรุปการเดินทาง' : '📊 Trip Summary'}</h5>
+            <div class="trip-stats">
+                <div><strong>${isThaiLang ? 'ระยะเวลา:' : 'Duration:'}</strong> ${tripPlan.totalDays} ${isThaiLang ? 'วัน' : 'days'}</div>
+                <div><strong>${isThaiLang ? 'สถานที่:' : 'Destinations:'}</strong> ${tripPlan.totalDestinations} ${isThaiLang ? 'แห่ง' : 'places'}</div>
+                <div><strong>${isThaiLang ? 'ระยะทาง:' : 'Total Distance:'}</strong> ${tripPlan.totalDistance}km</div>
+                <div><strong>${isThaiLang ? 'ค่าใช้จ่าย:' : 'Est. Cost:'}</strong> ฿${tripPlan.totalCost.toLocaleString()}</div>
+            </div>
+        </div>
+    `;
+    
+    tripResult.innerHTML = itineraryHTML;
+    tripResult.style.display = 'block';
+}
+
+// Animate through trip destinations on the globe
+function animateTripRoute(destinations) {
+    let currentIndex = 0;
+    
+    function showNextDestination() {
+        if (currentIndex < destinations.length) {
+            focusLocation(destinations[currentIndex]);
+            currentIndex++;
+            
+            if (currentIndex < destinations.length) {
+                setTimeout(showNextDestination, 1500);
+            }
+        }
+    }
+    
+    showNextDestination();
+}
+
 // Route calculation function
 function calculateRoute() {
     const fromSelect = document.getElementById('fromLocation');

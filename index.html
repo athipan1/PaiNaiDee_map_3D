@@ -153,6 +153,66 @@
                 </button>
             </div>
             
+            <!-- Trip Planning Wizard -->
+            <div class="trip-wizard-section" id="tripWizardSection">
+                <h4>✈️ วางแผนทริป / Trip Planner</h4>
+                <div class="trip-wizard-container">
+                    <div class="trip-wizard-step" id="tripStep1">
+                        <p>เลือกสถานที่ที่ต้องการเที่ยว:</p>
+                        <div class="destination-checkboxes" id="destinationCheckboxes">
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="bangkok">
+                                <span>🏛️ กรุงเทพฯ</span>
+                            </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="chiangmai">
+                                <span>🏔️ เชียงใหม่</span>
+                            </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="phuket">
+                                <span>🏝️ ภูเก็ต</span>
+                            </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="ayutthaya">
+                                <span>🏺 อยุธยา</span>
+                            </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="krabi">
+                                <span>🌊 กระบี่</span>
+                            </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="sukhothai">
+                                <span>🏛️ สุโขทัย</span>
+                            </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="chonburi">
+                                <span>🏖️ ชลบุรี</span>
+                            </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="kanchanaburi">
+                                <span>🌉 กาญจนบุรี</span>
+                            </label>
+                            <label class="destination-checkbox">
+                                <input type="checkbox" value="lopburi">
+                                <span>🐵 ลพบุรี</span>
+                            </label>
+                        </div>
+                        <div class="trip-duration-selector">
+                            <label for="tripDuration">ระยะเวลาเที่ยว:</label>
+                            <select id="tripDuration" class="route-select">
+                                <option value="3">3 วัน</option>
+                                <option value="5" selected>5 วัน</option>
+                                <option value="7">7 วัน</option>
+                                <option value="10">10 วัน</option>
+                                <option value="14">14 วัน</option>
+                            </select>
+                        </div>
+                        <button onclick="generateTripPlan()" class="trip-wizard-btn">🗺️ สร้างแผนการเดินทาง</button>
+                    </div>
+                    <div class="trip-plan-result" id="tripPlanResult" style="display: none;"></div>
+                </div>
+            </div>
+
             <!-- Route Planning section -->
             <div class="route-planning-section" id="routePlanningSection">
                 <h4>🗺️ วางแผนเส้นทาง / Route Planning</h4>
