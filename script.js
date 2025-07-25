@@ -6145,6 +6145,58 @@ function startExploring() {
     }, 800);
 }
 
+// Quick start functions for streamlined onboarding
+function quickStartCultural() {
+    startExploring();
+    setTimeout(() => {
+        // Auto-focus on Bangkok for cultural experience
+        focusLocation('bangkok');
+        setTimeout(() => showInfo('bangkok'), 1000);
+        
+        // Show cultural suggestion
+        showNotification(
+            userPreferences.language === 'th' ? 
+            '🏛️ เริ่มต้นกับวัฒนธรรมไทย: กรุงเทพฯ' : 
+            '🏛️ Starting with Thai Culture: Bangkok',
+            'info'
+        );
+    }, 1000);
+}
+
+function quickStartNature() {
+    startExploring();
+    setTimeout(() => {
+        // Auto-focus on Chiang Mai for nature experience
+        focusLocation('chiangmai');
+        setTimeout(() => showInfo('chiangmai'), 1000);
+        
+        // Show nature suggestion
+        showNotification(
+            userPreferences.language === 'th' ? 
+            '🏔️ เริ่มต้นกับธรรมชาติ: เชียงใหม่' : 
+            '🏔️ Starting with Nature: Chiang Mai',
+            'info'
+        );
+    }, 1000);
+}
+
+function quickStartBeach() {
+    startExploring();
+    setTimeout(() => {
+        // Auto-focus on Phuket for beach experience
+        focusLocation('phuket');
+        setTimeout(() => showInfo('phuket'), 1000);
+        
+        // Show beach suggestion
+        showNotification(
+            userPreferences.language === 'th' ? 
+            '🏝️ เริ่มต้นกับทะเลและเกาะ: ภูเก็ต' : 
+            '🏝️ Starting with Beaches: Phuket',
+            'info'
+        );
+    }, 1000);
+}
+
 // Add a gentle hint system for new users after starting
 function showStartHint() {
     const hasSeenHint = localStorage.getItem('painaidee-seen-start-hint');
