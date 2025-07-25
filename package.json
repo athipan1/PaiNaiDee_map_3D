@@ -1,0 +1,54 @@
+{
+  "name": "painaidee-3d-map",
+  "version": "1.0.0",
+  "description": "PaiNaiDee 3D Interactive Map - แผนที่ 3 มิติแบบอินเทอแรคทีฟสำหรับการท่องเที่ยวประเทศไทย",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "dev": "python3 -m http.server 3000",
+    "build": "echo 'No build process required for static site'",
+    "preview": "python3 -m http.server 4173",
+    "deploy:github": "gh-pages -d .",
+    "deploy:vercel": "vercel",
+    "serve": "python3 -m http.server",
+    "validate": "node -c script.js && echo 'JavaScript validation passed'",
+    "docker:build": "docker build -t painaidee-3d-map .",
+    "docker:run": "docker run -p 8080:80 painaidee-3d-map"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/athipan1/PaiNaiDee_map_3D.git"
+  },
+  "keywords": [
+    "3d-map",
+    "thailand",
+    "tourism",
+    "interactive",
+    "globe",
+    "mapping",
+    "bangkok",
+    "chiang-mai",
+    "phuket",
+    "accessibility",
+    "responsive",
+    "vanilla-js"
+  ],
+  "author": "PaiNaiDee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/athipan1/PaiNaiDee_map_3D/issues"
+  },
+  "homepage": "https://athipan1.github.io/PaiNaiDee_map_3D/",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.1.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
+}
