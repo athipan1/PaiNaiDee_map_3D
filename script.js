@@ -2536,7 +2536,7 @@ function startExploring() {
             `🚀 ${getText('exploring')} | Exploration started!`
         );
         
-        // Show welcome notification
+        // Show welcome notification with enhanced start guidance
         showNotification(
             userPreferences.language === 'th' ? 
             '🎉 ยินดีต้อนรับ! เริ่มสำรวจโลก 3D ได้เลย' : 
@@ -2544,8 +2544,40 @@ function startExploring() {
             'success'
         );
         
+        // Add gentle hint for first interaction after 3 seconds
+        setTimeout(() => {
+            showStartHint();
+        }, 3000);
+        
         console.log('🚀 Welcome experience completed - Starting exploration!');
     }, 800);
+}
+
+// Add a gentle hint system for new users after starting
+function showStartHint() {
+    const hasSeenHint = localStorage.getItem('painaidee-seen-start-hint');
+    if (hasSeenHint === 'true') {
+        return; // Don't show hint if user has seen it before
+    }
+    
+    const isThaiLang = userPreferences.language === 'th';
+    const hintMessage = isThaiLang ? 
+        '💡 เคล็ดลับ: ลองคลิกที่จุดสีทองบนโลกเพื่อดูข้อมูลสถานที่!' :
+        '💡 Tip: Try clicking the golden dots on the globe to see location details!';
+    
+    showNotification(hintMessage, 'info');
+    
+    // Mark hint as seen
+    localStorage.setItem('painaidee-seen-start-hint', 'true');
+    
+    // Add subtle visual indicator to first marker for 10 seconds
+    const bangkokMarker = document.querySelector('.marker.bangkok');
+    if (bangkokMarker) {
+        bangkokMarker.style.animation = 'markerStartHint 3s ease-in-out 3';
+        setTimeout(() => {
+            bangkokMarker.style.animation = 'markerPulseGentle 3s ease-in-out infinite';
+        }, 9000);
+    }
 }
 
 function startGuidedTour() {
