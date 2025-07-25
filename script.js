@@ -7,7 +7,8 @@ let globe;
 let favorites = JSON.parse(localStorage.getItem('painaidee-favorites')) || [];
 let userPreferences = JSON.parse(localStorage.getItem('painaidee-preferences')) || {
     theme: 'light',
-    language: 'th'
+    language: 'th',
+    highContrast: false
 };
 
 // Mascot System Variables
@@ -891,15 +892,37 @@ function updateButtonTexts() {
 function initializeTheme() {
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
+    const contrastToggle = document.getElementById('contrastToggle');
+    const contrastIcon = document.getElementById('contrastIcon');
     const savedTheme = userPreferences.theme;
+    const savedHighContrast = userPreferences.highContrast;
     
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    // Apply theme and high contrast
+    if (savedHighContrast) {
+        document.documentElement.setAttribute('data-theme', 'contrast');
+        contrastIcon.textContent = '🔆';
+    } else {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        contrastIcon.textContent = '🎨';
+    }
+    
     themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
     
     themeToggle.addEventListener('click', toggleTheme);
+    contrastToggle.addEventListener('click', toggleHighContrast);
+    
+    // Add keyboard support
+    themeToggle.addEventListener('keydown', handleToggleKeyDown);
+    contrastToggle.addEventListener('keydown', handleToggleKeyDown);
 }
 
 function toggleTheme() {
+    // If high contrast is enabled, disable it first
+    if (userPreferences.highContrast) {
+        toggleHighContrast();
+        return;
+    }
+    
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     const themeIcon = document.getElementById('themeIcon');
@@ -920,6 +943,66 @@ function toggleTheme() {
     setTimeout(() => {
         showContextualMascotTip('themeChanged');
     }, 500);
+    
+    // Announce theme change for screen readers
+    announceToScreenReader(`Theme changed to ${newTheme} mode`);
+}
+
+function toggleHighContrast() {
+    const currentContrast = userPreferences.highContrast;
+    const newContrast = !currentContrast;
+    const contrastIcon = document.getElementById('contrastIcon');
+    
+    userPreferences.highContrast = newContrast;
+    
+    if (newContrast) {
+        document.documentElement.setAttribute('data-theme', 'contrast');
+        contrastIcon.textContent = '🔆';
+    } else {
+        document.documentElement.setAttribute('data-theme', userPreferences.theme);
+        contrastIcon.textContent = '🎨';
+    }
+    
+    localStorage.setItem('painaidee-preferences', JSON.stringify(userPreferences));
+    
+    // Add transition effect
+    document.body.style.transition = 'all 0.3s ease';
+    setTimeout(() => {
+        document.body.style.transition = '';
+    }, 300);
+    
+    // Show notification
+    const message = newContrast ? 
+        (userPreferences.language === 'th' ? 'เปิดโหมดสีคมชัดแล้ว' : 'High contrast mode enabled') :
+        (userPreferences.language === 'th' ? 'ปิดโหมดสีคมชัดแล้ว' : 'High contrast mode disabled');
+    
+    showNotification(message, 'info');
+    
+    // Announce contrast change for screen readers
+    announceToScreenReader(message);
+}
+
+// Handle keyboard navigation for toggle buttons
+function handleToggleKeyDown(event) {
+    if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        event.target.click();
+    }
+}
+
+// Screen reader announcements
+function announceToScreenReader(message) {
+    const announcement = document.createElement('div');
+    announcement.setAttribute('aria-live', 'polite');
+    announcement.setAttribute('aria-atomic', 'true');
+    announcement.className = 'sr-only';
+    announcement.textContent = message;
+    
+    document.body.appendChild(announcement);
+    
+    setTimeout(() => {
+        document.body.removeChild(announcement);
+    }, 1000);
 }
 
 function initializeEnhanced3D() {
@@ -2728,6 +2811,17 @@ function showInfo(location) {
     // Enhanced modal animation sequence
     modal.style.display = 'flex';
     modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'false');
+    
+    // Set focus to modal for screen readers
+    setTimeout(() => {
+        const firstFocusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        if (firstFocusable) {
+            firstFocusable.focus();
+        } else {
+            modal.focus();
+        }
+    }, 100);
     
     // Trigger animations with proper timing
     requestAnimationFrame(() => {
@@ -2774,6 +2868,94 @@ function showInfo(location) {
     updateStatus(`📍 ${getText('description')}: ${getCurrentLocationName(info)}`, `📍 Viewing: ${getCurrentLocationName(info)}`);
 }
 
+// Enhanced keyboard navigation and accessibility
+function initializeKeyboardNavigation() {
+    // Add keyboard support for markers
+    document.querySelectorAll('.marker').forEach(marker => {
+        marker.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                marker.click();
+            }
+        });
+    });
+    
+    // Add keyboard support for search results
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    
+    if (searchInput && searchResults) {
+        let selectedIndex = -1;
+        
+        searchInput.addEventListener('keydown', (e) => {
+            const items = searchResults.querySelectorAll('.search-result-item');
+            
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+                updateSearchSelection(items, selectedIndex);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedIndex = Math.max(selectedIndex - 1, -1);
+                updateSearchSelection(items, selectedIndex);
+            } else if (e.key === 'Enter' && selectedIndex >= 0) {
+                e.preventDefault();
+                items[selectedIndex].click();
+                selectedIndex = -1;
+            } else if (e.key === 'Escape') {
+                searchResults.style.display = 'none';
+                selectedIndex = -1;
+            }
+        });
+    }
+    
+    // Add modal keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        const modal = document.getElementById('modalOverlay');
+        if (modal && modal.style.display !== 'none') {
+            if (e.key === 'Escape') {
+                closeModal();
+            } else if (e.key === 'Tab') {
+                trapFocusInModal(e, modal);
+            }
+        }
+    });
+}
+
+function updateSearchSelection(items, selectedIndex) {
+    items.forEach((item, index) => {
+        if (index === selectedIndex) {
+            item.classList.add('selected');
+            item.setAttribute('aria-selected', 'true');
+            item.scrollIntoView({ block: 'nearest' });
+        } else {
+            item.classList.remove('selected');
+            item.setAttribute('aria-selected', 'false');
+        }
+    });
+}
+
+function trapFocusInModal(e, modal) {
+    const focusableElements = modal.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+    
+    if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+        }
+    } else {
+        if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+        }
+    }
+}
+
 // Helper functions for multilingual support
 function getCurrentLocationName(info) {
     return userPreferences.language === 'en' ? info.nameEn : info.name;
@@ -2800,12 +2982,23 @@ function closeModal() {
         }
         
         modal.classList.remove('show');
+        modal.setAttribute('aria-hidden', 'true');
+        
+        // Return focus to the element that opened the modal
+        const focusedMarker = document.querySelector('.marker:focus');
+        if (focusedMarker) {
+            focusedMarker.focus();
+        }
+        
         setTimeout(() => {
             modal.style.display = 'none';
             if (modalContent) {
                 modalContent.style.animation = '';
             }
         }, 300);
+        
+        // Announce modal closure to screen readers
+        announceToScreenReader('Location information dialog closed');
     }
 }
 

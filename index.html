@@ -132,13 +132,18 @@
     </div>
 
     <!-- Theme toggle button -->
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" role="button" tabindex="0">
         <span id="themeIcon">🌙</span>
     </button>
     
     <!-- Language toggle button -->
-    <button class="language-toggle" id="languageToggle" aria-label="Toggle language">
+    <button class="language-toggle" id="languageToggle" aria-label="Toggle language" role="button" tabindex="0">
         <span id="languageIcon">🇬🇧</span>
+    </button>
+
+    <!-- High contrast toggle button -->
+    <button class="contrast-toggle" id="contrastToggle" aria-label="Toggle high contrast mode" role="button" tabindex="0">
+        <span id="contrastIcon">🎨</span>
     </button>
 
     <!-- Floating Mascot Assistant -->
@@ -212,8 +217,11 @@
                     id="searchInput"
                     placeholder="🔍 ค้นหาสถานที่... / Search location..."
                     aria-label="Search locations"
+                    role="searchbox"
+                    aria-describedby="searchResults"
+                    tabindex="0"
                 >
-                <div class="search-results" id="searchResults"></div>
+                <div class="search-results" id="searchResults" role="listbox" aria-label="Search results"></div>
             </div>
             
             <!-- Category Filter System -->
@@ -226,26 +234,26 @@
             
             <!-- Location buttons with favorites - Enhanced with more Thai destinations -->
             <div class="button-row">
-                <button onclick="focusLocation('bangkok')" aria-label="Focus on Bangkok">
+                <button onclick="focusLocation('bangkok')" aria-label="Focus on Bangkok" role="button" tabindex="0">
                     🏛️ กรุงเทพฯ
                 </button>
-                <button class="favorite-btn" onclick="toggleFavorite('bangkok')" aria-label="Add Bangkok to favorites" data-location="bangkok">
+                <button class="favorite-btn" onclick="toggleFavorite('bangkok')" aria-label="Add Bangkok to favorites" data-location="bangkok" role="button" tabindex="0">
                     ⭐
                 </button>
             </div>
             <div class="button-row">
-                <button onclick="focusLocation('chiangmai')" aria-label="Focus on Chiang Mai">
+                <button onclick="focusLocation('chiangmai')" aria-label="Focus on Chiang Mai" role="button" tabindex="0">
                     🏔️ เชียงใหม่
                 </button>
-                <button class="favorite-btn" onclick="toggleFavorite('chiangmai')" aria-label="Add Chiang Mai to favorites" data-location="chiangmai">
+                <button class="favorite-btn" onclick="toggleFavorite('chiangmai')" aria-label="Add Chiang Mai to favorites" data-location="chiangmai" role="button" tabindex="0">
                     ⭐
                 </button>
             </div>
             <div class="button-row">
-                <button onclick="focusLocation('phuket')" aria-label="Focus on Phuket">
+                <button onclick="focusLocation('phuket')" aria-label="Focus on Phuket" role="button" tabindex="0">
                     🏝️ ภูเก็ต
                 </button>
-                <button class="favorite-btn" onclick="toggleFavorite('phuket')" aria-label="Add Phuket to favorites" data-location="phuket">
+                <button class="favorite-btn" onclick="toggleFavorite('phuket')" aria-label="Add Phuket to favorites" data-location="phuket" role="button" tabindex="0">
                     ⭐
                 </button>
             </div>
@@ -614,13 +622,13 @@
     </div>
 
     <!-- Location info modal -->
-    <div class="modal-overlay" id="modalOverlay" style="display: none;">
-        <div class="location-modal" id="locationModal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
-            <button class="modal-close" onclick="closeModal()" aria-label="Close modal">×</button>
+    <div class="modal-overlay" id="modalOverlay" style="display: none;" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="location-modal" id="locationModal" role="document" aria-labelledby="modalTitle" aria-describedby="modalBody">
+            <button class="modal-close" onclick="closeModal()" aria-label="Close modal" tabindex="0">×</button>
             <div class="modal-content">
                 <h2 id="modalTitle"></h2>
                 <div class="modal-body" id="modalBody"></div>
-                <div class="modal-gallery" id="modalGallery"></div>
+                <div class="modal-gallery" id="modalGallery" role="img" aria-label="Location photo gallery"></div>
             </div>
         </div>
     </div>
