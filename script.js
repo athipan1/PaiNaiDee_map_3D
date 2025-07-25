@@ -1,4 +1,4 @@
-// PaiNaiDee Enhanced 3D Map JavaScript with Modern UX/UI Features
+// PaiNaiDee Enhanced 3D Map JavaScript with Modern UX/UI Features and Mascot System
 
 let isRotating = true;
 let rotationSpeed = 1;
@@ -10,7 +10,13 @@ let userPreferences = JSON.parse(localStorage.getItem('painaidee-preferences')) 
     language: 'th'
 };
 
-// Language system
+// Mascot System Variables
+let mascotTips = [];
+let currentTipIndex = 0;
+let mascotInteractionCount = 0;
+let lastMascotInteraction = 0;
+
+// Enhanced Language system with mascot support
 const texts = {
     th: {
         welcome: "ยินดีต้อนรับสู่แผนที่ 3 มิติ!",
@@ -36,7 +42,11 @@ const texts = {
         travelTips: "เคล็ดลับการเดินทาง",
         description: "คำอธิบาย",
         attractionsTitle: "สถานที่น่าสนใจ",
-        km: "กิโลเมตร"
+        km: "กิโลเมตร",
+        mascotGreeting: "สวัสดีค่ะ! ฉันชื่อ PaiNai ช้างน้อยผู้นำทาง 🐘",
+        mascotWelcome: "ยินดีต้อนรับสู่แผนที่ 3 มิติของเรา!",
+        mascotClickForTips: "คลิกที่ฉันเพื่อรับคำแนะนำการใช้งาน!",
+        mascotTipButton: "💡 คำแนะนำ"
     },
     en: {
         welcome: "Welcome to the 3D Interactive Globe!",
@@ -62,7 +72,11 @@ const texts = {
         travelTips: "Travel Tips",
         description: "Description",
         attractionsTitle: "Attractions",
-        km: "kilometers"
+        km: "kilometers",
+        mascotGreeting: "Hello! I'm PaiNai, your little elephant guide 🐘",
+        mascotWelcome: "Welcome to our 3D interactive map!",
+        mascotClickForTips: "Click me for helpful tips!",
+        mascotTipButton: "💡 Tips"
     }
 };
 
@@ -155,6 +169,245 @@ function estimateTravelCost(distance, transportType) {
 function getText(key) {
     return texts[userPreferences.language] ? texts[userPreferences.language][key] || key : key;
 }
+
+// ========================================
+// MASCOT SYSTEM & INTERACTIVE FEATURES
+// ========================================
+
+// Mascot Tips Database
+function initializeMascotTips() {
+    mascotTips = {
+        th: [
+            "🎯 คลิกจุดสีทองบนโลกเพื่อดูข้อมูลสถานที่!",
+            "🔍 ใช้ช่องค้นหาเพื่อหาสถานที่ที่คุณสนใจ",
+            "⭐ กดปุ่มดาวเพื่อเพิ่มสถานที่ในรายการโปรด",
+            "🌍 ลากเมาส์เพื่อหมุนโลกและสำรวจมุมมองใหม่",
+            "⚡ เปลี่ยนความเร็วการหมุนด้วยปุ่มควบคุม",
+            "🗺️ ใช้ Trip Planner เพื่อวางแผนการเดินทาง",
+            "📏 เปรียบเทียบระยะทางระหว่างสถานที่ต่างๆ",
+            "🌙 เปลี่ยนธีมเป็นโหมดกลางคืนเพื่อประสบการณ์ใหม่",
+            "🇹🇭🇬🇧 สลับภาษาไทย-อังกฤษได้ตลอดเวลา",
+            "📱 แอปใช้งานได้ดีบนมือถือด้วยนะ!",
+            "🏖️ ลองดูข้อมูลสภาพอากาศของแต่ละสถานที่",
+            "🎨 ใช้ Category Filter เพื่อกรองสถานที่ตามประเภท"
+        ],
+        en: [
+            "🎯 Click golden dots on the globe to explore locations!",
+            "🔍 Use the search box to find places you're interested in",
+            "⭐ Click the star button to add places to your favorites",
+            "🌍 Drag to rotate the globe and explore new perspectives",
+            "⚡ Change rotation speed with the control buttons",
+            "🗺️ Use Trip Planner to organize your travels",
+            "📏 Compare distances between different locations",
+            "🌙 Switch to dark theme for a different experience",
+            "🇹🇭🇬🇧 Toggle between Thai and English anytime",
+            "📱 The app works great on mobile devices too!",
+            "🏖️ Check weather information for each location",
+            "🎨 Use Category Filters to find specific types of places"
+        ]
+    };
+}
+
+// Mascot Interactive Functions
+function initializeMascot() {
+    initializeMascotTips();
+    
+    // Setup floating mascot click handler
+    const floatingMascot = document.getElementById('floatingMascot');
+    if (floatingMascot) {
+        floatingMascot.addEventListener('click', handleMascotClick);
+        
+        // Show initial tip after a delay
+        setTimeout(() => {
+            showMascotTip();
+        }, 5000);
+        
+        // Periodic tip showing
+        setInterval(() => {
+            if (Date.now() - lastMascotInteraction > 30000) { // Show tip every 30 seconds if no interaction
+                showMascotTip();
+            }
+        }, 30000);
+    }
+    
+    // Update welcome mascot message
+    updateWelcomeMascotMessage();
+}
+
+function handleMascotClick() {
+    const floatingMascot = document.getElementById('floatingMascot');
+    const mascotSpeech = document.getElementById('mascotSpeechSmall');
+    
+    mascotInteractionCount++;
+    lastMascotInteraction = Date.now();
+    
+    // Add click animation
+    floatingMascot.classList.add('active');
+    setTimeout(() => {
+        floatingMascot.classList.remove('active');
+    }, 300);
+    
+    // Show next tip or greeting
+    if (mascotInteractionCount === 1) {
+        showMascotGreeting();
+    } else {
+        showMascotTip();
+    }
+    
+    // Show speech bubble
+    floatingMascot.classList.add('speaking');
+    setTimeout(() => {
+        floatingMascot.classList.remove('speaking');
+    }, 4000);
+}
+
+function showMascotGreeting() {
+    const mascotTip = document.getElementById('mascotTip');
+    if (mascotTip) {
+        const isThaiLang = userPreferences.language === 'th';
+        const greeting = isThaiLang ? 
+            `${getText('mascotGreeting')}<br>${getText('mascotWelcome')}` :
+            `${getText('mascotGreeting')}<br>${getText('mascotWelcome')}`;
+        
+        mascotTip.innerHTML = greeting;
+        
+        // Add some personality with random greetings
+        const greetings = {
+            th: [
+                "สวัสดีค่ะ! ฉันคือ PaiNai ช้างน้อยผู้ช่วย 🐘<br>พร้อมช่วยคุณสำรวจโลกแล้ว!",
+                "หวัดดีจ้า! ฉันจะคอยให้คำแนะนำดีๆ นะ 💫<br>มาสำรวจไปด้วยกัน!",
+                "ยินดีที่ได้รู้จักค่ะ! 🌟<br>ฉันจะช่วยให้การเดินทางของคุณสนุกขึ้น!"
+            ],
+            en: [
+                "Hello! I'm PaiNai, your little elephant assistant 🐘<br>Ready to help you explore the world!",
+                "Hi there! I'll give you helpful tips 💫<br>Let's explore together!",
+                "Nice to meet you! 🌟<br>I'll make your journey more fun!"
+            ]
+        };
+        
+        const randomGreeting = greetings[userPreferences.language][Math.floor(Math.random() * greetings[userPreferences.language].length)];
+        mascotTip.innerHTML = randomGreeting;
+    }
+}
+
+function showMascotTip() {
+    const mascotTip = document.getElementById('mascotTip');
+    if (mascotTip && mascotTips[userPreferences.language]) {
+        const tips = mascotTips[userPreferences.language];
+        const tip = tips[currentTipIndex % tips.length];
+        
+        mascotTip.innerHTML = tip;
+        currentTipIndex++;
+        
+        // Add sparkle effect to the mascot
+        createMascotSparkles();
+    }
+}
+
+function createMascotSparkles() {
+    const floatingMascot = document.getElementById('floatingMascot');
+    if (!floatingMascot) return;
+    
+    const sparkles = ['✨', '💫', '⭐', '🌟'];
+    const rect = floatingMascot.getBoundingClientRect();
+    
+    for (let i = 0; i < 3; i++) {
+        setTimeout(() => {
+            const sparkle = document.createElement('div');
+            sparkle.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
+            sparkle.style.cssText = `
+                position: fixed;
+                left: ${rect.left + Math.random() * rect.width}px;
+                top: ${rect.top + Math.random() * rect.height}px;
+                font-size: 1.2rem;
+                pointer-events: none;
+                z-index: 1001;
+                animation: mascotSparkle 2s ease-out forwards;
+            `;
+            document.body.appendChild(sparkle);
+            
+            setTimeout(() => sparkle.remove(), 2000);
+        }, i * 200);
+    }
+}
+
+function updateWelcomeMascotMessage() {
+    const mascotMessage = document.getElementById('mascotMessage');
+    if (mascotMessage) {
+        const isThaiLang = userPreferences.language === 'th';
+        const message = isThaiLang ?
+            `${getText('mascotGreeting')}<br>${getText('mascotWelcome')}` :
+            `${getText('mascotGreeting')}<br>${getText('mascotWelcome')}`;
+        
+        mascotMessage.innerHTML = message;
+    }
+}
+
+function updateMascotLanguage() {
+    updateWelcomeMascotMessage();
+    
+    const mascotTip = document.getElementById('mascotTip');
+    if (mascotTip) {
+        const isThaiLang = userPreferences.language === 'th';
+        const message = isThaiLang ? 
+            `${getText('mascotClickForTips')}` : 
+            `${getText('mascotClickForTips')}`;
+        mascotTip.innerHTML = message;
+    }
+}
+
+// Context-aware mascot responses
+function showContextualMascotTip(context) {
+    const contextTips = {
+        th: {
+            locationFocus: "ดีมาก! คุณกำลังดูข้อมูล${location} อยู่นะ 🎯<br>ลองคลิกจุดทองอื่นๆ ดูสิ!",
+            searchUsed: "เก่งมาก! การค้นหาช่วยให้หาสถานที่ได้ง่ายขึ้น 🔍<br>ลองใช้ Category Filter ด้วยนะ!",
+            favoriteAdded: "ยอดเยี่ยม! บันทึกสถานที่โปรดแล้ว ⭐<br>จะได้หาง่ายในครั้งหน้า!",
+            tripPlanning: "สุดยอด! กำลังวางแผนทริปใช่มั้ย? 🗺️<br>อย่าลืมดูข้อมูลสภาพอากาศด้วยนะ!",
+            themeChanged: "สวยใหม่เลย! ธีมใหม่ทำให้ดูดีขึ้นมาก 🎨<br>ลองเปลี่ยนไปมาดูสิ!"
+        },
+        en: {
+            locationFocus: "Great! You're viewing ${location} 🎯<br>Try clicking other golden dots too!",
+            searchUsed: "Excellent! Search makes finding places easier 🔍<br>Try the Category Filters too!",
+            favoriteAdded: "Awesome! Location saved to favorites ⭐<br>Easy to find next time!",
+            tripPlanning: "Perfect! Planning a trip? 🗺️<br>Don't forget to check weather info!",
+            themeChanged: "Looking good! The new theme is beautiful 🎨<br>Feel free to switch back and forth!"
+        }
+    };
+    
+    const mascotTip = document.getElementById('mascotTip');
+    if (mascotTip && contextTips[userPreferences.language] && contextTips[userPreferences.language][context]) {
+        const tip = contextTips[userPreferences.language][context];
+        mascotTip.innerHTML = tip;
+        
+        // Show mascot speaking
+        const floatingMascot = document.getElementById('floatingMascot');
+        if (floatingMascot) {
+            floatingMascot.classList.add('speaking');
+            setTimeout(() => {
+                floatingMascot.classList.remove('speaking');
+            }, 3000);
+        }
+        
+        lastMascotInteraction = Date.now();
+    }
+}
+
+// Add CSS animation for sparkles
+const mascotSparkleStyle = document.createElement('style');
+mascotSparkleStyle.textContent = `
+    @keyframes mascotSparkle {
+        0% {
+            transform: translateY(0) rotate(0deg) scale(1);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-50px) rotate(180deg) scale(0.5);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(mascotSparkleStyle);
 
 // Location categories for enhanced filtering
 const locationCategories = {
@@ -554,6 +807,9 @@ function toggleLanguage() {
     // Update interface language
     updateInterfaceLanguage();
     
+    // Update mascot language
+    updateMascotLanguage();
+    
     showNotification(
         newLang === 'th' ? 'เปลี่ยนเป็นภาษาไทยแล้ว' : 'Changed to English',
         'info'
@@ -659,6 +915,11 @@ function toggleTheme() {
     setTimeout(() => {
         document.body.style.transition = '';
     }, 300);
+    
+    // Show contextual mascot tip
+    setTimeout(() => {
+        showContextualMascotTip('themeChanged');
+    }, 500);
 }
 
 function initializeEnhanced3D() {
@@ -989,6 +1250,11 @@ function focusLocation(location) {
         }
         
         updateStatus(`${info.emoji} ${info.name}`, `${info.emoji} ${info.nameEn}`);
+        
+        // Show contextual mascot tip
+        setTimeout(() => {
+            showContextualMascotTip('locationFocus');
+        }, 1000);
     } else if (location === 'world') {
         // Reset all markers
         document.querySelectorAll('.marker').forEach(marker => {
@@ -2565,6 +2831,9 @@ function initializeMap() {
     initializeLanguage();
     initializeFontLoading();
     
+    // Initialize mascot system
+    initializeMascot();
+    
     // Self-contained enhanced 3D map
     initializeEnhanced3D();
     
@@ -2582,7 +2851,7 @@ function initializeMap() {
         initializeEnhancedUX();
         hideLoadingSpinner();
         updateStatus('🌍 สร้างโลก 3D ปรับปรุงแล้วสำเร็จ!', '🌍 Enhanced 3D Globe created successfully!');
-        console.log('🗺️ PaiNaiDee Enhanced 3D Map loaded successfully!');
+        console.log('🗺️ PaiNaiDee Enhanced 3D Map with Mascot loaded successfully!');
     }, 1000);
     
     // Show welcome notification

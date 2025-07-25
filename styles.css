@@ -2720,3 +2720,489 @@ select:focus-visible {
         flex-direction: column;
     }
 }
+
+/* ========================================
+   MASCOT CHARACTER STYLES & ANIMATIONS
+   ======================================== */
+
+/* Welcome Screen Mascot */
+.mascot-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.mascot-elephant {
+    width: 120px;
+    height: 100px;
+    position: relative;
+    animation: mascotFloatWelcome 3s ease-in-out infinite;
+}
+
+.mascot-elephant svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.3));
+}
+
+/* Mascot Animations */
+@keyframes mascotFloatWelcome {
+    0%, 100% {
+        transform: translateY(0) rotate(-2deg);
+    }
+    50% {
+        transform: translateY(-10px) rotate(2deg);
+    }
+}
+
+@keyframes mascotEarFlap {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-5deg);
+    }
+    75% {
+        transform: rotate(5deg);
+    }
+}
+
+@keyframes mascotEyeBlink {
+    0%, 90%, 100% {
+        transform: scaleY(1);
+    }
+    95% {
+        transform: scaleY(0.1);
+    }
+}
+
+@keyframes mascotTrunkWave {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-10deg);
+    }
+    75% {
+        transform: rotate(10deg);
+    }
+}
+
+@keyframes mascotHeartBeat {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+}
+
+/* Apply animations to mascot parts */
+.mascot-elephant .ear-left {
+    animation: mascotEarFlap 4s ease-in-out infinite;
+    transform-origin: center;
+}
+
+.mascot-elephant .ear-right {
+    animation: mascotEarFlap 4s ease-in-out infinite 0.5s;
+    transform-origin: center;
+}
+
+.mascot-elephant .eye-left,
+.mascot-elephant .eye-right {
+    animation: mascotEyeBlink 6s ease-in-out infinite;
+    transform-origin: center;
+}
+
+.mascot-elephant .trunk {
+    animation: mascotTrunkWave 5s ease-in-out infinite;
+    transform-origin: 60px 45px;
+}
+
+.mascot-elephant .heart {
+    animation: mascotHeartBeat 2s ease-in-out infinite;
+    transform-origin: center;
+}
+
+/* Speech Bubble */
+.mascot-speech {
+    position: absolute;
+    top: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(72, 177, 232, 0.3);
+    border-radius: 20px;
+    padding: 1rem 1.5rem;
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    opacity: 0;
+    animation: speechBubbleAppear 1s ease-out 1s forwards, speechBubbleFloat 3s ease-in-out 2s infinite;
+    min-width: 300px;
+    text-align: center;
+}
+
+.mascot-speech::before {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 12px solid rgba(255, 255, 255, 0.9);
+}
+
+.mascot-speech p {
+    margin: 0;
+    color: #2C3E50;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes speechBubbleAppear {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) scale(0.8) translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1) translateY(0);
+    }
+}
+
+@keyframes speechBubbleFloat {
+    0%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    50% {
+        transform: translateX(-50%) translateY(-5px);
+    }
+}
+
+/* Floating Mascot Assistant */
+.floating-mascot {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    cursor: pointer;
+    animation: floatingMascotEntrance 1s ease-out 3s forwards;
+    opacity: 0;
+    transform: translateX(100px);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.floating-mascot:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.floating-mascot.active {
+    transform: scale(1.15);
+}
+
+.mascot-elephant-small {
+    width: 60px;
+    height: 50px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+    border-radius: 50%;
+    padding: 8px;
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    border: 2px solid rgba(72, 177, 232, 0.3);
+    backdrop-filter: blur(15px);
+    animation: floatingMascotBounce 4s ease-in-out infinite;
+    position: relative;
+}
+
+@keyframes floatingMascotEntrance {
+    0% {
+        opacity: 0;
+        transform: translateX(100px) scale(0.5);
+    }
+    60% {
+        opacity: 1;
+        transform: translateX(-10px) scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes floatingMascotBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    25% {
+        transform: translateY(-8px);
+    }
+    50% {
+        transform: translateY(-12px);
+    }
+    75% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Small mascot animations */
+.mascot-elephant-small .ear-left {
+    animation: mascotEarFlap 3s ease-in-out infinite;
+    transform-origin: center;
+}
+
+.mascot-elephant-small .ear-right {
+    animation: mascotEarFlap 3s ease-in-out infinite 0.3s;
+    transform-origin: center;
+}
+
+.mascot-elephant-small .trunk {
+    animation: mascotTrunkWave 4s ease-in-out infinite;
+    transform-origin: 30px 23px;
+}
+
+.mascot-elephant-small .heart {
+    animation: mascotHeartBeat 2.5s ease-in-out infinite;
+    transform-origin: center;
+}
+
+/* Small Speech Bubble */
+.mascot-speech-small {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(72, 177, 232, 0.3);
+    border-radius: 15px;
+    padding: 0.8rem 1rem;
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    opacity: 0;
+    transform: translateY(10px) scale(0.8);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    min-width: 200px;
+    max-width: 250px;
+    animation: speechBubbleFloatSmall 3s ease-in-out infinite;
+}
+
+.floating-mascot:hover .mascot-speech-small,
+.floating-mascot.speaking .mascot-speech-small {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.mascot-speech-small::before {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    right: 20px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid rgba(255, 255, 255, 0.9);
+}
+
+.mascot-speech-small p {
+    margin: 0;
+    color: #2C3E50;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes speechBubbleFloatSmall {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+/* Mascot Badge */
+.mascot-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    box-shadow: 
+        0 4px 12px rgba(255, 215, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    animation: badgePulse 2s ease-in-out infinite;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+@keyframes badgePulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 6px 18px rgba(255, 215, 0, 0.6);
+    }
+}
+
+/* Responsive Design for Mascot */
+@media (max-width: 768px) {
+    .mascot-elephant {
+        width: 100px;
+        height: 80px;
+    }
+    
+    .mascot-speech {
+        min-width: 250px;
+        padding: 0.8rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .floating-mascot {
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    .mascot-elephant-small {
+        width: 50px;
+        height: 40px;
+        padding: 6px;
+    }
+    
+    .mascot-speech-small {
+        min-width: 180px;
+        padding: 0.6rem 0.8rem;
+    }
+    
+    .mascot-speech-small p {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .mascot-container {
+        margin-bottom: 1.5rem;
+    }
+    
+    .mascot-elephant {
+        width: 80px;
+        height: 65px;
+    }
+    
+    .mascot-speech {
+        min-width: 220px;
+        padding: 0.6rem 0.8rem;
+        top: -70px;
+    }
+    
+    .mascot-speech p {
+        font-size: 0.75rem;
+    }
+    
+    .floating-mascot {
+        bottom: 10px;
+        right: 10px;
+    }
+    
+    .mascot-elephant-small {
+        width: 45px;
+        height: 35px;
+        padding: 5px;
+    }
+    
+    .mascot-badge {
+        width: 20px;
+        height: 20px;
+        font-size: 0.6rem;
+    }
+}
+
+/* Reduced Motion Support for Mascot */
+@media (prefers-reduced-motion: reduce) {
+    .mascot-elephant,
+    .mascot-elephant-small,
+    .mascot-speech,
+    .mascot-speech-small,
+    .floating-mascot,
+    .mascot-badge {
+        animation: none !important;
+    }
+    
+    .mascot-elephant .ear-left,
+    .mascot-elephant .ear-right,
+    .mascot-elephant .trunk,
+    .mascot-elephant .heart,
+    .mascot-elephant-small .ear-left,
+    .mascot-elephant-small .ear-right,
+    .mascot-elephant-small .trunk,
+    .mascot-elephant-small .heart {
+        animation: none !important;
+    }
+    
+    .floating-mascot {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    
+    .mascot-speech-small {
+        animation: none !important;
+    }
+}
+
+/* High Contrast Mode Support for Mascot */
+@media (prefers-contrast: high) {
+    .mascot-speech,
+    .mascot-speech-small {
+        background: rgba(255, 255, 255, 1);
+        border: 2px solid #000000;
+        color: #000000;
+    }
+    
+    .mascot-elephant-small {
+        background: rgba(255, 255, 255, 1);
+        border: 2px solid #000000;
+    }
+    
+    .mascot-badge {
+        background: #FFD700;
+        border: 2px solid #000000;
+    }
+}
+
+/* Dark Theme Adjustments for Mascot */
+[data-theme="dark"] .mascot-speech,
+[data-theme="dark"] .mascot-speech-small {
+    background: linear-gradient(145deg, rgba(42, 42, 42, 0.95), rgba(20, 20, 30, 0.9));
+    border-color: rgba(100, 181, 246, 0.4);
+    color: #E0E0E0;
+}
+
+[data-theme="dark"] .mascot-speech::before,
+[data-theme="dark"] .mascot-speech-small::before {
+    border-top-color: rgba(42, 42, 42, 0.95);
+}
+
+[data-theme="dark"] .mascot-elephant-small {
+    background: linear-gradient(145deg, rgba(42, 42, 42, 0.9), rgba(20, 20, 30, 0.8));
+    border-color: rgba(100, 181, 246, 0.4);
+}

@@ -30,6 +30,46 @@
     <div class="welcome-overlay" id="welcomeOverlay">
         <div class="welcome-container">
             <div class="welcome-header">
+                <!-- Mascot Container -->
+                <div class="mascot-container">
+                    <div class="mascot-elephant" id="welcomeMascot">
+                        <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Elephant Body -->
+                            <ellipse cx="60" cy="65" rx="25" ry="20" fill="#E8E8E8" stroke="#D0D0D0" stroke-width="2"/>
+                            
+                            <!-- Elephant Head -->
+                            <circle cx="60" cy="35" r="20" fill="#F0F0F0" stroke="#D0D0D0" stroke-width="2"/>
+                            
+                            <!-- Ears -->
+                            <ellipse cx="45" cy="30" rx="8" ry="12" fill="#E8E8E8" stroke="#D0D0D0" stroke-width="1.5" class="ear-left"/>
+                            <ellipse cx="75" cy="30" rx="8" ry="12" fill="#E8E8E8" stroke="#D0D0D0" stroke-width="1.5" class="ear-right"/>
+                            
+                            <!-- Trunk -->
+                            <path d="M60 45 Q55 55 50 65 Q45 70 48 75" fill="none" stroke="#D0D0D0" stroke-width="6" stroke-linecap="round" class="trunk"/>
+                            
+                            <!-- Eyes -->
+                            <circle cx="55" cy="30" r="3" fill="#2C3E50" class="eye-left"/>
+                            <circle cx="65" cy="30" r="3" fill="#2C3E50" class="eye-right"/>
+                            <circle cx="55.5" cy="29" r="1" fill="#FFFFFF"/>
+                            <circle cx="65.5" cy="29" r="1" fill="#FFFFFF"/>
+                            
+                            <!-- Legs -->
+                            <rect x="45" y="80" width="6" height="10" fill="#D0D0D0" rx="3"/>
+                            <rect x="55" y="80" width="6" height="10" fill="#D0D0D0" rx="3"/>
+                            <rect x="65" y="80" width="6" height="10" fill="#D0D0D0" rx="3"/>
+                            <rect x="75" y="80" width="6" height="10" fill="#D0D0D0" rx="3"/>
+                            
+                            <!-- Heart decoration -->
+                            <path d="M52 45 Q50 43 48 45 Q50 47 52 45 Q54 43 56 45 Q54 47 52 45" fill="#FF6B6B" class="heart"/>
+                        </svg>
+                        
+                        <!-- Speech Bubble -->
+                        <div class="mascot-speech" id="mascotSpeech">
+                            <p id="mascotMessage">สวัสดีค่ะ! ยินดีต้อนรับสู่ PaiNaiDee 3D Map 🐘<br>Hello! Welcome to PaiNaiDee 3D Map 🌍</p>
+                        </div>
+                    </div>
+                </div>
+                
                 <h1 class="welcome-title">🗺️ ยินดีต้อนรับสู่ PaiNaiDee 3D Map</h1>
                 <h2 class="welcome-subtitle">Welcome to PaiNaiDee 3D Interactive Globe</h2>
                 <div class="welcome-description">
@@ -100,6 +140,51 @@
     <button class="language-toggle" id="languageToggle" aria-label="Toggle language">
         <span id="languageIcon">🇬🇧</span>
     </button>
+
+    <!-- Floating Mascot Assistant -->
+    <div class="floating-mascot" id="floatingMascot">
+        <div class="mascot-elephant-small">
+            <svg viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg">
+                <!-- Elephant Body -->
+                <ellipse cx="30" cy="32" rx="12" ry="10" fill="#E8E8E8" stroke="#D0D0D0" stroke-width="1"/>
+                
+                <!-- Elephant Head -->
+                <circle cx="30" cy="18" r="10" fill="#F0F0F0" stroke="#D0D0D0" stroke-width="1"/>
+                
+                <!-- Ears -->
+                <ellipse cx="22" cy="15" rx="4" ry="6" fill="#E8E8E8" stroke="#D0D0D0" stroke-width="1" class="ear-left"/>
+                <ellipse cx="38" cy="15" rx="4" ry="6" fill="#E8E8E8" stroke="#D0D0D0" stroke-width="1" class="ear-right"/>
+                
+                <!-- Trunk -->
+                <path d="M30 23 Q27 28 25 33 Q23 35 24 37" fill="none" stroke="#D0D0D0" stroke-width="3" stroke-linecap="round" class="trunk"/>
+                
+                <!-- Eyes -->
+                <circle cx="27" cy="15" r="1.5" fill="#2C3E50" class="eye-left"/>
+                <circle cx="33" cy="15" r="1.5" fill="#2C3E50" class="eye-right"/>
+                <circle cx="27.5" cy="14.5" r="0.5" fill="#FFFFFF"/>
+                <circle cx="33.5" cy="14.5" r="0.5" fill="#FFFFFF"/>
+                
+                <!-- Legs -->
+                <rect x="22" y="40" width="3" height="5" fill="#D0D0D0" rx="1.5"/>
+                <rect x="27" y="40" width="3" height="5" fill="#D0D0D0" rx="1.5"/>
+                <rect x="33" y="40" width="3" height="5" fill="#D0D0D0" rx="1.5"/>
+                <rect x="38" y="40" width="3" height="5" fill="#D0D0D0" rx="1.5"/>
+                
+                <!-- Heart decoration -->
+                <path d="M26 23 Q25 22 24 23 Q25 24 26 23 Q27 22 28 23 Q27 24 26 23" fill="#FF6B6B" class="heart"/>
+            </svg>
+        </div>
+        
+        <!-- Mascot Speech Bubble -->
+        <div class="mascot-speech-small" id="mascotSpeechSmall">
+            <p id="mascotTip">คลิกที่ฉันเพื่อรับคำแนะนำ!<br>Click me for tips!</p>
+        </div>
+        
+        <!-- Help Badge -->
+        <div class="mascot-badge">
+            <span>💡</span>
+        </div>
+    </div>
 
     <div id="mapContainer">
         <!-- Info Panel -->
