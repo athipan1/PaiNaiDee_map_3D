@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback System Test - PaiNaiDee Map</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="feedback-system.css">
+    <style>
+        body {
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 2rem;
+            padding: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .test-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .test-section h3 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .test-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .test-btn {
+            background: linear-gradient(145deg, #48b1e8, #369ce8);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(72, 177, 232, 0.4);
+        }
+        
+        .test-btn.danger {
+            background: linear-gradient(145deg, #f44336, #d32f2f);
+        }
+        
+        .test-btn.warning {
+            background: linear-gradient(145deg, #ff9800, #f57c00);
+        }
+        
+        .test-btn.success {
+            background: linear-gradient(145deg, #4caf50, #388e3c);
+        }
+        
+        .progress-demo {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 style="color: white; text-align: center; margin-bottom: 2rem;">
+            🔔 Feedback System Test
+        </h1>
+        
+        <div class="test-section">
+            <h3>📢 Basic Notifications</h3>
+            <div class="test-buttons">
+                <button class="test-btn success" onclick="testSuccess()">Success</button>
+                <button class="test-btn danger" onclick="testError()">Error</button>
+                <button class="test-btn warning" onclick="testWarning()">Warning</button>
+                <button class="test-btn" onclick="testInfo()">Info</button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>⏳ Loading States</h3>
+            <div class="test-buttons">
+                <button class="test-btn" onclick="testLoading()">Simple Loading</button>
+                <button class="test-btn" onclick="testProgress()">Progress Bar</button>
+                <button class="test-btn" onclick="simulateDataLoad()">Simulate Data Load</button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>💬 Confirmation Modals</h3>
+            <div class="test-buttons">
+                <button class="test-btn" onclick="testConfirmation()">Simple Confirmation</button>
+                <button class="test-btn danger" onclick="testDeleteConfirmation()">Delete Confirmation</button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🎯 Specific Scenarios</h3>
+            <div class="test-buttons">
+                <button class="test-btn" onclick="testSearch()">Search Scenario</button>
+                <button class="test-btn" onclick="testFavorite()">Favorite Scenario</button>
+                <button class="test-btn" onclick="testConnection()">Connection Test</button>
+                <button class="test-btn" onclick="testFeature()">Feature Not Available</button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🧪 Stress Tests</h3>
+            <div class="test-buttons">
+                <button class="test-btn" onclick="testMultiple()">Multiple Notifications</button>
+                <button class="test-btn" onclick="testQueue()">Queue Test</button>
+                <button class="test-btn danger" onclick="feedbackSystem.dismissAll()">Clear All</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock user preferences for testing
+        const userPreferences = { language: 'th' };
+        
+        // Load the feedback system
+    </script>
+    <script src="feedback-system.js"></script>
+    
+    <script>
+        // Test functions
+        function testSuccess() {
+            feedbackSystem.showSuccess({
+                message: 'การบันทึกข้อมูลสำเร็จ!',
+                showCelebration: true
+            });
+        }
+        
+        function testError() {
+            feedbackSystem.showError({
+                message: 'เกิดข้อผิดพลาดในการเชื่อมต่อ',
+                action: () => alert('Retry action executed!'),
+                actionText: 'ลองใหม่'
+            });
+        }
+        
+        function testWarning() {
+            feedbackSystem.showWarning({
+                message: 'ระบบจะปิดปรับปรุงในอีก 5 นาที'
+            });
+        }
+        
+        function testInfo() {
+            feedbackSystem.showInfo({
+                message: 'ข้อมูลของคุณได้รับการบันทึกอัตโนมัติ'
+            });
+        }
+        
+        function testLoading() {
+            const id = feedbackSystem.startLoading('test', {
+                message: 'กำลังประมวลผล...'
+            });
+            
+            setTimeout(() => {
+                feedbackSystem.stopLoading('test', 'success', 'ประมวลผลเสร็จสิ้น!');
+            }, 3000);
+        }
+        
+        function testProgress() {
+            const id = feedbackSystem.showProgress({
+                message: 'กำลังอัพโหลดไฟล์...',
+                progress: 0
+            });
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                feedbackSystem.updateProgress(id, progress, `อัพโหลด ${progress}%`);
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                }
+            }, 500);
+        }
+        
+        function simulateDataLoad() {
+            feedbackSystem.locationLoadStarted('กรุงเทพมหานคร');
+            
+            setTimeout(() => {
+                if (Math.random() > 0.7) {
+                    feedbackSystem.locationLoadFailed('กรุงเทพมหานคร');
+                } else {
+                    feedbackSystem.locationLoadCompleted('กรุงเทพมหานคร');
+                }
+            }, 2000);
+        }
+        
+        async function testConfirmation() {
+            const result = await feedbackSystem.showConfirmation({
+                title: 'บันทึกการเปลี่ยนแปลง',
+                message: 'คุณต้องการบันทึกการเปลี่ยนแปลงหรือไม่?',
+                confirmText: 'บันทึก',
+                cancelText: 'ยกเลิก'
+            });
+            
+            if (result) {
+                feedbackSystem.showSuccess({ message: 'บันทึกสำเร็จ!' });
+            } else {
+                feedbackSystem.showInfo({ message: 'ยกเลิกการบันทึก' });
+            }
+        }
+        
+        async function testDeleteConfirmation() {
+            const result = await feedbackSystem.showConfirmation({
+                title: 'ลบข้อมูล',
+                message: 'การกระทำนี้ไม่สามารถยกเลิกได้ คุณแน่ใจหรือไม่?',
+                confirmText: 'ลบ',
+                cancelText: 'ยกเลิก'
+            });
+            
+            if (result) {
+                feedbackSystem.showSuccess({ 
+                    message: 'ลบข้อมูลเรียบร้อยแล้ว',
+                    showCelebration: true
+                });
+            }
+        }
+        
+        function testSearch() {
+            feedbackSystem.searchStarted();
+            
+            setTimeout(() => {
+                const results = Math.floor(Math.random() * 10);
+                if (results === 0) {
+                    feedbackSystem.searchFailed();
+                } else {
+                    feedbackSystem.searchCompleted(results);
+                }
+            }, 1500);
+        }
+        
+        function testFavorite() {
+            const locations = ['กรุงเทพฯ', 'เชียงใหม่', 'ภูเก็ต'];
+            const randomLocation = locations[Math.floor(Math.random() * locations.length)];
+            
+            if (Math.random() > 0.5) {
+                feedbackSystem.addedToFavorites(randomLocation);
+            } else {
+                feedbackSystem.removedFromFavorites(randomLocation);
+            }
+        }
+        
+        function testConnection() {
+            feedbackSystem.connectionLost();
+            
+            setTimeout(() => {
+                feedbackSystem.connectionRestored();
+            }, 3000);
+        }
+        
+        function testFeature() {
+            feedbackSystem.featureNotAvailable();
+        }
+        
+        function testMultiple() {
+            feedbackSystem.showInfo({ message: 'การแจ้งเตือนที่ 1' });
+            
+            setTimeout(() => {
+                feedbackSystem.showWarning({ message: 'การแจ้งเตือนที่ 2' });
+            }, 500);
+            
+            setTimeout(() => {
+                feedbackSystem.showSuccess({ message: 'การแจ้งเตือนที่ 3' });
+            }, 1000);
+            
+            setTimeout(() => {
+                feedbackSystem.showError({ message: 'การแจ้งเตือนที่ 4' });
+            }, 1500);
+        }
+        
+        function testQueue() {
+            for (let i = 1; i <= 5; i++) {
+                setTimeout(() => {
+                    feedbackSystem.showInfo({ 
+                        message: `การแจ้งเตือนคิวที่ ${i}`,
+                        duration: 2000
+                    });
+                }, i * 200);
+            }
+        }
+    </script>
+</body>
+</html>

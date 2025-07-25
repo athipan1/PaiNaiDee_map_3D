@@ -586,12 +586,38 @@ function trackUserBehavior(action, data) {
     saveBehaviorData();
 }
 
-// Save behavior data to localStorage
+// Enhanced data save behavior tracking with feedback
 function saveBehaviorData() {
     try {
         localStorage.setItem('painaidee-user-behavior', JSON.stringify(userBehavior));
+        // Optional: Show feedback for significant milestones
+        if (userBehavior.totalSessions > 0 && userBehavior.totalSessions % 10 === 0) {
+            feedbackSystem.showInfo({
+                message: userPreferences.language === 'th' ? 
+                    `คุณใช้งานแผนที่ไปแล้ว ${userBehavior.totalSessions} ครั้ง!` :
+                    `You've used the map ${userBehavior.totalSessions} times!`,
+                icon: '🎉'
+            });
+        }
     } catch (error) {
         console.warn('Could not save user behavior data:', error);
+        if (error.name === 'QuotaExceededError') {
+            feedbackSystem.showWarning({
+                message: userPreferences.language === 'th' ? 
+                    'พื้นที่จัดเก็บข้อมูลเต็ม บางข้อมูลอาจไม่ถูกบันทึก' :
+                    'Storage quota exceeded. Some data may not be saved.',
+                action: () => {
+                    // Clear old data
+                    localStorage.removeItem('painaidee-user-behavior');
+                    feedbackSystem.showInfo({
+                        message: userPreferences.language === 'th' ? 
+                            'ล้างข้อมูลเก่าแล้ว' : 
+                            'Old data cleared'
+                    });
+                },
+                actionText: userPreferences.language === 'th' ? 'ล้างข้อมูล' : 'Clear Data'
+            });
+        }
     }
 }
 
@@ -2003,26 +2029,36 @@ function initializeLanguage() {
 }
 
 function toggleLanguage() {
-    const currentLang = userPreferences.language;
-    const newLang = currentLang === 'th' ? 'en' : 'th';
-    const languageIcon = document.getElementById('languageIcon');
-    
-    userPreferences.language = newLang;
-    localStorage.setItem('painaidee-preferences', JSON.stringify(userPreferences));
-    
-    // Update language icon
-    languageIcon.textContent = newLang === 'th' ? '🇬🇧' : '🇹🇭';
-    
-    // Update interface language
-    updateInterfaceLanguage();
-    
-    // Update mascot language
-    updateMascotLanguage();
-    
-    showNotification(
-        newLang === 'th' ? 'เปลี่ยนเป็นภาษาไทยแล้ว' : 'Changed to English',
-        'info'
-    );
+    try {
+        const currentLang = userPreferences.language;
+        const newLang = currentLang === 'th' ? 'en' : 'th';
+        const languageIcon = document.getElementById('languageIcon');
+        
+        userPreferences.language = newLang;
+        localStorage.setItem('painaidee-preferences', JSON.stringify(userPreferences));
+        
+        // Update language icon
+        languageIcon.textContent = newLang === 'th' ? '🇬🇧' : '🇹🇭';
+        
+        // Update interface language
+        updateInterfaceLanguage();
+        
+        // Update mascot language
+        updateMascotLanguage();
+        
+        // Use enhanced feedback system
+        feedbackSystem.showSuccess({
+            message: newLang === 'th' ? 'เปลี่ยนเป็นภาษาไทยแล้ว' : 'Changed to English',
+            icon: newLang === 'th' ? '🇹🇭' : '🇬🇧'
+        });
+    } catch (error) {
+        console.error('Error toggling language:', error);
+        feedbackSystem.showError({
+            message: userPreferences.language === 'th' ? 
+                'เกิดข้อผิดพลาดในการเปลี่ยนภาษา' : 
+                'Error changing language'
+        });
+    }
 }
 
 function updateInterfaceLanguage() {
@@ -2592,18 +2628,31 @@ function handleSearch(e) {
         return;
     }
     
+    // Show search loading state
+    feedbackSystem.searchStarted();
+    
     // Track search behavior for recommendations
     trackUserBehavior('search_query', { query: query });
     
-    const filteredLocations = Object.keys(locations).filter(key => {
-        const location = locations[key];
-        return location.name.toLowerCase().includes(query) ||
-               location.nameEn.toLowerCase().includes(query) ||
-               (location.attractions && location.attractions.some(attraction => attraction.toLowerCase().includes(query))) ||
-               (location.attractionsEn && location.attractionsEn.some(attraction => attraction.toLowerCase().includes(query)));
-    });
-    
-    displaySearchResults(filteredLocations);
+    // Simulate search delay for better UX (remove in production if search is instant)
+    setTimeout(() => {
+        const filteredLocations = Object.keys(locations).filter(key => {
+            const location = locations[key];
+            return location.name.toLowerCase().includes(query) ||
+                   location.nameEn.toLowerCase().includes(query) ||
+                   (location.attractions && location.attractions.some(attraction => attraction.toLowerCase().includes(query))) ||
+                   (location.attractionsEn && location.attractionsEn.some(attraction => attraction.toLowerCase().includes(query)));
+        });
+        
+        // Provide feedback based on results
+        if (filteredLocations.length === 0) {
+            feedbackSystem.searchFailed();
+        } else {
+            feedbackSystem.searchCompleted(filteredLocations.length);
+        }
+        
+        displaySearchResults(filteredLocations);
+    }, 300); // Small delay to show loading state
 }
 
 function displaySearchResults(filteredLocations) {
@@ -2962,10 +3011,13 @@ function initializeFavorites() {
 function toggleFavorite(locationKey) {
     const index = favorites.indexOf(locationKey);
     const action = index === -1 ? 'add' : 'remove';
+    const locationData = locations[locationKey];
+    const locationName = locationData ? getCurrentLocationName(locationData) : locationKey;
     
     if (index === -1) {
         favorites.push(locationKey);
-        showNotification(getText('addedFavorite'), 'success');
+        // Use enhanced feedback system with celebration
+        feedbackSystem.addedToFavorites(locationName);
         
         // Trigger contextual mascot response for adding favorites
         setTimeout(() => {
@@ -2973,7 +3025,8 @@ function toggleFavorite(locationKey) {
         }, 500);
     } else {
         favorites.splice(index, 1);
-        showNotification(getText('removedFavorite'), 'info');
+        // Use enhanced feedback system
+        feedbackSystem.removedFromFavorites(locationName);
     }
     
     // Track favorite action for recommendations
@@ -5266,41 +5319,59 @@ function createSVGRippleEffect(e) {
 // ========================================
 function showInfo(location) {
     const info = locations[location];
-    if (!info) return;
-    
-    // Track user behavior for recommendations
-    const viewStartTime = Date.now();
-    trackUserBehavior('location_view', {
-        location: location,
-        categories: info.categories || []
-    });
-    
-    // Track time spent when modal is closed
-    window.currentLocationView = {
-        location: location,
-        startTime: viewStartTime
-    };
-    
-    const modal = document.getElementById('modalOverlay');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalBody = document.getElementById('modalBody');
-    const modalGallery = document.getElementById('modalGallery');
-    
-    if (!modal || !modalTitle || !modalBody || !modalGallery) {
-        // Fallback to alert if modal elements don't exist
-        const attractions = info.attractions ? `\n\n🎯 ${getText('attractionsTitle')}:\n${info.attractions.join(', ')}` : '';
-        const message = `${info.emoji} ${getCurrentLocationName(info)}\n\n📍 ${getCurrentLocationDescription(info)}${attractions}`;
-        alert(message);
-        focusLocation(location);
+    if (!info) {
+        feedbackSystem.showError({
+            message: userPreferences.language === 'th' ? 
+                'ไม่พบข้อมูลสถานที่นี้' : 
+                'Location information not found'
+        });
         return;
     }
     
-    modalTitle.textContent = `${info.emoji} ${getCurrentLocationName(info)}`;
+    // Show loading feedback
+    const locationName = getCurrentLocationName(info);
+    feedbackSystem.locationLoadStarted(locationName);
     
-    // Calculate distance from Bangkok (reference point)
-    let distanceInfo = '';
-    if (location !== 'bangkok' && locations.bangkok && info.coordinates) {
-        const distance = calculateDistance(
+    // Simulate loading delay for better UX
+    setTimeout(() => {
+        try {
+            // Track user behavior for recommendations
+            const viewStartTime = Date.now();
+            trackUserBehavior('location_view', {
+                location: location,
+                categories: info.categories || []
+            });
+            
+            // Track time spent when modal is closed
+            window.currentLocationView = {
+                location: location,
+                startTime: viewStartTime
+            };
+            
+            const modal = document.getElementById('modalOverlay');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            const modalGallery = document.getElementById('modalGallery');
+            
+            if (!modal || !modalTitle || !modalBody || !modalGallery) {
+                // Fallback to alert if modal elements don't exist
+                const attractions = info.attractions ? `\n\n🎯 ${getText('attractionsTitle')}:\n${info.attractions.join(', ')}` : '';
+                const message = `${info.emoji} ${getCurrentLocationName(info)}\n\n📍 ${getCurrentLocationDescription(info)}${attractions}`;
+                alert(message);
+                focusLocation(location);
+                feedbackSystem.locationLoadCompleted(locationName);
+                return;
+            }
+            
+            // Load content successfully
+            feedbackSystem.locationLoadCompleted(locationName);
+            
+            modalTitle.textContent = `${info.emoji} ${getCurrentLocationName(info)}`;
+            
+            // Calculate distance from Bangkok (reference point)
+            let distanceInfo = '';
+            if (location !== 'bangkok' && locations.bangkok && info.coordinates) {
+                const distance = calculateDistance(
             locations.bangkok.coordinates[1], locations.bangkok.coordinates[0],
             info.coordinates[1], info.coordinates[0]
         );
@@ -5485,6 +5556,11 @@ function showInfo(location) {
             showLocationOnMiniMap(location);
         }
     }, 500);
+        } catch (error) {
+            console.error('Error loading location info:', error);
+            feedbackSystem.locationLoadFailed(locationName);
+        }
+    }, 300); // Simulate loading delay
 }
 
 // Enhanced keyboard navigation and accessibility
@@ -5663,59 +5739,96 @@ function updateStatus(textTh, textEn) {
 }
 
 function initializeMap() {
-    // Show loading spinner immediately
-    showLoadingSpinner();
-    
-    // Initialize user behavior tracking
-    userBehavior.totalSessions++;
-    userBehavior.sessionStart = Date.now();
-    saveBehaviorData();
-    
-    // Initialize core features first
-    initializeTheme();
-    initializeLanguage();
-    initializeFontLoading();
-    
-    // Initialize mascot system
-    initializeMascot();
-    
-    // Self-contained enhanced 3D map
-    initializeEnhanced3D();
-    
-    // Initialize other UI features
-    initializeSearch();
-    initializeCategoryFilter();
-    initializeLocationComparison();
-    initializeFavorites();
-    initializeKeyboardNavigation();
-    updateWeatherInfo();
-    updateInterfaceLanguage();
-    
-    // Initialize performance features
-    preloadCriticalImages();
-    initializeLazyLoading();
-    
-    // Initialize responsive and touch enhancements
-    initializeTouchEnhancements();
-    initializeResponsiveEnhancements();
-    initializePerformanceMonitoring();
-    
-    // Initialize enhanced UX/UI features after short delay
-    setTimeout(() => {
-        initializeEnhancedUX();
+    try {
+        // Show loading spinner immediately
+        showLoadingSpinner();
         
-        // Initialize recommendations system
-        updateRecommendationsUI();
+        // Initialize user behavior tracking
+        userBehavior.totalSessions++;
+        userBehavior.sessionStart = Date.now();
+        saveBehaviorData();
         
+        // Initialize core features first
+        initializeTheme();
+        initializeLanguage();
+        initializeFontLoading();
+        
+        // Initialize mascot system
+        initializeMascot();
+        
+        // Self-contained enhanced 3D map
+        initializeEnhanced3D();
+        
+        // Initialize other UI features
+        initializeSearch();
+        initializeCategoryFilter();
+        initializeLocationComparison();
+        initializeFavorites();
+        initializeKeyboardNavigation();
+        updateWeatherInfo();
+        updateInterfaceLanguage();
+        
+        // Initialize performance features
+        preloadCriticalImages();
+        initializeLazyLoading();
+        
+        // Initialize responsive and touch enhancements
+        initializeTouchEnhancements();
+        initializeResponsiveEnhancements();
+        initializePerformanceMonitoring();
+        
+        // Initialize enhanced UX/UI features after short delay
+        setTimeout(() => {
+            initializeEnhancedUX();
+            
+            // Initialize recommendations system
+            updateRecommendationsUI();
+            
+            hideLoadingSpinner();
+            updateStatus('🌍 สร้างโลก 3D ปรับปรุงแล้วสำเร็จ!', '🌍 Enhanced 3D Globe created successfully!');
+            console.log('🗺️ PaiNaiDee Enhanced 3D Map with Mascot loaded successfully!');
+            
+            // Initialize connection monitoring
+            initializeConnectionMonitoring();
+        }, 1000);
+        
+        // Show welcome notification
+        setTimeout(() => {
+            feedbackSystem.showSuccess({
+                message: getText('globeCreated'),
+                showCelebration: true
+            });
+        }, 2000);
+        
+    } catch (error) {
+        console.error('Error initializing map:', error);
         hideLoadingSpinner();
-        updateStatus('🌍 สร้างโลก 3D ปรับปรุงแล้วสำเร็จ!', '🌍 Enhanced 3D Globe created successfully!');
-        console.log('🗺️ PaiNaiDee Enhanced 3D Map with Mascot loaded successfully!');
-    }, 1000);
+        feedbackSystem.showError({
+            message: userPreferences.language === 'th' ? 
+                'เกิดข้อผิดพลาดในการโหลดแผนที่ กรุณาลองใหม่อีกครั้ง' :
+                'Error loading map. Please try again.',
+            action: () => window.location.reload(),
+            actionText: userPreferences.language === 'th' ? 'รีโหลด' : 'Reload',
+            persistent: true
+        });
+    }
+}
+
+// Initialize connection monitoring for better user feedback
+function initializeConnectionMonitoring() {
+    // Monitor online/offline status
+    window.addEventListener('online', () => {
+        feedbackSystem.connectionRestored();
+    });
     
-    // Show welcome notification
-    setTimeout(() => {
-        showNotification(getText('globeCreated'), 'success');
-    }, 2000);
+    window.addEventListener('offline', () => {
+        feedbackSystem.connectionLost();
+    });
+    
+    // Initial connection check
+    if (!navigator.onLine) {
+        feedbackSystem.connectionLost();
+    }
 }
 
 // Add all dynamic CSS animations in a single style element to avoid conflicts
@@ -6128,13 +6241,14 @@ function startExploring() {
             `🚀 ${getText('exploring')} | Exploration started!`
         );
         
-        // Show welcome notification with enhanced start guidance
-        showNotification(
-            userPreferences.language === 'th' ? 
-            '🎉 ยินดีต้อนรับ! เริ่มสำรวจโลก 3D ได้เลย' : 
-            '🎉 Welcome! Start exploring the 3D world',
-            'success'
-        );
+        // Show welcome notification with enhanced start guidance using new feedback system
+        feedbackSystem.showSuccess({
+            message: userPreferences.language === 'th' ? 
+                '🎉 ยินดีต้อนรับ! เริ่มสำรวจโลก 3D ได้เลย' : 
+                '🎉 Welcome! Start exploring the 3D world',
+            showCelebration: true,
+            duration: 5000
+        });
         
         // Add gentle hint for first interaction after 3 seconds
         setTimeout(() => {
