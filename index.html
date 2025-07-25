@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-    <meta name="description" content="PaiNaiDee 3D Interactive Map - แผนที่ 3 มิติแบบอินเทอแรคทีฟ">
-    <meta name="keywords" content="3D map, Thailand, Bangkok, Chiang Mai, Phuket, interactive globe">
+    <meta name="description" content="PaiNaiDee 3D Interactive Map - แผนที่ 3 มิติแบบอินเทอแรคทีฟสำหรับการท่องเที่ยวประเทศไทย เข้าถึงได้สำหรับผู้ใช้ทุกกลุ่ม">
+    <meta name="keywords" content="3D map, Thailand, Bangkok, Chiang Mai, Phuket, interactive globe, accessible tourism, แผนที่ท่องเที่ยว, การเข้าถึง">
     <meta name="author" content="PaiNaiDee">
-    <title>PaiNaiDee 3D Map</title>
+    <meta name="theme-color" content="#48b1e8">
+    <title>PaiNaiDee 3D Map - แผนที่ท่องเที่ยวไทย 3 มิติที่เข้าถึงได้</title>
     
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>">
@@ -30,19 +31,29 @@
     <link rel="stylesheet" href="user-testing.css">
 </head>
 <body>
+    <!-- Skip Navigation Links for Screen Readers -->
+    <nav class="skip-navigation" aria-label="Skip navigation">
+        <a href="#main-content" class="skip-link">ข้ามไปเนื้อหาหลัก / Skip to main content</a>
+        <a href="#navigation-controls" class="skip-link">ข้ามไปการควบคุม / Skip to controls</a>
+        <a href="#globe-interaction" class="skip-link">ข้ามไปโลก 3 มิติ / Skip to 3D globe</a>
+    </nav>
+
     <!-- Loading spinner -->
-    <div class="loading-spinner" id="loadingSpinner">
-        <div class="spinner"></div>
+    <div class="loading-spinner" id="loadingSpinner" role="status" aria-live="polite" aria-label="กำลังโหลดแผนที่ / Loading map">
+        <div class="spinner" aria-hidden="true"></div>
+        <span class="sr-only">กำลังโหลดแผนที่ 3 มิติ โปรดรอสักครู่ / Loading 3D map, please wait</span>
     </div>
 
     <!-- Enhanced Welcome Screen -->
-    <div class="welcome-overlay" id="welcomeOverlay">
+    <div class="welcome-overlay" id="welcomeOverlay" role="dialog" aria-modal="true" aria-labelledby="welcome-title" aria-describedby="welcome-description">
         <div class="welcome-container">
             <div class="welcome-header">
                 <!-- Mascot Container -->
                 <div class="mascot-container">
-                    <div class="mascot-elephant" id="welcomeMascot">
-                        <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+                    <div class="mascot-elephant" id="welcomeMascot" role="img" aria-label="PaiNai ช้างน้อยมาสคอต ผู้นำทางท่องเที่ยว กำลังโบกงวงทักทาย">
+                        <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                            <title>PaiNai ช้างน้อยมาสคอต</title>
+                            <desc>ช้างน้อยสีเทาน่ารักที่เป็นมาสคอตของเว็บไซต์ กำลังโบกงวงและมีรอยยิ้ม พร้อมใจสีแดงที่อกเป็นสัญลักษณ์ของความรัก</desc>
                             <!-- Elephant Body -->
                             <ellipse cx="60" cy="65" rx="25" ry="20" fill="#E8E8E8" stroke="#D0D0D0" stroke-width="2"/>
                             
@@ -73,15 +84,15 @@
                         </svg>
                         
                         <!-- Speech Bubble -->
-                        <div class="mascot-speech" id="mascotSpeech">
+                        <div class="mascot-speech" id="mascotSpeech" role="complementary" aria-live="polite">
                             <p id="mascotMessage">สวัสดีค่ะ! ยินดีต้อนรับสู่ PaiNaiDee 3D Map 🐘<br>Hello! Welcome to PaiNaiDee 3D Map 🌍</p>
                         </div>
                     </div>
                 </div>
                 
-                <h1 class="welcome-title">🗺️ ยินดีต้อนรับสู่ PaiNaiDee 3D Map</h1>
+                <h1 class="welcome-title" id="welcome-title">🗺️ ยินดีต้อนรับสู่ PaiNaiDee 3D Map</h1>
                 <h2 class="welcome-subtitle">Welcome to PaiNaiDee 3D Interactive Globe</h2>
-                <div class="welcome-description">
+                <div class="welcome-description" id="welcome-description">
                     <p class="welcome-text-th">
                         เริ่มต้นการเดินทางสู่โลกแห่งการสำรวจ 3 มิติ พร้อมข้อมูลสถานที่ท่องเที่ยวในประเทศไทยและทั่วโลก ที่จะทำให้คุณได้สัมผัสประสบการณ์ใหม่ในการค้นพบสถานที่ต่างๆ
                     </p>
@@ -92,24 +103,24 @@
             </div>
             
             <div class="welcome-features">
-                <div class="feature-grid">
-                    <div class="feature-item">
-                        <div class="feature-icon">🌍</div>
+                <div class="feature-grid" role="list" aria-label="คุณสมบัติหลักของแผนที่ / Main features of the map">
+                    <div class="feature-item" role="listitem">
+                        <div class="feature-icon" role="img" aria-label="ไอคอนโลก">🌍</div>
                         <h3>Interactive 3D Globe</h3>
                         <p>โลก 3 มิติแบบหมุนได้</p>
                     </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">📍</div>
+                    <div class="feature-item" role="listitem">
+                        <div class="feature-icon" role="img" aria-label="ไอคอนหมุดตำแหน่ง">📍</div>
                         <h3>Rich Location Info</h3>
                         <p>ข้อมูลสถานที่ครบครัน</p>
                     </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">✈️</div>
+                    <div class="feature-item" role="listitem">
+                        <div class="feature-icon" role="img" aria-label="ไอคอนเครื่องบิน">✈️</div>
                         <h3>Trip Planning</h3>
                         <p>วางแผนการเดินทาง</p>
                     </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">⭐</div>
+                    <div class="feature-item" role="listitem">
+                        <div class="feature-icon" role="img" aria-label="ไอคอนดาว">⭐</div>
                         <h3>Favorites & Search</h3>
                         <p>รายการโปรดและค้นหา</p>
                     </div>
@@ -117,48 +128,76 @@
             </div>
 
             <div class="welcome-actions">
-                <button class="start-button" id="startExploring" onclick="startExploring()">
-                    <span class="start-icon">🚀</span>
+                <button class="start-button" id="startExploring" onclick="startExploring()" type="button" aria-describedby="start-button-desc">
+                    <span class="start-icon" role="img" aria-label="ไอคอนจรวด">🚀</span>
                     <span class="start-text-th">เริ่มต้นสำรวจ</span>
                     <span class="start-text-en">Start Exploring</span>
                 </button>
+                <div class="sr-only" id="start-button-desc">คลิกเพื่อเริ่มต้นการสำรวจแผนที่ 3 มิติ และปิดหน้าต้อนรับ</div>
                 
                 <div class="welcome-options">
-                    <button class="option-button" id="startTourButton" onclick="startGuidedTour()">
-                        <span>🎯 เริ่มทัวร์แนะนำ / Start Guided Tour</span>
+                    <button class="option-button" id="startTourButton" onclick="startGuidedTour()" type="button" aria-describedby="tour-button-desc">
+                        <span role="img" aria-label="ไอคอนเป้าหมาย">🎯</span> เริ่มทัวร์แนะนำ / Start Guided Tour
                     </button>
-                    <button class="option-button" id="skipToMapButton" onclick="skipToMap()">
-                        <span>⚡ ข้ามไปที่แผนที่ / Skip to Map</span>
+                    <div class="sr-only" id="tour-button-desc">เริ่มทัวร์แนะนำการใช้งานแผนที่แบบมีคำแนะนำทีละขั้นตอน</div>
+                    
+                    <button class="option-button" id="skipToMapButton" onclick="skipToMap()" type="button" aria-describedby="skip-button-desc">
+                        <span role="img" aria-label="ไอคอนฟ้าผ่า">⚡</span> ข้ามไปที่แผนที่ / Skip to Map
                     </button>
+                    <div class="sr-only" id="skip-button-desc">ข้ามการแนะนำและไปที่แผนที่โดยตรง</div>
                 </div>
             </div>
 
             <div class="welcome-footer">
-                <p>💡 <span class="tip-th">เคล็ดลับ:</span> <span class="tip-en">Tip:</span> เริ่มต้นด้วยการหมุนโลก และคลิกที่จุดสีทองเพื่อเริ่มสำรวจ</p>
+                <p><span role="img" aria-label="หลอดไฟ">💡</span> <span class="tip-th">เคล็ดลับ:</span> <span class="tip-en">Tip:</span> เริ่มต้นด้วยการหมุนโลก และคลิกที่จุดสีทองเพื่อเริ่มสำรวจ</p>
                 <p>Start by rotating the globe and click golden dots to begin exploring</p>
             </div>
         </div>
     </div>
 
     <!-- Theme toggle button -->
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" role="button" tabindex="0">
-        <span id="themeIcon">🌙</span>
+    <button class="theme-toggle" id="themeToggle" 
+            aria-label="เปลี่ยนธีมสี เปิด/ปิดโหมดมืด / Toggle dark mode theme" 
+            role="button" 
+            tabindex="0"
+            aria-pressed="false"
+            aria-describedby="theme-toggle-desc">
+        <span id="themeIcon" role="img" aria-label="ไอคอนดวงจันทร์">🌙</span>
     </button>
+    <div class="sr-only" id="theme-toggle-desc">ปุ่มเปลี่ยนธีมสีระหว่างโหมดสว่างและโหมดมืด</div>
     
     <!-- Language toggle button -->
-    <button class="language-toggle" id="languageToggle" aria-label="Toggle language" role="button" tabindex="0">
-        <span id="languageIcon">🇬🇧</span>
+    <button class="language-toggle" id="languageToggle" 
+            aria-label="เปลี่ยนภาษา ไทย/อังกฤษ / Toggle language Thai/English" 
+            role="button" 
+            tabindex="0"
+            aria-describedby="language-toggle-desc">
+        <span id="languageIcon" role="img" aria-label="ธงอังกฤษ">🇬🇧</span>
     </button>
+    <div class="sr-only" id="language-toggle-desc">ปุ่มเปลี่ยนภาษาระหว่างไทยและอังกฤษ</div>
 
     <!-- High contrast toggle button -->
-    <button class="contrast-toggle" id="contrastToggle" aria-label="Toggle high contrast mode" role="button" tabindex="0">
-        <span id="contrastIcon">🎨</span>
+    <button class="contrast-toggle" id="contrastToggle" 
+            aria-label="เปลี่ยนโหมดความคมชัดสูง / Toggle high contrast mode" 
+            role="button" 
+            tabindex="0"
+            aria-pressed="false"
+            aria-describedby="contrast-toggle-desc">
+        <span id="contrastIcon" role="img" aria-label="ไอคอนจานสี">🎨</span>
     </button>
+    <div class="sr-only" id="contrast-toggle-desc">ปุ่มเปิด/ปิดโหมดความคมชัดสูงสำหรับผู้ที่มีปัญหาการมองเห็น</div>
 
     <!-- Floating Mascot Assistant -->
-    <div class="floating-mascot" id="floatingMascot">
+    <div class="floating-mascot" id="floatingMascot" 
+         role="button" 
+         tabindex="0"
+         aria-label="PaiNai ผู้ช่วยมาสคอต คลิกเพื่อรับคำแนะนำการใช้งาน"
+         aria-describedby="floating-mascot-desc"
+         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">
         <div class="mascot-elephant-small">
-            <svg viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                <title>PaiNai ช้างน้อยผู้ช่วย</title>
+                <desc>ช้างน้อยขนาดเล็กสีเทาน่ารักที่เป็นผู้ช่วยให้คำแนะนำ</desc>
                 <!-- Elephant Body -->
                 <ellipse cx="30" cy="32" rx="12" ry="10" fill="#E8E8E8" stroke="#D0D0D0" stroke-width="1"/>
                 
@@ -190,82 +229,146 @@
         </div>
         
         <!-- Mascot Speech Bubble -->
-        <div class="mascot-speech-small" id="mascotSpeechSmall">
+        <div class="mascot-speech-small" id="mascotSpeechSmall" role="complementary" aria-live="polite" aria-hidden="true">
             <p id="mascotTip">คลิกที่ฉันเพื่อรับคำแนะนำ!<br>Click me for tips!</p>
         </div>
         
         <!-- Help Badge -->
-        <div class="mascot-badge">
-            <span>💡</span>
+        <div class="mascot-badge" aria-hidden="true">
+            <span role="img" aria-label="หลอดไฟ">💡</span>
         </div>
     </div>
+    <div class="sr-only" id="floating-mascot-desc">ผู้ช่วยมาสคอตจะให้คำแนะนำการใช้งานแผนที่ การนำทาง และคุณสมบัติต่างๆ</div>
 
     <div id="mapContainer">
         <!-- Info Panel -->
-        <section class="info-panel" role="banner">
+        <section class="info-panel" role="banner" id="main-content">
             <h1>🗺️ PaiNaiDee 3D Map</h1>
             <p><strong>ยินดีต้อนรับสู่แผนที่ 3 มิติ!</strong></p>
             <p>Welcome to the 3D Interactive Globe!</p>
-            <div class="info-stats">
-                <p>📍 กำลังแสดง: โลกและประเทศไทย</p>
-                <p>🎮 คลิกจุดทองเพื่อสำรวจ</p>
-                <p>🌍 โลกหมุนอัตโนมัติ</p>
-                <p id="weatherInfo">🌤️ กำลังโหลดข้อมูลสภาพอากาศ...</p>
+            <div class="info-stats" role="status" aria-live="polite" aria-label="สถานะข้อมูลแผนที่">
+                <p><span role="img" aria-label="หมุดตำแหน่ง">📍</span> กำลังแสดง: โลกและประเทศไทย</p>
+                <p><span role="img" aria-label="จอยสติ๊ก">🎮</span> คลิกจุดทองเพื่อสำรวจ</p>
+                <p><span role="img" aria-label="โลก">🌍</span> โลกหมุนอัตโนมัติ</p>
+                <p id="weatherInfo" aria-live="polite"><span role="img" aria-label="ฟ้าใส">🌤️</span> กำลังโหลดข้อมูลสภาพอากาศ...</p>
             </div>
         </section>
         
         <!-- Controls Panel -->
-        <section class="controls" role="navigation" aria-label="Map controls">
-            <h3>🧭 สถานที่ท่องเที่ยว</h3>
+        <section class="controls" role="navigation" aria-label="การควบคุมแผนที่และการค้นหา / Map controls and search" id="navigation-controls">
+            <h2 id="attractions-heading"><span role="img" aria-label="เข็มทิศ">🧭</span> สถานที่ท่องเที่ยว</h2>
             
             <!-- Search functionality -->
-            <div class="search-container">
+            <div class="search-container" role="search" aria-labelledby="search-heading">
+                <h3 id="search-heading" class="sr-only">ค้นหาสถานที่ท่องเที่ยว</h3>
+                <label for="searchInput" class="sr-only">
+                    ช่องค้นหาสถานที่ท่องเที่ยว สามารถพิมพ์ชื่อเมือง จังหวัด หรือสถานที่ท่องเที่ยวเป็นภาษาไทยหรืออังกฤษ
+                </label>
                 <input 
                     type="text" 
                     class="search-input" 
                     id="searchInput"
                     placeholder="🔍 ค้นหาสถานที่... / Search location..."
-                    aria-label="Search locations"
-                    role="searchbox"
-                    aria-describedby="searchResults"
+                    aria-label="ค้นหาสถานที่ท่องเที่ยว / Search for tourist locations"
+                    role="combobox"
+                    aria-expanded="false"
+                    aria-autocomplete="list"
+                    aria-describedby="searchResults search-help"
                     tabindex="0"
+                    autocomplete="off"
+                    spellcheck="false"
+                    inputmode="text"
                 >
-                <div class="search-results" id="searchResults" role="listbox" aria-label="Search results"></div>
+                <div class="sr-only" id="search-help">
+                    พิมพ์เพื่อค้นหาสถานที่ท่องเที่ยว เมื่อพิมพ์แล้วจะมีรายการแนะนำปรากฏขึ้น ใช้ลูกศรขึ้นลงเพื่อเลือก และกด Enter เพื่อยืนยัน
+                </div>
+                <div class="search-results" 
+                     id="searchResults" 
+                     role="listbox" 
+                     aria-label="รายการผลการค้นหา / Search results"
+                     aria-live="polite"
+                     aria-relevant="additions removals">
+                </div>
             </div>
             
             <!-- Category Filter System -->
-            <div class="category-filter-section">
-                <h4 class="filter-title">🏷️ ประเภทสถานที่ / Categories</h4>
-                <div class="category-filters" id="categoryFilters" role="group" aria-label="Location category filters">
+            <div class="category-filter-section" role="region" aria-labelledby="category-filter-heading">
+                <h3 class="filter-title" id="category-filter-heading"><span role="img" aria-label="ป้าย">🏷️</span> ประเภทสถานที่ / Categories</h3>
+                <div class="category-filters" 
+                     id="categoryFilters" 
+                     role="group" 
+                     aria-labelledby="category-filter-heading"
+                     aria-describedby="category-filter-help">
                     <!-- Category filter buttons will be generated by JavaScript -->
+                </div>
+                <div class="sr-only" id="category-filter-help">
+                    เลือกประเภทสถานที่เพื่อกรองการแสดงผล สามารถเลือกได้หลายประเภท คลิกอีกครั้งเพื่อยกเลิกการเลือก
                 </div>
             </div>
             
             <!-- Location buttons with favorites - Enhanced with more Thai destinations -->
-            <div class="button-row">
-                <button onclick="focusLocation('bangkok')" aria-label="Focus on Bangkok" role="button" tabindex="0">
-                    🏛️ กรุงเทพฯ
-                </button>
-                <button class="favorite-btn" onclick="toggleFavorite('bangkok')" aria-label="Add Bangkok to favorites" data-location="bangkok" role="button" tabindex="0">
-                    ⭐
-                </button>
-            </div>
-            <div class="button-row">
-                <button onclick="focusLocation('chiangmai')" aria-label="Focus on Chiang Mai" role="button" tabindex="0">
-                    🏔️ เชียงใหม่
-                </button>
-                <button class="favorite-btn" onclick="toggleFavorite('chiangmai')" aria-label="Add Chiang Mai to favorites" data-location="chiangmai" role="button" tabindex="0">
-                    ⭐
-                </button>
-            </div>
-            <div class="button-row">
-                <button onclick="focusLocation('phuket')" aria-label="Focus on Phuket" role="button" tabindex="0">
-                    🏝️ ภูเก็ต
-                </button>
-                <button class="favorite-btn" onclick="toggleFavorite('phuket')" aria-label="Add Phuket to favorites" data-location="phuket" role="button" tabindex="0">
-                    ⭐
-                </button>
-            </div>
+            <div class="location-buttons-section" role="region" aria-labelledby="location-buttons-heading">
+                <h3 id="location-buttons-heading" class="sr-only">ปุ่มเลือกสถานที่ท่องเที่ยว</h3>
+                
+                <div class="button-row">
+                    <button onclick="focusLocation('bangkok')" 
+                            aria-label="เน้นการแสดงกรุงเทพมหานคร เมืองหลวงของประเทศไทย / Focus on Bangkok, capital of Thailand" 
+                            role="button" 
+                            tabindex="0"
+                            aria-describedby="bangkok-info">
+                        <span role="img" aria-label="วัด">🏛️</span> กรุงเทพฯ
+                    </button>
+                    <button class="favorite-btn" 
+                            onclick="toggleFavorite('bangkok')" 
+                            aria-label="เพิ่มหรือลบกรุงเทพฯออกจากรายการโปรด / Add or remove Bangkok from favorites" 
+                            data-location="bangkok" 
+                            role="button" 
+                            tabindex="0"
+                            aria-pressed="false">
+                        <span role="img" aria-label="ดาว">⭐</span>
+                    </button>
+                    <div class="sr-only" id="bangkok-info">กรุงเทพมหานคร เมืองหลวง มีวัดพระแก้ว วัดโพธิ์ และตลาดจตุจักร</div>
+                </div>
+                
+                <div class="button-row">
+                    <button onclick="focusLocation('chiangmai')" 
+                            aria-label="เน้นการแสดงเชียงใหม่ เมืองวัฒนธรรมล้านนา / Focus on Chiang Mai, cultural city of Lanna" 
+                            role="button" 
+                            tabindex="0"
+                            aria-describedby="chiangmai-info">
+                        <span role="img" aria-label="ภูเขา">🏔️</span> เชียงใหม่
+                    </button>
+                    <button class="favorite-btn" 
+                            onclick="toggleFavorite('chiangmai')" 
+                            aria-label="เพิ่มหรือลบเชียงใหม่ออกจากรายการโปรด / Add or remove Chiang Mai from favorites" 
+                            data-location="chiangmai" 
+                            role="button" 
+                            tabindex="0"
+                            aria-pressed="false">
+                        <span role="img" aria-label="ดาว">⭐</span>
+                    </button>
+                    <div class="sr-only" id="chiangmai-info">เชียงใหม่ เมืองวัฒนธรรมล้านนา มีดอยสุเทพ ถนนคนเดิน และค่ายช้าง</div>
+                </div>
+                
+                <div class="button-row">
+                    <button onclick="focusLocation('phuket')" 
+                            aria-label="เน้นการแสดงภูเก็ต เกาะมุกของทะเลอันดามัน / Focus on Phuket, pearl of Andaman Sea" 
+                            role="button" 
+                            tabindex="0"
+                            aria-describedby="phuket-info">
+                        <span role="img" aria-label="เกาะ">🏝️</span> ภูเก็ต
+                    </button>
+                    <button class="favorite-btn" 
+                            onclick="toggleFavorite('phuket')" 
+                            aria-label="เพิ่มหรือลบภูเก็ตออกจากรายการโปรด / Add or remove Phuket from favorites" 
+                            data-location="phuket" 
+                            role="button" 
+                            tabindex="0"
+                            aria-pressed="false">
+                        <span role="img" aria-label="ดาว">⭐</span>
+                    </button>
+                    <div class="sr-only" id="phuket-info">ภูเก็ต เกาะมุกของทะเลอันดามัน มีหาดป่าตอง เกาะพีพี และพระใหญ่</div>
+                </div>
             <div class="button-row">
                 <button onclick="focusLocation('ayutthaya')" aria-label="Focus on Ayutthaya">
                     🏺 อยุธยา
@@ -532,29 +635,40 @@
         </section>
         
         <!-- 3D Globe -->
-        <main id="globe3D" role="main" aria-label="Interactive 3D globe">
-            <div class="globe-sphere" tabindex="0" role="button" aria-label="Interactive globe - use mouse to rotate">
-                <div class="continents-layer"></div>
-                <div class="atmosphere"></div>
+        <main id="globe3D" role="main" aria-label="โลก 3 มิติแบบอินเทอแรคทีฟ / Interactive 3D globe" tabindex="0" id="globe-interaction">
+            <div class="globe-sphere" 
+                 tabindex="0" 
+                 role="button" 
+                 aria-label="โลก 3 มิติ ใช้เมาส์หรือนิ้วเพื่อหมุน คลิกจุดทองเพื่อดูข้อมูลสถานที่ / Interactive 3D globe - use mouse or touch to rotate, click golden dots for location info"
+                 aria-describedby="globe-instructions"
+                 onkeydown="handleGlobeKeydown(event)">
+                <div class="continents-layer" aria-hidden="true"></div>
+                <div class="atmosphere" aria-hidden="true"></div>
+                
                 <!-- Enhanced markers with new Thai destinations -->
                 <div class="marker bangkok" 
                      data-name="🏛️ กรุงเทพฯ (Bangkok)" 
                      onclick="showInfo('bangkok')"
                      role="button"
                      tabindex="0"
-                     aria-label="Bangkok location marker"></div>
+                     aria-label="จุดสถานที่: กรุงเทพมหานคร เมืองหลวงของประเทศไทย คลิกเพื่อดูข้อมูลเพิ่มเติม"
+                     onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showInfo('bangkok');}"></div>
+                     
                 <div class="marker chiangmai" 
                      data-name="🏔️ เชียงใหม่ (Chiang Mai)" 
                      onclick="showInfo('chiangmai')"
                      role="button"
                      tabindex="0"
-                     aria-label="Chiang Mai location marker"></div>
+                     aria-label="จุดสถานที่: เชียงใหม่ เมืองวัฒนธรรมล้านนา คลิกเพื่อดูข้อมูลเพิ่มเติม"
+                     onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showInfo('chiangmai');}"></div>
+                     
                 <div class="marker phuket" 
                      data-name="🏝️ ภูเก็ต (Phuket)" 
                      onclick="showInfo('phuket')"
                      role="button"
                      tabindex="0"
-                     aria-label="Phuket location marker"></div>
+                     aria-label="จุดสถานที่: ภูเก็ต เกาะมุกของทะเลอันดามัน คลิกเพื่อดูข้อมูลเพิ่มเติม"
+                     onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showInfo('phuket');}"></div>
                 <div class="marker ayutthaya" 
                      data-name="🏺 อยุธยา (Ayutthaya)" 
                      onclick="showInfo('ayutthaya')"
@@ -620,48 +734,103 @@
                      onclick="showInfo('europe')"
                      role="button"
                      tabindex="0"
-                     aria-label="Europe location marker"></div>
+                     aria-label="จุดสถานที่: ทวีปยุโรป คลิกเพื่อดูข้อมูลเพิ่มเติม"
+                     onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showInfo('europe');}"></div>
+                     
                 <div class="marker america" 
                      data-name="🗽 อเมริกา (America)" 
                      onclick="showInfo('america')"
                      role="button"
                      tabindex="0"
-                     aria-label="America location marker"></div>
+                     aria-label="จุดสถานที่: ทวีปอเมริกา คลิกเพื่อดูข้อมูลเพิ่มเติม"
+                     onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showInfo('america');}"></div>
+            </div>
+            
+            <!-- Globe Instructions for Screen Readers -->
+            <div class="sr-only" id="globe-instructions">
+                คำแนะนำการใช้งานโลก 3 มิติ: ใช้เมาส์หรือนิ้วลากเพื่อหมุนโลก ใช้ปุ่มลูกศรเพื่อหมุนด้วยคีย์บอร์ด คลิกที่จุดสีทองเพื่อดูข้อมูลสถานที่ท่องเที่ยว กดปุ่ม Tab เพื่อเลื่อนไปยังจุดต่างๆ
             </div>
         </main>
         
         <!-- Status bar -->
-        <footer class="status" id="status" role="status" aria-live="polite">
-            🌍 กำลังสำรวจโลก... | Exploring the World...
+        <footer class="status" id="status" role="status" aria-live="polite" aria-label="สถานะปัจจุบันของแผนที่">
+            <span role="img" aria-label="โลก">🌍</span> กำลังสำรวจโลก... | Exploring the World...
         </footer>
     </div>
 
     <!-- Location info modal -->
-    <div class="modal-overlay" id="modalOverlay" style="display: none;" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="location-modal" id="locationModal" role="document" aria-labelledby="modalTitle" aria-describedby="modalBody">
-            <button class="modal-close" onclick="closeModal()" aria-label="Close modal" tabindex="0">×</button>
+    <div class="modal-overlay" 
+         id="modalOverlay" 
+         style="display: none;" 
+         role="dialog" 
+         aria-modal="true" 
+         aria-hidden="true"
+         aria-labelledby="modalTitle"
+         aria-describedby="modalBody">
+        <div class="location-modal" 
+             id="locationModal" 
+             role="document" 
+             aria-labelledby="modalTitle" 
+             aria-describedby="modalBody">
+            <button class="modal-close" 
+                    onclick="closeModal()" 
+                    aria-label="ปิดหน้าต่างข้อมูลสถานที่ / Close location information dialog" 
+                    tabindex="0"
+                    type="button">×</button>
             <div class="modal-content">
                 <h2 id="modalTitle"></h2>
                 <div class="modal-body" id="modalBody"></div>
                 
                 <!-- Mini-Map Section -->
-                <div class="mini-map-section" id="miniMapSection" style="display: none;">
+                <div class="mini-map-section" id="miniMapSection" style="display: none;" role="complementary" aria-labelledby="miniMapTitle">
                     <div class="mini-map-header">
-                        <h4 id="miniMapTitle">🗺️ Mini-Map: Nearby Attractions</h4>
-                        <button class="mini-map-toggle" id="miniMapToggle" aria-label="Toggle mini-map">
-                            📍 Show Map
+                        <h3 id="miniMapTitle"><span role="img" aria-label="แผนที่">🗺️</span> Mini-Map: Nearby Attractions</h3>
+                        <button class="mini-map-toggle" 
+                                id="miniMapToggle" 
+                                aria-label="เปิด/ปิดการแสดงแผนที่ย่อย / Toggle mini-map display"
+                                aria-expanded="false"
+                                type="button">
+                            <span role="img" aria-label="หมุดตำแหน่ง">📍</span> Show Map
                         </button>
                     </div>
                     <div class="mini-map-container" id="miniMapContainer">
-                        <div id="miniMap" class="mini-map"></div>
-                        <div class="mini-map-controls">
-                            <button class="map-control-btn" id="centerMapBtn" title="Center on location">🎯</button>
-                            <button class="map-control-btn" id="toggleAttractionsBtn" title="Toggle attractions">🏛️</button>
+                        <div id="miniMap" 
+                             class="mini-map" 
+                             role="img" 
+                             aria-label="แผนที่ย่อยแสดงสถานที่ใกล้เคียง"
+                             aria-describedby="mini-map-desc"></div>
+                        <div class="sr-only" id="mini-map-desc">
+                            แผนที่ย่อยแสดงตำแหน่งสถานที่ท่องเที่ยวใกล้เคียงและสถานที่น่าสนใจในบริเวณนั้น
+                        </div>
+                        <div class="mini-map-controls" role="group" aria-label="การควบคุมแผนที่ย่อย">
+                            <button class="map-control-btn" 
+                                    id="centerMapBtn" 
+                                    title="กลับไปจุดกลางของแผนที่ / Center on location"
+                                    aria-label="กลับไปจุดกลางของแผนที่"
+                                    type="button">
+                                <span role="img" aria-label="เป้าหมาย">🎯</span>
+                            </button>
+                            <button class="map-control-btn" 
+                                    id="toggleAttractionsBtn" 
+                                    title="เปิด/ปิดการแสดงสถานที่ท่องเที่ยว / Toggle attractions display"
+                                    aria-label="เปิด/ปิดการแสดงสถานที่ท่องเที่ยว"
+                                    aria-pressed="true"
+                                    type="button">
+                                <span role="img" aria-label="วัด">🏛️</span>
+                            </button>
                         </div>
                     </div>
                 </div>
                 
-                <div class="modal-gallery" id="modalGallery" role="img" aria-label="Location photo gallery"></div>
+                <div class="modal-gallery" 
+                     id="modalGallery" 
+                     role="region" 
+                     aria-label="แกลเลอรี่รูปภาพสถานที่ / Location photo gallery"
+                     aria-describedby="gallery-desc">
+                    <div class="sr-only" id="gallery-desc">
+                        แกลเลอรี่รูปภาพและข้อมูลเพิ่มเติมของสถานที่ท่องเที่ยว
+                    </div>
+                </div>
             </div>
         </div>
     </div>

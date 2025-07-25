@@ -6382,7 +6382,340 @@ mapRippleStyle.textContent = `
     
     .popup-close:hover {
         background: #ff4444;
-        transform: scale(1.1);
     }
 `;
 document.head.appendChild(mapRippleStyle);
+
+// ===================================
+// ACCESSIBILITY ENHANCEMENT FUNCTIONS
+// ===================================
+
+// Keyboard navigation for globe
+function handleGlobeKeydown(event) {
+    const globe = document.querySelector('.globe-sphere');
+    if (!globe) return;
+    
+    switch(event.key) {
+        case 'ArrowLeft':
+            event.preventDefault();
+            // Rotate globe left
+            announceToScreenReader('หมุนโลกไปทางซ้าย / Rotating globe left');
+            break;
+        case 'ArrowRight':
+            event.preventDefault();
+            // Rotate globe right
+            announceToScreenReader('หมุนโลกไปทางขวา / Rotating globe right');
+            break;
+        case 'ArrowUp':
+            event.preventDefault();
+            // Rotate globe up
+            announceToScreenReader('หมุนโลกขึ้น / Rotating globe up');
+            break;
+        case 'ArrowDown':
+            event.preventDefault();
+            // Rotate globe down
+            announceToScreenReader('หมุนโลกลง / Rotating globe down');
+            break;
+        case 'Enter':
+        case ' ':
+            event.preventDefault();
+            // Toggle rotation
+            toggleRotation();
+            break;
+    }
+}
+
+// Screen reader announcements
+function announceToScreenReader(message, priority = 'polite') {
+    const announcement = document.createElement('div');
+    announcement.setAttribute('aria-live', priority);
+    announcement.setAttribute('aria-atomic', 'true');
+    announcement.className = 'sr-only';
+    announcement.textContent = message;
+    
+    document.body.appendChild(announcement);
+    
+    // Remove after announcement
+    setTimeout(() => {
+        if (document.body.contains(announcement)) {
+            document.body.removeChild(announcement);
+        }
+    }, 1000);
+}
+
+// Enhanced focus management for modals
+function trapFocus(element) {
+    const focusableElements = element.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const firstFocusable = focusableElements[0];
+    const lastFocusable = focusableElements[focusableElements.length - 1];
+    
+    const handleTabKey = (e) => {
+        if (e.key === 'Tab') {
+            if (e.shiftKey) {
+                if (document.activeElement === firstFocusable) {
+                    e.preventDefault();
+                    lastFocusable.focus();
+                }
+            } else {
+                if (document.activeElement === lastFocusable) {
+                    e.preventDefault();
+                    firstFocusable.focus();
+                }
+            }
+        }
+        
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    };
+    
+    element.addEventListener('keydown', handleTabKey);
+    
+    return firstFocusable;
+}
+
+// Enhanced search with keyboard navigation
+function enhanceSearchAccessibility() {
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    let currentResultIndex = -1;
+    
+    if (!searchInput || !searchResults) return;
+    
+    searchInput.addEventListener('keydown', (e) => {
+        const results = searchResults.querySelectorAll('.search-result-item');
+        
+        switch(e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                currentResultIndex = Math.min(currentResultIndex + 1, results.length - 1);
+                updateSearchSelection(results, currentResultIndex);
+                break;
+            case 'ArrowUp':
+                e.preventDefault();
+                currentResultIndex = Math.max(currentResultIndex - 1, -1);
+                updateSearchSelection(results, currentResultIndex);
+                break;
+            case 'Enter':
+                e.preventDefault();
+                if (currentResultIndex >= 0 && results[currentResultIndex]) {
+                    results[currentResultIndex].click();
+                }
+                break;
+            case 'Escape':
+                hideSearchResults();
+                break;
+        }
+    });
+    
+    searchInput.addEventListener('input', () => {
+        currentResultIndex = -1;
+        // Update aria-expanded based on results
+        const hasResults = searchResults.children.length > 0;
+        searchInput.setAttribute('aria-expanded', hasResults.toString());
+    });
+}
+
+function updateSearchSelection(results, index) {
+    // Remove previous selection
+    results.forEach((result, i) => {
+        result.classList.toggle('selected', i === index);
+        result.setAttribute('aria-selected', (i === index).toString());
+    });
+    
+    // Announce current selection
+    if (index >= 0 && results[index]) {
+        const text = results[index].textContent;
+        announceToScreenReader(`เลือกผลการค้นหา ${text} / Selected search result ${text}`);
+    }
+}
+
+function hideSearchResults() {
+    const searchResults = document.getElementById('searchResults');
+    const searchInput = document.getElementById('searchInput');
+    
+    if (searchResults) {
+        searchResults.style.display = 'none';
+    }
+    if (searchInput) {
+        searchInput.setAttribute('aria-expanded', 'false');
+    }
+}
+
+// Touch target size validation
+function validateTouchTargets() {
+    const interactiveElements = document.querySelectorAll('button, [role="button"], input, select, .marker');
+    
+    interactiveElements.forEach(element => {
+        const rect = element.getBoundingClientRect();
+        const minSize = 44; // WCAG recommended minimum
+        
+        if (rect.width < minSize || rect.height < minSize) {
+            // Add CSS class for minimum touch target
+            element.classList.add('touch-target-enhanced');
+        }
+    });
+}
+
+// Update ARIA states based on current UI state
+function updateAriaStates() {
+    // Update theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const contrastToggle = document.getElementById('contrastToggle');
+    const theme = document.documentElement.getAttribute('data-theme');
+    
+    if (themeToggle) {
+        themeToggle.setAttribute('aria-pressed', (theme === 'dark').toString());
+        const isDark = theme === 'dark';
+        themeToggle.setAttribute('aria-label', 
+            isDark ? 
+            'เปลี่ยนเป็นโหมดสว่าง / Switch to light mode' :
+            'เปลี่ยนเป็นโหมดมืด / Switch to dark mode'
+        );
+    }
+    
+    if (contrastToggle) {
+        contrastToggle.setAttribute('aria-pressed', (theme === 'contrast').toString());
+        const isContrast = theme === 'contrast';
+        contrastToggle.setAttribute('aria-label', 
+            isContrast ? 
+            'ปิดโหมดความคมชัดสูง / Turn off high contrast mode' :
+            'เปิดโหมดความคมชัดสูง / Turn on high contrast mode'
+        );
+    }
+    
+    // Update favorite buttons
+    const favoriteButtons = document.querySelectorAll('.favorite-btn');
+    favoriteButtons.forEach(btn => {
+        const location = btn.getAttribute('data-location');
+        const isFavorite = favorites.includes(location);
+        btn.setAttribute('aria-pressed', isFavorite.toString());
+        
+        const locationNames = {
+            'bangkok': 'กรุงเทพฯ / Bangkok',
+            'chiangmai': 'เชียงใหม่ / Chiang Mai',
+            'phuket': 'ภูเก็ต / Phuket'
+        };
+        
+        const locationName = locationNames[location] || location;
+        btn.setAttribute('aria-label', 
+            isFavorite ? 
+            `ลบ${locationName}ออกจากรายการโปรด / Remove ${locationName} from favorites` :
+            `เพิ่ม${locationName}ไปยังรายการโปรด / Add ${locationName} to favorites`
+        );
+    });
+}
+
+// Initialize accessibility enhancements
+function initializeAccessibility() {
+    enhanceSearchAccessibility();
+    
+    // Set up keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        // Skip if typing in input
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+            return;
+        }
+        
+        switch(e.key) {
+            case '1':
+                e.preventDefault();
+                focusLocation('bangkok');
+                announceToScreenReader('เน้นกรุงเทพฯ / Focused on Bangkok');
+                break;
+            case '2':
+                e.preventDefault();
+                focusLocation('chiangmai');
+                announceToScreenReader('เน้นเชียงใหม่ / Focused on Chiang Mai');
+                break;
+            case '3':
+                e.preventDefault();
+                focusLocation('phuket');
+                announceToScreenReader('เน้นภูเก็ต / Focused on Phuket');
+                break;
+            case '4':
+                e.preventDefault();
+                focusLocation('world');
+                announceToScreenReader('แสดงมุมมองโลก / World view');
+                break;
+            case ' ':
+                if (e.target === document.body) {
+                    e.preventDefault();
+                    toggleRotation();
+                }
+                break;
+        }
+    });
+    
+    // Validate touch targets on resize
+    window.addEventListener('resize', validateTouchTargets);
+    validateTouchTargets();
+    
+    // Initialize ARIA states
+    updateAriaStates();
+    
+    // Add live region for status updates
+    if (!document.getElementById('aria-live-region')) {
+        const liveRegion = document.createElement('div');
+        liveRegion.id = 'aria-live-region';
+        liveRegion.className = 'sr-only';
+        liveRegion.setAttribute('aria-live', 'polite');
+        liveRegion.setAttribute('aria-atomic', 'true');
+        document.body.appendChild(liveRegion);
+    }
+    
+    console.log('🔧 Accessibility enhancements initialized');
+}
+
+// Enhanced toggle functions with accessibility announcements
+const originalToggleTheme = function() {
+    const root = document.documentElement;
+    const currentTheme = root.getAttribute('data-theme');
+    let newTheme;
+    
+    if (currentTheme === 'light') {
+        newTheme = 'dark';
+    } else if (currentTheme === 'dark') {
+        newTheme = 'contrast';
+    } else {
+        newTheme = 'light';
+    }
+    
+    root.setAttribute('data-theme', newTheme);
+    localStorage.setItem('painaidee-theme', newTheme);
+    
+    // Update theme icon
+    const themeIcon = document.getElementById('themeIcon');
+    if (themeIcon) {
+        const icons = {
+            'light': '🌙',
+            'dark': '🎨', 
+            'contrast': '☀️'
+        };
+        themeIcon.textContent = icons[newTheme];
+    }
+    
+    updateAriaStates();
+    
+    const themeNames = {
+        'light': 'โหมดสว่าง / Light mode',
+        'dark': 'โหมดมืด / Dark mode',
+        'contrast': 'โหมดความคมชัดสูง / High contrast mode'
+    };
+    
+    announceToScreenReader(`เปลี่ยนเป็น${themeNames[newTheme]} / Changed to ${themeNames[newTheme]}`);
+};
+
+// Override existing functions to include accessibility
+if (typeof toggleTheme === 'undefined') {
+    window.toggleTheme = originalToggleTheme;
+}
+
+// Initialize accessibility when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeAccessibility);
+} else {
+    initializeAccessibility();
+}
