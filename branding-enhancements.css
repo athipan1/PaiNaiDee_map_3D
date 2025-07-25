@@ -1,0 +1,639 @@
+/* ========================================
+   PAINAIDEE 3D MAP - BRANDING ENHANCEMENTS
+   Enhanced Thai-Inspired UI/UX Design
+   ======================================== */
+
+/* Thai-Inspired Color Palette */
+:root {
+    /* Primary Thai Gold & Orange Palette */
+    --thai-gold-primary: #FFD700;
+    --thai-gold-secondary: #FFA500;
+    --thai-gold-light: #FFEB3B;
+    --thai-gold-dark: #B8860B;
+    
+    /* Thai Royal Colors */
+    --thai-royal-blue: #1E3A8A;
+    --thai-royal-purple: #7C3AED;
+    --thai-royal-red: #DC2626;
+    
+    /* Traditional Thai Colors */
+    --thai-temple-red: #B91C1C;
+    --thai-emerald: #059669;
+    --thai-lotus-pink: #EC4899;
+    --thai-sunset-orange: #EA580C;
+    
+    /* Enhanced Brand Gradients */
+    --brand-primary-gradient: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF6B35 100%);
+    --brand-secondary-gradient: linear-gradient(135deg, #1E3A8A 0%, #7C3AED 50%, #EC4899 100%);
+    --brand-sunset-gradient: linear-gradient(135deg, #FF6B35 0%, #F59E0B 50%, #FFD700 100%);
+    --brand-emerald-gradient: linear-gradient(135deg, #059669 0%, #10B981 50%, #34D399 100%);
+    
+    /* Enhanced Typography */
+    --font-thai-primary: 'Sarabun', 'Noto Sans Thai', 'Inter', system-ui, sans-serif;
+    --font-thai-decorative: 'Charm', 'Sarabun', 'Noto Sans Thai', serif;
+    --font-thai-modern: 'Kanit', 'Inter', 'Noto Sans Thai', sans-serif;
+    
+    /* Enhanced Spacing with Golden Ratio */
+    --spacing-golden-xs: 0.382rem;    /* φ/2.618 */
+    --spacing-golden-sm: 0.618rem;    /* φ/1.618 */
+    --spacing-golden-md: 1rem;        /* Base */
+    --spacing-golden-lg: 1.618rem;    /* φ */
+    --spacing-golden-xl: 2.618rem;    /* φ^2 */
+    --spacing-golden-2xl: 4.236rem;   /* φ^3 */
+    
+    /* Cultural Design Elements */
+    --thai-pattern-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+    --thai-temple-shadow: 0 8px 32px rgba(220, 38, 38, 0.2);
+    --thai-lotus-shadow: 0 6px 24px rgba(236, 72, 153, 0.2);
+    
+    /* Enhanced Glass Effects */
+    --glass-thai-gold: rgba(255, 215, 0, 0.1);
+    --glass-thai-blue: rgba(30, 58, 138, 0.1);
+    --glass-cultural: rgba(255, 255, 255, 0.08);
+    
+    /* Animation Timings - Based on Thai Cultural Rhythms */
+    --animation-gentle: 0.8s ease-in-out;     /* Like gentle Thai classical music */
+    --animation-flowing: 1.2s ease-in-out;    /* Like flowing river movements */
+    --animation-ceremonial: 2s ease-in-out;   /* Like traditional ceremony pace */
+}
+
+/* Enhanced Light Theme with Thai Colors */
+[data-theme="light"] {
+    --primary-bg: var(--brand-sunset-gradient);
+    --secondary-bg: linear-gradient(to bottom, 
+        rgba(255, 215, 0, 0.1) 0%, 
+        rgba(255, 165, 0, 0.1) 50%, 
+        rgba(255, 107, 53, 0.1) 100%);
+    --accent-color: var(--thai-gold-primary);
+    --button-bg: var(--brand-primary-gradient);
+    --button-hover: linear-gradient(135deg, #FFA500 0%, #FF6B35 50%, #DC2626 100%);
+}
+
+/* Enhanced Dark Theme with Thai Night Colors */
+[data-theme="dark"] {
+    --primary-bg: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #334155 100%);
+    --secondary-bg: linear-gradient(to bottom, 
+        rgba(30, 58, 138, 0.2) 0%, 
+        rgba(124, 58, 237, 0.1) 50%, 
+        rgba(236, 72, 153, 0.1) 100%);
+    --accent-color: var(--thai-gold-light);
+    --button-bg: var(--brand-primary-gradient);
+}
+
+/* Enhanced High Contrast Theme */
+[data-theme="contrast"] {
+    --primary-bg: #000000;
+    --secondary-bg: #000000;
+    --accent-color: var(--thai-gold-light);
+    --button-bg: var(--thai-gold-primary);
+    --button-hover: var(--thai-gold-secondary);
+}
+
+/* ========================================
+   ENHANCED TYPOGRAPHY WITH THAI FONTS
+   ======================================== */
+
+/* Thai Font Loading and Fallbacks */
+@font-face {
+    font-family: 'Sarabun';
+    font-style: normal;
+    font-weight: 300 700;
+    font-display: swap;
+    src: url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+}
+
+@font-face {
+    font-family: 'Kanit';
+    font-style: normal;
+    font-weight: 300 700;
+    font-display: swap;
+    src: url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap');
+}
+
+/* Enhanced Typography Hierarchy */
+.thai-heading {
+    font-family: var(--font-thai-decorative);
+    font-weight: 600;
+    background: var(--brand-primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    line-height: 1.2;
+}
+
+.thai-body {
+    font-family: var(--font-thai-primary);
+    line-height: 1.6;
+}
+
+.thai-accent {
+    font-family: var(--font-thai-modern);
+    font-weight: 500;
+    color: var(--thai-gold-primary);
+}
+
+/* ========================================
+   CULTURAL DESIGN PATTERNS
+   ======================================== */
+
+/* Thai Temple Pattern Background */
+.thai-pattern-bg {
+    background-image: 
+        radial-gradient(circle at 25% 25%, rgba(255, 215, 0, 0.1) 0%, transparent 25%),
+        radial-gradient(circle at 75% 75%, rgba(255, 165, 0, 0.1) 0%, transparent 25%),
+        linear-gradient(45deg, transparent 40%, rgba(255, 215, 0, 0.05) 50%, transparent 60%);
+    background-size: 60px 60px, 60px 60px, 30px 30px;
+    animation: thai-pattern-float var(--animation-flowing) infinite alternate;
+}
+
+@keyframes thai-pattern-float {
+    0% { background-position: 0% 0%, 100% 100%, 0% 0%; }
+    100% { background-position: 10% 10%, 90% 90%, 5% 5%; }
+}
+
+/* Lotus Flower Decorative Elements */
+.lotus-decoration {
+    position: relative;
+}
+
+.lotus-decoration::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(ellipse at center, var(--thai-lotus-pink) 0%, transparent 70%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    opacity: 0.7;
+    animation: lotus-bloom var(--animation-ceremonial) infinite alternate;
+}
+
+@keyframes lotus-bloom {
+    0% { 
+        transform: translateX(-50%) scale(0.8) rotate(0deg);
+        opacity: 0.5;
+    }
+    100% { 
+        transform: translateX(-50%) scale(1.2) rotate(360deg);
+        opacity: 0.8;
+    }
+}
+
+/* Thai Golden Border Elements */
+.thai-golden-border {
+    border: 2px solid transparent;
+    background: linear-gradient(var(--panel-bg), var(--panel-bg)) padding-box,
+                var(--brand-primary-gradient) border-box;
+    border-radius: var(--radius-lg);
+    position: relative;
+}
+
+.thai-golden-border::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    padding: 2px;
+    background: var(--brand-primary-gradient);
+    border-radius: inherit;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    opacity: 0.6;
+    transition: opacity var(--animation-gentle);
+}
+
+.thai-golden-border:hover::after {
+    opacity: 1;
+    animation: golden-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes golden-glow {
+    0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+    100% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
+}
+
+/* ========================================
+   ENHANCED BUTTON STYLING
+   ======================================== */
+
+/* Thai-Inspired Button Base */
+.btn-thai-primary {
+    background: var(--brand-primary-gradient);
+    border: none;
+    color: #ffffff;
+    font-family: var(--font-thai-modern);
+    font-weight: 600;
+    padding: var(--spacing-golden-sm) var(--spacing-golden-lg);
+    border-radius: var(--spacing-golden-md);
+    cursor: pointer;
+    transition: all var(--animation-gentle);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--thai-pattern-shadow);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.btn-thai-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left var(--animation-gentle);
+}
+
+.btn-thai-primary:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 
+        var(--thai-pattern-shadow),
+        0 10px 30px rgba(255, 165, 0, 0.4);
+    background: linear-gradient(135deg, #FFA500 0%, #FF6B35 50%, #DC2626 100%);
+}
+
+.btn-thai-primary:hover::before {
+    left: 100%;
+}
+
+.btn-thai-primary:active {
+    transform: translateY(0) scale(0.98);
+    transition: transform 0.1s ease;
+}
+
+/* Thai Secondary Button */
+.btn-thai-secondary {
+    background: transparent;
+    border: 2px solid var(--thai-gold-primary);
+    color: var(--thai-gold-primary);
+    font-family: var(--font-thai-modern);
+    font-weight: 500;
+    padding: var(--spacing-golden-sm) var(--spacing-golden-lg);
+    border-radius: var(--spacing-golden-md);
+    cursor: pointer;
+    transition: all var(--animation-gentle);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-thai-secondary:hover {
+    background: var(--thai-gold-primary);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: var(--thai-pattern-shadow);
+}
+
+/* ========================================
+   ENHANCED ICON STYLING
+   ======================================== */
+
+/* Thai Cultural Icons */
+.icon-thai {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--glass-thai-gold);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--thai-gold-primary);
+    color: var(--thai-gold-primary);
+    font-size: 1.2rem;
+    transition: all var(--animation-gentle);
+}
+
+.icon-thai:hover {
+    background: var(--thai-gold-primary);
+    color: #ffffff;
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: var(--thai-pattern-shadow);
+}
+
+/* Animated Thai Temple Icon */
+.icon-temple {
+    animation: temple-shine var(--animation-ceremonial) infinite;
+}
+
+@keyframes temple-shine {
+    0%, 100% { 
+        filter: brightness(1) hue-rotate(0deg);
+        transform: scale(1);
+    }
+    50% { 
+        filter: brightness(1.2) hue-rotate(10deg);
+        transform: scale(1.05);
+    }
+}
+
+/* Elephant Icon Animation */
+.icon-elephant {
+    animation: elephant-walk 3s ease-in-out infinite;
+}
+
+@keyframes elephant-walk {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-2px) rotate(-1deg); }
+    50% { transform: translateY(0) rotate(0deg); }
+    75% { transform: translateY(-2px) rotate(1deg); }
+}
+
+/* ========================================
+   ENHANCED ANIMATIONS
+   ======================================== */
+
+/* Thai Cultural Entrance Animation */
+.thai-entrance {
+    animation: thai-cultural-entrance 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes thai-cultural-entrance {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+        filter: blur(10px);
+    }
+    50% {
+        opacity: 0.7;
+        transform: translateY(-5px) scale(1.02);
+        filter: blur(2px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+/* Golden Sparkle Effect */
+.golden-sparkle {
+    position: relative;
+}
+
+.golden-sparkle::after {
+    content: '✨';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 1rem;
+    animation: sparkle-dance 2s ease-in-out infinite;
+    opacity: 0;
+}
+
+.golden-sparkle:hover::after {
+    opacity: 1;
+}
+
+@keyframes sparkle-dance {
+    0%, 100% { 
+        transform: translate(0, 0) rotate(0deg) scale(0.8);
+        opacity: 0;
+    }
+    25% { 
+        transform: translate(-5px, -5px) rotate(90deg) scale(1);
+        opacity: 1;
+    }
+    50% { 
+        transform: translate(5px, -10px) rotate(180deg) scale(1.2);
+        opacity: 0.8;
+    }
+    75% { 
+        transform: translate(10px, -5px) rotate(270deg) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Flowing Water Animation (for river-like elements) */
+.thai-flow {
+    background: linear-gradient(
+        45deg,
+        transparent 30%, 
+        rgba(255, 215, 0, 0.1) 50%, 
+        transparent 70%
+    );
+    background-size: 200% 200%;
+    animation: thai-water-flow 3s ease-in-out infinite;
+}
+
+@keyframes thai-water-flow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ========================================
+   CULTURAL HOVER EFFECTS
+   ======================================== */
+
+/* Thai Temple Hover Effect */
+.thai-temple-hover {
+    transition: all var(--animation-gentle);
+    position: relative;
+}
+
+.thai-temple-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+        0 15px 35px rgba(220, 38, 38, 0.2),
+        0 5px 15px rgba(255, 215, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    background: linear-gradient(145deg, 
+        rgba(255, 215, 0, 0.1) 0%, 
+        rgba(220, 38, 38, 0.05) 100%);
+}
+
+/* Lotus Bloom Hover Effect */
+.lotus-bloom-hover {
+    transition: all var(--animation-gentle);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+}
+
+.lotus-bloom-hover:hover {
+    border-radius: 60% 40% 60% 40% / 70% 30% 70% 30%;
+    background: radial-gradient(ellipse at center, 
+        rgba(236, 72, 153, 0.2) 0%, 
+        rgba(255, 215, 0, 0.1) 50%,
+        transparent 100%);
+    transform: scale(1.05) rotate(5deg);
+}
+
+/* Thai Silk Texture Effect */
+.thai-silk-texture {
+    background: linear-gradient(45deg, 
+        rgba(255, 215, 0, 0.1) 25%, 
+        transparent 25%, 
+        transparent 75%, 
+        rgba(255, 215, 0, 0.1) 75%),
+    linear-gradient(-45deg, 
+        rgba(255, 165, 0, 0.1) 25%, 
+        transparent 25%, 
+        transparent 75%, 
+        rgba(255, 165, 0, 0.1) 75%);
+    background-size: 20px 20px;
+    animation: silk-weave 4s linear infinite;
+}
+
+@keyframes silk-weave {
+    0% { background-position: 0 0, 0 0; }
+    100% { background-position: 20px 20px, -20px -20px; }
+}
+
+/* ========================================
+   RESPONSIVE ENHANCEMENTS
+   ======================================== */
+
+/* Mobile-First Thai Design */
+@media (max-width: 768px) {
+    :root {
+        --spacing-golden-xs: 0.3rem;
+        --spacing-golden-sm: 0.5rem;
+        --spacing-golden-md: 0.8rem;
+        --spacing-golden-lg: 1.3rem;
+        --spacing-golden-xl: 2rem;
+    }
+    
+    .thai-heading {
+        font-size: 1.5rem;
+        line-height: 1.3;
+    }
+    
+    .btn-thai-primary,
+    .btn-thai-secondary {
+        padding: var(--spacing-golden-sm) var(--spacing-golden-md);
+        font-size: 0.9rem;
+        min-height: 44px; /* Touch-friendly */
+    }
+    
+    .icon-thai {
+        width: 1.8rem;
+        height: 1.8rem;
+        font-size: 1rem;
+    }
+}
+
+/* Tablet Optimization */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .thai-heading {
+        font-size: 2rem;
+    }
+    
+    .thai-pattern-bg {
+        background-size: 80px 80px, 80px 80px, 40px 40px;
+    }
+}
+
+/* Desktop Enhancement */
+@media (min-width: 1024px) {
+    .thai-heading {
+        font-size: 2.5rem;
+    }
+    
+    .btn-thai-primary:hover {
+        transform: translateY(-3px) scale(1.03);
+    }
+    
+    .thai-pattern-bg {
+        background-size: 100px 100px, 100px 100px, 50px 50px;
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY ENHANCEMENTS
+   ======================================== */
+
+/* High Contrast Mode Improvements */
+@media (prefers-contrast: high) {
+    .thai-heading {
+        background: none;
+        -webkit-text-fill-color: unset;
+        color: var(--thai-gold-light);
+        text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+    }
+    
+    .btn-thai-primary {
+        border: 2px solid #ffffff;
+    }
+    
+    .icon-thai {
+        border: 2px solid var(--thai-gold-light);
+    }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .thai-pattern-bg,
+    .lotus-decoration::before,
+    .golden-sparkle::after,
+    .thai-flow,
+    .thai-silk-texture {
+        animation: none;
+    }
+    
+    .btn-thai-primary:hover,
+    .btn-thai-secondary:hover,
+    .icon-thai:hover {
+        transform: none;
+    }
+}
+
+/* Focus Styles for Keyboard Navigation */
+.btn-thai-primary:focus-visible,
+.btn-thai-secondary:focus-visible,
+.icon-thai:focus-visible {
+    outline: 3px solid var(--thai-gold-light);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.3);
+}
+
+/* ========================================
+   PERFORMANCE OPTIMIZATIONS
+   ======================================== */
+
+/* GPU Acceleration for Animations */
+.thai-entrance,
+.golden-sparkle,
+.thai-temple-hover,
+.lotus-bloom-hover {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+/* Optimize Animation Performance */
+@supports (backdrop-filter: blur()) {
+    .icon-thai {
+        backdrop-filter: blur(10px) saturate(1.5);
+    }
+}
+
+/* CSS Custom Properties for Dynamic Theming */
+.cultural-theme-switcher {
+    --current-cultural-bg: var(--brand-primary-gradient);
+    --current-cultural-text: #ffffff;
+    --current-cultural-accent: var(--thai-gold-primary);
+    
+    background: var(--current-cultural-bg);
+    color: var(--current-cultural-text);
+    transition: all var(--animation-gentle);
+}
+
+/* Thai Festival Theme (Special Occasions) */
+.festival-theme {
+    --current-cultural-bg: linear-gradient(135deg, 
+        var(--thai-temple-red) 0%, 
+        var(--thai-gold-primary) 25%, 
+        var(--thai-royal-blue) 50%, 
+        var(--thai-emerald) 75%, 
+        var(--thai-lotus-pink) 100%);
+    animation: festival-celebration 5s ease-in-out infinite;
+}
+
+@keyframes festival-celebration {
+    0%, 100% { filter: brightness(1) saturate(1); }
+    25% { filter: brightness(1.1) saturate(1.2); }
+    50% { filter: brightness(1.2) saturate(1.4); }
+    75% { filter: brightness(1.1) saturate(1.2); }
+}
