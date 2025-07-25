@@ -657,6 +657,99 @@ body::before {
     border-bottom: none;
 }
 
+/* Category Filter System */
+.category-filter-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.filter-title {
+    color: var(--panel-text);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.9;
+}
+
+.category-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.category-filter-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-sm) var(--spacing-md);
+    color: var(--panel-text);
+    font-size: var(--font-size-xs);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    white-space: nowrap;
+}
+
+.category-filter-btn:hover {
+    background: var(--glass-bg);
+    border-color: var(--accent-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.category-filter-btn.active {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+    box-shadow: 0 4px 12px rgba(72, 177, 232, 0.3);
+}
+
+.category-filter-btn.active:hover {
+    background: var(--button-hover);
+    transform: translateY(-1px) scale(1.05);
+}
+
+.category-name {
+    font-weight: 500;
+}
+
+/* Responsive category filters */
+@media (max-width: 768px) {
+    .category-filters {
+        gap: var(--spacing-xs);
+    }
+    
+    .category-filter-btn {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: 0.7rem;
+    }
+    
+    .category-name {
+        display: none;
+    }
+}
+
+/* Location comparison highlight effect */
+.comparison-highlight {
+    animation: comparisonPulse 2s ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8) !important;
+    border: 2px solid #ffd700 !important;
+}
+
+@keyframes comparisonPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+}
+
 button {
     background: var(--button-bg);
     color: white;

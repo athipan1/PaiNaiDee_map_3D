@@ -156,6 +156,46 @@ function getText(key) {
     return texts[userPreferences.language] ? texts[userPreferences.language][key] || key : key;
 }
 
+// Location categories for enhanced filtering
+const locationCategories = {
+    beach: {
+        nameEn: "Beaches & Islands",
+        nameTh: "ชายหาดและเกาะ",
+        emoji: "🏖️",
+        color: "#00bcd4"
+    },
+    mountain: {
+        nameEn: "Mountains & Nature",
+        nameTh: "ภูเขาและธรรมชาติ",
+        emoji: "🏔️",
+        color: "#4caf50"
+    },
+    historical: {
+        nameEn: "Historical Sites",
+        nameTh: "แหล่งประวัติศาสตร์",
+        emoji: "🏛️",
+        color: "#ff9800"
+    },
+    cultural: {
+        nameEn: "Cultural Centers",
+        nameTh: "ศูนย์วัฒนธรรม",
+        emoji: "🏯",
+        color: "#9c27b0"
+    },
+    urban: {
+        nameEn: "Urban Areas",
+        nameTh: "เขตเมือง",
+        emoji: "🏙️",
+        color: "#2196f3"
+    },
+    adventure: {
+        nameEn: "Adventure & Activities",
+        nameTh: "ผจญภัยและกิจกรรม",
+        emoji: "🧗",
+        color: "#f44336"
+    }
+};
+
 // Enhanced Thai locations with more destinations and detailed information
 const locations = {
     bangkok: {
@@ -165,6 +205,7 @@ const locations = {
         descriptionEn: "Capital city of Thailand, rich in temples and culture, and the economic and tourism center",
         emoji: "🏛️",
         coordinates: [100.5018, 13.7563],
+        categories: ["urban", "cultural", "historical"],
         attractions: ["วัดพระแก้ว", "พระบรมมหาราชวัง", "วัดโพธิ์", "ตลาดจตุจักร", "วัดอรุณ", "เยาวราช"],
         attractionsEn: ["Wat Phra Kaew", "Grand Palace", "Wat Pho", "Chatuchak Market", "Wat Arun", "Chinatown"],
         photos: [
@@ -184,6 +225,7 @@ const locations = {
         descriptionEn: "City of mountains and Lanna culture with cool weather and beautiful nature",
         emoji: "🏔️",
         coordinates: [98.9817, 18.7883],
+        categories: ["mountain", "cultural", "adventure"],
         attractions: ["ดอยสุเทพ", "วัดพระธาตุ", "ตลาดวอร์กกิ้งสตรีท", "อุทยานแห่งชาติดอยอินทนนท์", "บ้านช้าง", "ตลาดนัดเสาร์อาทิตย์"],
         attractionsEn: ["Doi Suthep", "Wat Phra That", "Walking Street", "Doi Inthanon National Park", "Elephant Sanctuary", "Weekend Market"],
         photos: [
@@ -203,6 +245,7 @@ const locations = {
         descriptionEn: "Pearl of Andaman with crystal clear sea and white sandy beaches, a world-famous tourist destination",
         emoji: "🏝️",
         coordinates: [98.3923, 7.8804],
+        categories: ["beach", "adventure"],
         attractions: ["หาดป่าตอง", "เกาะพีพี", "หาดกะตะ", "บิ๊กบุดดา", "เมืองเก่าภูเก็ต", "หาดไนหาน"],
         attractionsEn: ["Patong Beach", "Phi Phi Islands", "Kata Beach", "Big Buddha", "Phuket Old Town", "Nai Harn Beach"],
         photos: [
@@ -222,6 +265,7 @@ const locations = {
         descriptionEn: "Former capital of Thailand, UNESCO World Heritage site with ancient temple ruins and palaces",
         emoji: "🏺",
         coordinates: [100.5692, 14.3532],
+        categories: ["historical", "cultural"],
         attractions: ["วัดมหาธาตุ", "วัดพระศรีสรรเพชญ์", "วัดชัยวัฒนาราม", "พระราชวังหลวง", "ตลาดน้ำอยุธยา"],
         attractionsEn: ["Wat Mahathat", "Wat Phra Si Sanphet", "Wat Chaiwatthanaram", "Royal Palace", "Ayutthaya Floating Market"],
         photos: [
@@ -241,6 +285,7 @@ const locations = {
         descriptionEn: "Province with beautiful nature, white sand beaches, crystal clear sea, and stunning limestone cliffs",
         emoji: "🌊",
         coordinates: [98.9063, 8.0863],
+        categories: ["beach", "adventure", "mountain"],
         attractions: ["อ่าวไร่เลย์", "เกาะพีพี", "เกาะฮ่องอิสลาม", "ถ้ำพระนาง", "น้ำตกน้ำหยดธรรมชาติ"],
         attractionsEn: ["Railay Bay", "Phi Phi Islands", "Hong Island", "Phra Nang Cave", "Namtok Namyod Nature"],
         photos: [
@@ -260,6 +305,7 @@ const locations = {
         descriptionEn: "Sukhothai Historical Park, first capital of Thailand, UNESCO site preserving ancient ruins",
         emoji: "🏛️",
         coordinates: [99.8230, 17.0238],
+        categories: ["historical", "cultural"],
         attractions: ["วัดมหาธาตุ", "วัดศรีชุม", "วัดสระศรี", "วัดศรีสวาย", "ประตูนาคนาต"],
         attractionsEn: ["Wat Mahathat", "Wat Sri Chum", "Wat Sa Sri", "Wat Sri Sawai", "Nakonart Gate"],
         photos: [
@@ -279,6 +325,7 @@ const locations = {
         descriptionEn: "Coastal tourist city featuring Pattaya Beach and Koh Larn with diverse water activities",
         emoji: "🏖️",
         coordinates: [100.9847, 13.3611],
+        categories: ["beach", "adventure", "urban"],
         attractions: ["หาดพัทยา", "เกาะล้าน", "สวนนงนุช", "ตลาดลอยน้ำสี่ภาค", "วัดใหญ่อินทราราม"],
         attractionsEn: ["Pattaya Beach", "Koh Larn", "Nong Nooch Garden", "Four Regions Floating Market", "Wat Yai Inthararam"],
         photos: [
@@ -298,6 +345,7 @@ const locations = {
         descriptionEn: "Historic city by the River Kwai with the famous bridge and beautiful nature",
         emoji: "🌉",
         coordinates: [99.5328, 14.0227],
+        categories: ["historical", "mountain", "adventure"],
         attractions: ["สะพานข้ามแควใหญ่", "อุทยานแห่งชาติเอราวัณ", "ถ้ำกระแซ", "พิพิธภัณฑ์สงคราม", "ตลาดน้ำดอนวาย"],
         attractionsEn: ["Bridge over River Kwai", "Erawan National Park", "Kaeng Krachan Cave", "War Museum", "Don Wai Floating Market"],
         photos: [
@@ -317,6 +365,7 @@ const locations = {
         descriptionEn: "Thailand's monkey city filled with ancient Khmer ruins and fascinating culture",
         emoji: "🐵",
         coordinates: [100.6531, 14.7995],
+        categories: ["historical", "cultural"],
         attractions: ["พระปรางค์สามยอด", "วัดพระศรีรัตนมหาธาตุ", "พระราชวังสมเด็จพระนารายณ์", "ศาลเจ้าแม่ชีจินดา"],
         attractionsEn: ["Phra Prang Sam Yot", "Wat Phra Sri Rattana Mahathat", "King Narai Palace", "Mae Chi Jinda Shrine"],
         photos: [
@@ -336,6 +385,7 @@ const locations = {
         descriptionEn: "Royal seaside resort town with white sandy beaches and pleasant weather",
         emoji: "🏖️",
         coordinates: [99.9588, 12.5683],
+        categories: ["beach", "cultural"],
         attractions: ["พระราชวังไกลกังวล", "หาดหัวหิน", "ตลาดน้ำอัมพวา", "เขาตะเกียบ", "วัดห้วยมงคล"],
         attractionsEn: ["Klaikangwon Palace", "Hua Hin Beach", "Amphawa Floating Market", "Khao Takiab", "Wat Huay Mongkol"],
         photos: [
@@ -355,6 +405,7 @@ const locations = {
         descriptionEn: "World-famous island in the Gulf of Thailand with pristine beaches and crystal clear waters",
         emoji: "🥥",
         coordinates: [100.0629, 9.5018],
+        categories: ["beach", "adventure"],
         attractions: ["หาดเฉวง", "หาดละไม", "วัดพระใหญ่", "หินตาหินยาย", "น้ำตกนาเมือง"],
         attractionsEn: ["Chaweng Beach", "Lamai Beach", "Big Buddha Temple", "Hin Ta Hin Yai", "Na Muang Waterfall"],
         photos: [
@@ -374,6 +425,7 @@ const locations = {
         descriptionEn: "Thailand's northernmost province famous for white and blue temples and beautiful Lanna culture",
         emoji: "⛩️",
         coordinates: [99.8325, 19.9105],
+        categories: ["cultural", "mountain", "historical"],
         attractions: ["วัดร่องขุ่น", "วัดร่องเสือเต้น", "สามเหลี่ยมทองคำ", "หมู่บ้านกะเหรี่ยงคอยาว", "ดอยตุง"],
         attractionsEn: ["Wat Rong Khun (White Temple)", "Wat Rong Suea Ten (Blue Temple)", "Golden Triangle", "Long Neck Karen Village", "Doi Tung"],
         photos: [
@@ -393,6 +445,7 @@ const locations = {
         descriptionEn: "Vibrant 24-hour beach city with abundant water activities and entertainment",
         emoji: "🌃",
         coordinates: [100.8868, 12.9236],
+        categories: ["beach", "urban", "adventure"],
         attractions: ["หาดพัทยา", "เกาะล้าน", "สวนนงนุช", "อุทยานโบราณสถาน", "วอล์กกิ้งสตรีท"],
         attractionsEn: ["Pattaya Beach", "Koh Larn", "Nong Nooch Garden", "Sanctuary of Truth", "Walking Street"],
         photos: [
@@ -412,6 +465,7 @@ const locations = {
         descriptionEn: "Continent of history and art with beautiful architecture and diverse cultures",
         emoji: "🏛️",
         coordinates: [10.0, 54.0],
+        categories: ["historical", "cultural", "urban"],
         attractions: ["หอไอเฟล", "โคลอสเซี่ยม", "สะพานลอนดอน", "พิพิธภัณฑ์ลูฟร์", "พระราชวังวีเมอร์", "บิ๊กเบน"],
         attractionsEn: ["Eiffel Tower", "Colosseum", "Tower Bridge", "Louvre Museum", "Buckingham Palace", "Big Ben"],
         photos: [
@@ -431,6 +485,7 @@ const locations = {
         descriptionEn: "Land of dreams and opportunities with modern cities and impressive nature",
         emoji: "🗽",
         coordinates: [-95.0, 37.0],
+        categories: ["urban", "mountain", "adventure"],
         attractions: ["เทพีเสรีภาพ", "แกรนด์แคนยอน", "ไทม์สแควร์", "โลกดิสนีย์", "โกลเดนเกต", "เยลโลสโตน"],
         attractionsEn: ["Statue of Liberty", "Grand Canyon", "Times Square", "Disney World", "Golden Gate", "Yellowstone"],
         photos: [
@@ -1007,6 +1062,329 @@ function displaySearchResults(filteredLocations) {
     }
     
     searchResults.style.display = 'block';
+}
+
+// Enhanced category filtering system
+let activeCategories = new Set();
+
+function initializeCategoryFilter() {
+    const categoryContainer = document.getElementById('categoryFilters');
+    if (!categoryContainer) return;
+    
+    // Create category filter buttons
+    Object.keys(locationCategories).forEach(categoryKey => {
+        const category = locationCategories[categoryKey];
+        const button = document.createElement('button');
+        button.className = 'category-filter-btn';
+        button.setAttribute('data-category', categoryKey);
+        button.innerHTML = `${category.emoji} <span class="category-name">${getCurrentCategoryName(category)}</span>`;
+        button.setAttribute('aria-label', `Filter by ${category.nameEn}`);
+        
+        button.addEventListener('click', () => toggleCategoryFilter(categoryKey));
+        categoryContainer.appendChild(button);
+    });
+    
+    // Add "All Categories" button
+    const allButton = document.createElement('button');
+    allButton.className = 'category-filter-btn active';
+    allButton.setAttribute('data-category', 'all');
+    allButton.innerHTML = `🌍 <span class="category-name">${userPreferences.language === 'th' ? 'ทั้งหมด' : 'All'}</span>`;
+    allButton.setAttribute('aria-label', 'Show all categories');
+    allButton.addEventListener('click', () => showAllCategories());
+    categoryContainer.insertBefore(allButton, categoryContainer.firstChild);
+}
+
+function getCurrentCategoryName(category) {
+    return userPreferences.language === 'th' ? category.nameTh : category.nameEn;
+}
+
+function toggleCategoryFilter(categoryKey) {
+    const button = document.querySelector(`[data-category="${categoryKey}"]`);
+    const allButton = document.querySelector('[data-category="all"]');
+    
+    if (activeCategories.has(categoryKey)) {
+        activeCategories.delete(categoryKey);
+        button.classList.remove('active');
+    } else {
+        activeCategories.add(categoryKey);
+        button.classList.add('active');
+        allButton.classList.remove('active');
+    }
+    
+    if (activeCategories.size === 0) {
+        showAllCategories();
+    } else {
+        applyLocationFilters();
+    }
+}
+
+function showAllCategories() {
+    activeCategories.clear();
+    document.querySelectorAll('.category-filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector('[data-category="all"]').classList.add('active');
+    applyLocationFilters();
+}
+
+function applyLocationFilters() {
+    const locationButtons = document.querySelectorAll('.button-row');
+    
+    locationButtons.forEach(row => {
+        const locationBtn = row.querySelector('button[onclick]');
+        if (!locationBtn) return;
+        
+        const onclick = locationBtn.getAttribute('onclick');
+        const locationKey = onclick.match(/focusLocation\('(.+)'\)/)?.[1];
+        
+        if (!locationKey || !locations[locationKey]) return;
+        
+        const location = locations[locationKey];
+        const shouldShow = activeCategories.size === 0 || 
+                          (location.categories && location.categories.some(cat => activeCategories.has(cat)));
+        
+        row.style.display = shouldShow ? 'flex' : 'none';
+    });
+    
+    // Update filtered count
+    const visibleCount = document.querySelectorAll('.button-row[style*="flex"], .button-row:not([style])').length;
+    const totalCount = Object.keys(locations).length;
+    
+    showNotification(
+        userPreferences.language === 'th' ? 
+        `🎯 แสดง ${visibleCount} จาก ${totalCount} สถานที่` :
+        `🎯 Showing ${visibleCount} of ${totalCount} locations`,
+        'info'
+    );
+}
+
+// Enhanced location comparison system
+function initializeLocationComparison() {
+    const compareBtn = document.querySelector('button[onclick*="เปรียบเทียบ"]') ||
+                      document.querySelector('button[onclick*="comparison"]');
+    
+    if (compareBtn) {
+        compareBtn.addEventListener('click', performLocationComparison);
+    }
+    
+    // Replace button onclick with our enhanced function
+    const comparisonButton = document.querySelector('.comparison-section button:last-child');
+    if (comparisonButton) {
+        comparisonButton.onclick = performLocationComparison;
+    }
+}
+
+function performLocationComparison() {
+    const location1Select = document.querySelector('.comparison-section select:first-of-type');
+    const location2Select = document.querySelector('.comparison-section select:last-of-type');
+    
+    if (!location1Select || !location2Select) {
+        showNotification(
+            userPreferences.language === 'th' ? 
+            '❌ ไม่พบเครื่องมือเปรียบเทียบ' : 
+            '❌ Comparison tool not found',
+            'error'
+        );
+        return;
+    }
+    
+    const loc1Key = location1Select.value;
+    const loc2Key = location2Select.value;
+    
+    if (loc1Key === loc2Key || !loc1Key || !loc2Key || 
+        loc1Key.includes('เลือก') || loc2Key.includes('เลือก') ||
+        loc1Key.includes('Select') || loc2Key.includes('Select')) {
+        showNotification(
+            userPreferences.language === 'th' ? 
+            '⚠️ กรุณาเลือกสถานที่ 2 แห่งที่แตกต่างกัน' : 
+            '⚠️ Please select 2 different locations',
+            'warning'
+        );
+        return;
+    }
+    
+    const location1 = locations[loc1Key];
+    const location2 = locations[loc2Key];
+    
+    if (!location1 || !location2) {
+        showNotification(
+            userPreferences.language === 'th' ? 
+            '❌ ไม่พบข้อมูลสถานที่' : 
+            '❌ Location data not found',
+            'error'
+        );
+        return;
+    }
+    
+    // Calculate distance and travel info
+    let distanceInfo = '';
+    let travelTime = '';
+    let recommendedTransport = '';
+    
+    if (location1.coordinates && location2.coordinates) {
+        const distance = calculateDistance(
+            location1.coordinates[1], location1.coordinates[0],
+            location2.coordinates[1], location2.coordinates[0]
+        );
+        
+        travelTime = calculateTravelTime(distance, 'car');
+        const estimatedCost = estimateTravelCost(distance, 'car');
+        
+        if (distance > 500) {
+            recommendedTransport = userPreferences.language === 'th' ? 'เครื่องบิน' : 'Airplane';
+        } else if (distance > 200) {
+            recommendedTransport = userPreferences.language === 'th' ? 'รถบัส' : 'Bus';
+        } else {
+            recommendedTransport = userPreferences.language === 'th' ? 'รถยนต์' : 'Car';
+        }
+        
+        distanceInfo = `
+            <div class="comparison-distance">
+                <h4>📏 ${getText('distance')}</h4>
+                <p><strong>${distance} ${getText('km')}</strong></p>
+                <p>⏱️ ${userPreferences.language === 'th' ? 'เวลาเดินทาง' : 'Travel Time'}: ${travelTime}</p>
+                <p>🚗 ${userPreferences.language === 'th' ? 'แนะนำ' : 'Recommended'}: ${recommendedTransport}</p>
+                <p>💰 ${userPreferences.language === 'th' ? 'ประมาณค่าใช้จ่าย' : 'Estimated Cost'}: ${estimatedCost} THB</p>
+            </div>
+        `;
+    }
+    
+    // Create comparison modal
+    const modalHtml = `
+        <div class="comparison-modal" id="comparisonModal" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center;">
+            <div class="comparison-modal-content" style="background: var(--panel-bg); border-radius: var(--radius-xl); padding: 2rem; max-width: 90vw; max-height: 90vh; overflow-y: auto; border: 1px solid var(--glass-border);">
+                <div class="comparison-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 style="color: var(--panel-text);">⚖️ ${userPreferences.language === 'th' ? 'เปรียบเทียบสถานที่' : 'Location Comparison'}</h2>
+                    <button class="close-btn" onclick="closeComparisonModal()" style="background: none; border: none; font-size: 1.5rem; color: var(--panel-text); cursor: pointer;">×</button>
+                </div>
+                
+                <div class="comparison-content">
+                    <div class="location-comparison" style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 2rem; margin-bottom: 2rem;">
+                        <div class="location-card" style="background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius-lg); color: var(--panel-text);">
+                            <h3 style="margin-bottom: 1rem; color: var(--accent-color);">${location1.emoji} ${getCurrentLocationName(location1)}</h3>
+                            <div class="location-details">
+                                <p><strong>📍 ${getText('description')}:</strong></p>
+                                <p style="margin-bottom: 1rem; opacity: 0.9;">${getCurrentLocationDescription(location1)}</p>
+                                
+                                <p><strong>🌤️ ${getText('weather')}:</strong> ${location1.weather || 'N/A'}</p>
+                                <p style="margin-bottom: 1rem;"><strong>📅 ${getText('bestTime')}:</strong> ${location1.bestTime || 'Year Round'}</p>
+                                
+                                <div class="attractions-list" style="margin-bottom: 1rem;">
+                                    <p><strong>🎯 ${getText('attractionsTitle')}:</strong></p>
+                                    <ul style="margin-left: 1rem;">
+                                        ${location1.attractions ? location1.attractions.slice(0, 3).map((attraction, index) => 
+                                            `<li>${getCurrentAttractionName(location1, index)}</li>`
+                                        ).join('') : '<li>N/A</li>'}
+                                    </ul>
+                                </div>
+                                
+                                <div class="categories-display">
+                                    <p><strong>🏷️ ${userPreferences.language === 'th' ? 'ประเภท' : 'Categories'}:</strong></p>
+                                    <div class="category-tags" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                                        ${location1.categories ? location1.categories.map(cat => 
+                                            `<span class="category-tag" style="background: var(--accent-color); color: white; padding: 0.25rem 0.5rem; border-radius: var(--radius-sm); font-size: 0.8rem;">${locationCategories[cat]?.emoji} ${getCurrentCategoryName(locationCategories[cat])}</span>`
+                                        ).join('') : 'N/A'}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="comparison-divider" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 150px;">
+                            <div class="vs-badge" style="background: var(--accent-color); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-bottom: 1rem;">VS</div>
+                            ${distanceInfo}
+                        </div>
+                        
+                        <div class="location-card" style="background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius-lg); color: var(--panel-text);">
+                            <h3 style="margin-bottom: 1rem; color: var(--accent-color);">${location2.emoji} ${getCurrentLocationName(location2)}</h3>
+                            <div class="location-details">
+                                <p><strong>📍 ${getText('description')}:</strong></p>
+                                <p style="margin-bottom: 1rem; opacity: 0.9;">${getCurrentLocationDescription(location2)}</p>
+                                
+                                <p><strong>🌤️ ${getText('weather')}:</strong> ${location2.weather || 'N/A'}</p>
+                                <p style="margin-bottom: 1rem;"><strong>📅 ${getText('bestTime')}:</strong> ${location2.bestTime || 'Year Round'}</p>
+                                
+                                <div class="attractions-list" style="margin-bottom: 1rem;">
+                                    <p><strong>🎯 ${getText('attractionsTitle')}:</strong></p>
+                                    <ul style="margin-left: 1rem;">
+                                        ${location2.attractions ? location2.attractions.slice(0, 3).map((attraction, index) => 
+                                            `<li>${getCurrentAttractionName(location2, index)}</li>`
+                                        ).join('') : '<li>N/A</li>'}
+                                    </ul>
+                                </div>
+                                
+                                <div class="categories-display">
+                                    <p><strong>🏷️ ${userPreferences.language === 'th' ? 'ประเภท' : 'Categories'}:</strong></p>
+                                    <div class="category-tags" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                                        ${location2.categories ? location2.categories.map(cat => 
+                                            `<span class="category-tag" style="background: var(--accent-color); color: white; padding: 0.25rem 0.5rem; border-radius: var(--radius-sm); font-size: 0.8rem;">${locationCategories[cat]?.emoji} ${getCurrentCategoryName(locationCategories[cat])}</span>`
+                                        ).join('') : 'N/A'}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-actions" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="focusLocation('${loc1Key}'); closeComparisonModal();" style="background: var(--button-bg); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: var(--radius-lg); cursor: pointer;">
+                            📍 ${userPreferences.language === 'th' ? 'ดู' : 'View'} ${getCurrentLocationName(location1)}
+                        </button>
+                        <button onclick="focusLocation('${loc2Key}'); closeComparisonModal();" style="background: var(--button-bg); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: var(--radius-lg); cursor: pointer;">
+                            📍 ${userPreferences.language === 'th' ? 'ดู' : 'View'} ${getCurrentLocationName(location2)}
+                        </button>
+                        <button onclick="closeComparisonModal();" style="background: var(--card-bg); color: var(--panel-text); border: 1px solid var(--glass-border); padding: 0.75rem 1.5rem; border-radius: var(--radius-lg); cursor: pointer;">
+                            ✕ ${userPreferences.language === 'th' ? 'ปิด' : 'Close'}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Remove existing modal if any
+    const existingModal = document.getElementById('comparisonModal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+    
+    // Add modal to body
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    
+    // Highlight compared locations on map
+    highlightComparisonLocations(loc1Key, loc2Key);
+    
+    showNotification(
+        userPreferences.language === 'th' ? 
+        `⚖️ เปรียบเทียบ ${getCurrentLocationName(location1)} และ ${getCurrentLocationName(location2)}` :
+        `⚖️ Comparing ${getCurrentLocationName(location1)} and ${getCurrentLocationName(location2)}`,
+        'info'
+    );
+}
+
+function closeComparisonModal() {
+    const modal = document.getElementById('comparisonModal');
+    if (modal) {
+        modal.remove();
+    }
+    
+    // Remove location highlights
+    document.querySelectorAll('.comparison-highlight').forEach(el => {
+        el.classList.remove('comparison-highlight');
+    });
+}
+
+// Add missing highlight function
+function highlightComparisonLocations(loc1Key, loc2Key) {
+    // Remove any existing highlights first
+    document.querySelectorAll('.comparison-highlight').forEach(el => {
+        el.classList.remove('comparison-highlight');
+    });
+    
+    // Add highlights to the compared locations
+    const marker1 = document.querySelector(`.marker.${loc1Key}`);
+    const marker2 = document.querySelector(`.marker.${loc2Key}`);
+    
+    if (marker1) marker1.classList.add('comparison-highlight');
+    if (marker2) marker2.classList.add('comparison-highlight');
 }
 
 // Favorites system
@@ -2157,6 +2535,8 @@ function initializeMap() {
     
     // Initialize other UI features
     initializeSearch();
+    initializeCategoryFilter();
+    initializeLocationComparison();
     initializeFavorites();
     initializeKeyboardNavigation();
     updateWeatherInfo();
