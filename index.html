@@ -12,11 +12,27 @@
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>">
     
-    <!-- Google Fonts with improved loading and fallback -->
+    <!-- Google Fonts with improved loading and Thai font support -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Primary Inter font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'; this.onerror=function(){this.remove();}">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
+    
+    <!-- Thai Fonts for Enhanced Branding -->
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'; this.onerror=function(){this.remove();}">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'; this.onerror=function(){this.remove();}">
+    <link href="https://fonts.googleapis.com/css2?family=Charm:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'; this.onerror=function(){this.remove();}">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'; this.onerror=function(){this.remove();}">
+    
+    <!-- Fallback for Thai fonts -->
+    <noscript>
+        <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Charm:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    </noscript>
     
     <!-- Leaflet CSS for mini-map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -25,6 +41,8 @@
     
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
+    <!-- Enhanced Branding and Cultural Design System -->
+    <link rel="stylesheet" href="branding-enhancements.css">
     <!-- Enhanced Feedback System Styles -->
     <link rel="stylesheet" href="feedback-system.css">
     <!-- Iterative Design System Styles -->
@@ -50,8 +68,8 @@
 
     <!-- Enhanced Welcome Screen -->
     <div class="welcome-overlay" id="welcomeOverlay" role="dialog" aria-modal="true" aria-labelledby="welcome-title" aria-describedby="welcome-description">
-        <div class="welcome-container">
-            <div class="welcome-header">
+        <div class="welcome-container thai-pattern-bg thai-golden-border">
+            <div class="welcome-header lotus-decoration">
                 <!-- Mascot Container -->
                 <div class="mascot-container">
                     <div class="mascot-elephant" id="welcomeMascot" role="img" aria-label="PaiNai ช้างน้อยมาสคอต ผู้นำทางท่องเที่ยว กำลังโบกงวงทักทาย">
@@ -94,9 +112,9 @@
                     </div>
                 </div>
                 
-                <h1 class="welcome-title" id="welcome-title">🗺️ ยินดีต้อนรับสู่ PaiNaiDee 3D Map</h1>
-                <h2 class="welcome-subtitle">Welcome to PaiNaiDee 3D Interactive Globe</h2>
-                <div class="welcome-description" id="welcome-description">
+                <h1 class="welcome-title thai-heading" id="welcome-title">🗺️ ยินดีต้อนรับสู่ PaiNaiDee 3D Map</h1>
+                <h2 class="welcome-subtitle thai-body">Welcome to PaiNaiDee 3D Interactive Globe</h2>
+                <div class="welcome-description thai-body" id="welcome-description">
                     <p class="welcome-text-th">
                         เริ่มต้นการเดินทางสู่โลกแห่งการสำรวจ 3 มิติ พร้อมข้อมูลสถานที่ท่องเที่ยวในประเทศไทยและทั่วโลก ที่จะทำให้คุณได้สัมผัสประสบการณ์ใหม่ในการค้นพบสถานที่ต่างๆ
                     </p>
@@ -132,21 +150,21 @@
             </div>
 
             <div class="welcome-actions">
-                <button class="start-button" id="startExploring" onclick="startExploring()" type="button" aria-describedby="start-button-desc">
-                    <span class="start-icon" role="img" aria-label="ไอคอนจรวด">🚀</span>
-                    <span class="start-text-th">เริ่มต้นสำรวจ</span>
+                <button class="start-button btn-thai-primary thai-entrance golden-sparkle" id="startExploring" onclick="startExploring()" type="button" aria-describedby="start-button-desc">
+                    <span class="start-icon icon-elephant" role="img" aria-label="ไอคอนจรวด">🚀</span>
+                    <span class="start-text-th thai-accent">เริ่มต้นสำรวจ</span>
                     <span class="start-text-en">Start Exploring</span>
                 </button>
                 <div class="sr-only" id="start-button-desc">คลิกเพื่อเริ่มต้นการสำรวจแผนที่ 3 มิติ และปิดหน้าต้อนรับ</div>
                 
                 <div class="welcome-options">
-                    <button class="option-button" id="startTourButton" onclick="startGuidedTour()" type="button" aria-describedby="tour-button-desc">
-                        <span role="img" aria-label="ไอคอนเป้าหมาย">🎯</span> เริ่มทัวร์แนะนำ / Start Guided Tour
+                    <button class="option-button btn-thai-secondary lotus-bloom-hover" id="startTourButton" onclick="startGuidedTour()" type="button" aria-describedby="tour-button-desc">
+                        <span class="icon-thai" role="img" aria-label="ไอคอนเป้าหมาย">🎯</span> เริ่มทัวร์แนะนำ / Start Guided Tour
                     </button>
                     <div class="sr-only" id="tour-button-desc">เริ่มทัวร์แนะนำการใช้งานแผนที่แบบมีคำแนะนำทีละขั้นตอน</div>
                     
-                    <button class="option-button" id="skipToMapButton" onclick="skipToMap()" type="button" aria-describedby="skip-button-desc">
-                        <span role="img" aria-label="ไอคอนฟ้าผ่า">⚡</span> ข้ามไปที่แผนที่ / Skip to Map
+                    <button class="option-button btn-thai-secondary thai-temple-hover" id="skipToMapButton" onclick="skipToMap()" type="button" aria-describedby="skip-button-desc">
+                        <span class="icon-thai icon-temple" role="img" aria-label="ไอคอนฟ้าผ่า">⚡</span> ข้ามไปที่แผนที่ / Skip to Map
                     </button>
                     <div class="sr-only" id="skip-button-desc">ข้ามการแนะนำและไปที่แผนที่โดยตรง</div>
                     
@@ -262,10 +280,10 @@
 
     <div id="mapContainer">
         <!-- Info Panel -->
-        <section class="info-panel" role="banner" id="main-content">
-            <h1>🗺️ PaiNaiDee 3D Map</h1>
-            <p><strong>ยินดีต้อนรับสู่แผนที่ 3 มิติ!</strong></p>
-            <p>Welcome to the 3D Interactive Globe!</p>
+        <section class="info-panel thai-golden-border thai-pattern-bg thai-entrance" role="banner" id="main-content">
+            <h1 class="thai-heading">🗺️ PaiNaiDee 3D Map</h1>
+            <p class="thai-body"><strong class="thai-accent">ยินดีต้อนรับสู่แผนที่ 3 มิติ!</strong></p>
+            <p class="thai-body">Welcome to the 3D Interactive Globe!</p>
             <div class="info-stats" role="status" aria-live="polite" aria-label="สถานะข้อมูลแผนที่">
                 <p><span role="img" aria-label="หมุดตำแหน่ง">📍</span> กำลังแสดง: โลกและประเทศไทย</p>
                 <p><span role="img" aria-label="จอยสติ๊ก">🎮</span> คลิกจุดทองเพื่อสำรวจ</p>
@@ -275,8 +293,8 @@
         </section>
         
         <!-- Controls Panel -->
-        <section class="controls" role="navigation" aria-label="การควบคุมแผนที่และการค้นหา / Map controls and search" id="navigation-controls">
-            <h2 id="attractions-heading"><span role="img" aria-label="เข็มทิศ">🧭</span> สถานที่ท่องเที่ยว</h2>
+        <section class="controls thai-golden-border thai-silk-texture thai-entrance" role="navigation" aria-label="การควบคุมแผนที่และการค้นหา / Map controls and search" id="navigation-controls">
+            <h2 class="thai-heading" id="attractions-heading"><span class="icon-thai icon-temple" role="img" aria-label="เข็มทิศ">🧭</span> สถานที่ท่องเที่ยว</h2>
             
             <!-- Search functionality -->
             <div class="search-container" role="search" aria-labelledby="search-heading">
@@ -860,6 +878,8 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
             crossorigin=""></script>
+    <!-- Enhanced Branding and Cultural Animations -->
+    <script src="branding-enhancements.js"></script>
     <!-- Enhanced Feedback System -->
     <script src="feedback-system.js"></script>
     <!-- UX Improvements System -->
