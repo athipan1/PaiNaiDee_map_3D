@@ -1158,6 +1158,235 @@ function applyLocationFilters() {
     );
 }
 
+// Enhanced location comparison system
+function initializeLocationComparison() {
+    const compareBtn = document.querySelector('button[onclick*="เปรียบเทียบ"]') ||
+                      document.querySelector('button[onclick*="comparison"]');
+    
+    if (compareBtn) {
+        compareBtn.addEventListener('click', performLocationComparison);
+    }
+    
+    // Replace button onclick with our enhanced function
+    const comparisonButton = document.querySelector('.comparison-section button:last-child');
+    if (comparisonButton) {
+        comparisonButton.onclick = performLocationComparison;
+    }
+}
+
+function performLocationComparison() {
+    const location1Select = document.querySelector('.comparison-section select:first-of-type');
+    const location2Select = document.querySelector('.comparison-section select:last-of-type');
+    
+    if (!location1Select || !location2Select) {
+        showNotification(
+            userPreferences.language === 'th' ? 
+            '❌ ไม่พบเครื่องมือเปรียบเทียบ' : 
+            '❌ Comparison tool not found',
+            'error'
+        );
+        return;
+    }
+    
+    const loc1Key = location1Select.value;
+    const loc2Key = location2Select.value;
+    
+    if (loc1Key === loc2Key || !loc1Key || !loc2Key || 
+        loc1Key.includes('เลือก') || loc2Key.includes('เลือก') ||
+        loc1Key.includes('Select') || loc2Key.includes('Select')) {
+        showNotification(
+            userPreferences.language === 'th' ? 
+            '⚠️ กรุณาเลือกสถานที่ 2 แห่งที่แตกต่างกัน' : 
+            '⚠️ Please select 2 different locations',
+            'warning'
+        );
+        return;
+    }
+    
+    const location1 = locations[loc1Key];
+    const location2 = locations[loc2Key];
+    
+    if (!location1 || !location2) {
+        showNotification(
+            userPreferences.language === 'th' ? 
+            '❌ ไม่พบข้อมูลสถานที่' : 
+            '❌ Location data not found',
+            'error'
+        );
+        return;
+    }
+    
+    // Calculate distance and travel info
+    let distanceInfo = '';
+    let travelTime = '';
+    let recommendedTransport = '';
+    
+    if (location1.coordinates && location2.coordinates) {
+        const distance = calculateDistance(
+            location1.coordinates[1], location1.coordinates[0],
+            location2.coordinates[1], location2.coordinates[0]
+        );
+        
+        travelTime = calculateTravelTime(distance, 'car');
+        const estimatedCost = estimateTravelCost(distance, 'car');
+        
+        if (distance > 500) {
+            recommendedTransport = userPreferences.language === 'th' ? 'เครื่องบิน' : 'Airplane';
+        } else if (distance > 200) {
+            recommendedTransport = userPreferences.language === 'th' ? 'รถบัส' : 'Bus';
+        } else {
+            recommendedTransport = userPreferences.language === 'th' ? 'รถยนต์' : 'Car';
+        }
+        
+        distanceInfo = `
+            <div class="comparison-distance">
+                <h4>📏 ${getText('distance')}</h4>
+                <p><strong>${distance} ${getText('km')}</strong></p>
+                <p>⏱️ ${userPreferences.language === 'th' ? 'เวลาเดินทาง' : 'Travel Time'}: ${travelTime}</p>
+                <p>🚗 ${userPreferences.language === 'th' ? 'แนะนำ' : 'Recommended'}: ${recommendedTransport}</p>
+                <p>💰 ${userPreferences.language === 'th' ? 'ประมาณค่าใช้จ่าย' : 'Estimated Cost'}: ${estimatedCost} THB</p>
+            </div>
+        `;
+    }
+    
+    // Create comparison modal
+    const modalHtml = `
+        <div class="comparison-modal" id="comparisonModal" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center;">
+            <div class="comparison-modal-content" style="background: var(--panel-bg); border-radius: var(--radius-xl); padding: 2rem; max-width: 90vw; max-height: 90vh; overflow-y: auto; border: 1px solid var(--glass-border);">
+                <div class="comparison-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 style="color: var(--panel-text);">⚖️ ${userPreferences.language === 'th' ? 'เปรียบเทียบสถานที่' : 'Location Comparison'}</h2>
+                    <button class="close-btn" onclick="closeComparisonModal()" style="background: none; border: none; font-size: 1.5rem; color: var(--panel-text); cursor: pointer;">×</button>
+                </div>
+                
+                <div class="comparison-content">
+                    <div class="location-comparison" style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 2rem; margin-bottom: 2rem;">
+                        <div class="location-card" style="background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius-lg); color: var(--panel-text);">
+                            <h3 style="margin-bottom: 1rem; color: var(--accent-color);">${location1.emoji} ${getCurrentLocationName(location1)}</h3>
+                            <div class="location-details">
+                                <p><strong>📍 ${getText('description')}:</strong></p>
+                                <p style="margin-bottom: 1rem; opacity: 0.9;">${getCurrentLocationDescription(location1)}</p>
+                                
+                                <p><strong>🌤️ ${getText('weather')}:</strong> ${location1.weather || 'N/A'}</p>
+                                <p style="margin-bottom: 1rem;"><strong>📅 ${getText('bestTime')}:</strong> ${location1.bestTime || 'Year Round'}</p>
+                                
+                                <div class="attractions-list" style="margin-bottom: 1rem;">
+                                    <p><strong>🎯 ${getText('attractionsTitle')}:</strong></p>
+                                    <ul style="margin-left: 1rem;">
+                                        ${location1.attractions ? location1.attractions.slice(0, 3).map((attraction, index) => 
+                                            `<li>${getCurrentAttractionName(location1, index)}</li>`
+                                        ).join('') : '<li>N/A</li>'}
+                                    </ul>
+                                </div>
+                                
+                                <div class="categories-display">
+                                    <p><strong>🏷️ ${userPreferences.language === 'th' ? 'ประเภท' : 'Categories'}:</strong></p>
+                                    <div class="category-tags" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                                        ${location1.categories ? location1.categories.map(cat => 
+                                            `<span class="category-tag" style="background: var(--accent-color); color: white; padding: 0.25rem 0.5rem; border-radius: var(--radius-sm); font-size: 0.8rem;">${locationCategories[cat]?.emoji} ${getCurrentCategoryName(locationCategories[cat])}</span>`
+                                        ).join('') : 'N/A'}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="comparison-divider" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 150px;">
+                            <div class="vs-badge" style="background: var(--accent-color); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-bottom: 1rem;">VS</div>
+                            ${distanceInfo}
+                        </div>
+                        
+                        <div class="location-card" style="background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius-lg); color: var(--panel-text);">
+                            <h3 style="margin-bottom: 1rem; color: var(--accent-color);">${location2.emoji} ${getCurrentLocationName(location2)}</h3>
+                            <div class="location-details">
+                                <p><strong>📍 ${getText('description')}:</strong></p>
+                                <p style="margin-bottom: 1rem; opacity: 0.9;">${getCurrentLocationDescription(location2)}</p>
+                                
+                                <p><strong>🌤️ ${getText('weather')}:</strong> ${location2.weather || 'N/A'}</p>
+                                <p style="margin-bottom: 1rem;"><strong>📅 ${getText('bestTime')}:</strong> ${location2.bestTime || 'Year Round'}</p>
+                                
+                                <div class="attractions-list" style="margin-bottom: 1rem;">
+                                    <p><strong>🎯 ${getText('attractionsTitle')}:</strong></p>
+                                    <ul style="margin-left: 1rem;">
+                                        ${location2.attractions ? location2.attractions.slice(0, 3).map((attraction, index) => 
+                                            `<li>${getCurrentAttractionName(location2, index)}</li>`
+                                        ).join('') : '<li>N/A</li>'}
+                                    </ul>
+                                </div>
+                                
+                                <div class="categories-display">
+                                    <p><strong>🏷️ ${userPreferences.language === 'th' ? 'ประเภท' : 'Categories'}:</strong></p>
+                                    <div class="category-tags" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                                        ${location2.categories ? location2.categories.map(cat => 
+                                            `<span class="category-tag" style="background: var(--accent-color); color: white; padding: 0.25rem 0.5rem; border-radius: var(--radius-sm); font-size: 0.8rem;">${locationCategories[cat]?.emoji} ${getCurrentCategoryName(locationCategories[cat])}</span>`
+                                        ).join('') : 'N/A'}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-actions" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="focusLocation('${loc1Key}'); closeComparisonModal();" style="background: var(--button-bg); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: var(--radius-lg); cursor: pointer;">
+                            📍 ${userPreferences.language === 'th' ? 'ดู' : 'View'} ${getCurrentLocationName(location1)}
+                        </button>
+                        <button onclick="focusLocation('${loc2Key}'); closeComparisonModal();" style="background: var(--button-bg); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: var(--radius-lg); cursor: pointer;">
+                            📍 ${userPreferences.language === 'th' ? 'ดู' : 'View'} ${getCurrentLocationName(location2)}
+                        </button>
+                        <button onclick="closeComparisonModal();" style="background: var(--card-bg); color: var(--panel-text); border: 1px solid var(--glass-border); padding: 0.75rem 1.5rem; border-radius: var(--radius-lg); cursor: pointer;">
+                            ✕ ${userPreferences.language === 'th' ? 'ปิด' : 'Close'}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Remove existing modal if any
+    const existingModal = document.getElementById('comparisonModal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+    
+    // Add modal to body
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    
+    // Highlight compared locations on map
+    highlightComparisonLocations(loc1Key, loc2Key);
+    
+    showNotification(
+        userPreferences.language === 'th' ? 
+        `⚖️ เปรียบเทียบ ${getCurrentLocationName(location1)} และ ${getCurrentLocationName(location2)}` :
+        `⚖️ Comparing ${getCurrentLocationName(location1)} and ${getCurrentLocationName(location2)}`,
+        'info'
+    );
+}
+
+function closeComparisonModal() {
+    const modal = document.getElementById('comparisonModal');
+    if (modal) {
+        modal.remove();
+    }
+    
+    // Remove location highlights
+    document.querySelectorAll('.comparison-highlight').forEach(el => {
+        el.classList.remove('comparison-highlight');
+    });
+}
+
+// Add missing highlight function
+function highlightComparisonLocations(loc1Key, loc2Key) {
+    // Remove any existing highlights first
+    document.querySelectorAll('.comparison-highlight').forEach(el => {
+        el.classList.remove('comparison-highlight');
+    });
+    
+    // Add highlights to the compared locations
+    const marker1 = document.querySelector(`.marker.${loc1Key}`);
+    const marker2 = document.querySelector(`.marker.${loc2Key}`);
+    
+    if (marker1) marker1.classList.add('comparison-highlight');
+    if (marker2) marker2.classList.add('comparison-highlight');
+}
+
 // Favorites system
 function initializeFavorites() {
     updateFavoritesDisplay();
@@ -2307,6 +2536,7 @@ function initializeMap() {
     // Initialize other UI features
     initializeSearch();
     initializeCategoryFilter();
+    initializeLocationComparison();
     initializeFavorites();
     initializeKeyboardNavigation();
     updateWeatherInfo();

@@ -732,6 +732,24 @@ body::before {
     }
 }
 
+/* Location comparison highlight effect */
+.comparison-highlight {
+    animation: comparisonPulse 2s ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8) !important;
+    border: 2px solid #ffd700 !important;
+}
+
+@keyframes comparisonPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+}
+
 button {
     background: var(--button-bg);
     color: white;
