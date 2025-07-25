@@ -463,10 +463,30 @@ const locations = {
         attractions: ["วัดพระแก้ว", "พระบรมมหาราชวัง", "วัดโพธิ์", "ตลาดจตุจักร", "วัดอรุณ", "เยาวราช"],
         attractionsEn: ["Wat Phra Kaew", "Grand Palace", "Wat Pho", "Chatuchak Market", "Wat Arun", "Chinatown"],
         photos: [
-            { name: "Grand Palace", emoji: "🏰" },
-            { name: "Wat Arun", emoji: "🕌" },
-            { name: "Floating Market", emoji: "🛶" },
-            { name: "Tuk Tuk", emoji: "🛺" }
+            { 
+                name: "Grand Palace", 
+                emoji: "🏰",
+                url: "https://picsum.photos/800/600?random=1",
+                description: "The Grand Palace complex in Bangkok, Thailand's most famous landmark"
+            },
+            { 
+                name: "Wat Arun", 
+                emoji: "🕌",
+                url: "https://picsum.photos/800/600?random=2", 
+                description: "Temple of Dawn, one of Bangkok's most iconic temples"
+            },
+            { 
+                name: "Floating Market", 
+                emoji: "🛶",
+                url: "https://picsum.photos/800/600?random=3",
+                description: "Traditional floating market showcasing local culture and food"
+            },
+            { 
+                name: "Tuk Tuk", 
+                emoji: "🛺",
+                url: "https://picsum.photos/800/600?random=4",
+                description: "Iconic three-wheeled taxi, a symbol of Bangkok transportation"
+            }
         ],
         weather: "30°C ☀️",
         bestTime: "November - February",
@@ -483,10 +503,30 @@ const locations = {
         attractions: ["ดอยสุเทพ", "วัดพระธาตุ", "ตลาดวอร์กกิ้งสตรีท", "อุทยานแห่งชาติดอยอินทนนท์", "บ้านช้าง", "ตลาดนัดเสาร์อาทิตย์"],
         attractionsEn: ["Doi Suthep", "Wat Phra That", "Walking Street", "Doi Inthanon National Park", "Elephant Sanctuary", "Weekend Market"],
         photos: [
-            { name: "Doi Suthep", emoji: "⛰️" },
-            { name: "Night Bazaar", emoji: "🌃" },
-            { name: "Elephant Sanctuary", emoji: "🐘" },
-            { name: "Lanna Temple", emoji: "🏯" }
+            { 
+                name: "Doi Suthep", 
+                emoji: "⛰️",
+                url: "https://picsum.photos/800/600?random=5",
+                description: "Sacred mountain temple with panoramic city views"
+            },
+            { 
+                name: "Night Bazaar", 
+                emoji: "🌃",
+                url: "https://picsum.photos/800/600?random=6",
+                description: "Vibrant night market in the heart of Chiang Mai"
+            },
+            { 
+                name: "Elephant Sanctuary", 
+                emoji: "🐘",
+                url: "https://picsum.photos/800/600?random=7",
+                description: "Ethical elephant sanctuary in the mountains"
+            },
+            { 
+                name: "Lanna Temple", 
+                emoji: "🏯",
+                url: "https://picsum.photos/800/600?random=8",
+                description: "Traditional Lanna architecture temple"
+            }
         ],
         weather: "25°C 🌤️",
         bestTime: "October - March",
@@ -503,10 +543,30 @@ const locations = {
         attractions: ["หาดป่าตอง", "เกาะพีพี", "หาดกะตะ", "บิ๊กบุดดา", "เมืองเก่าภูเก็ต", "หาดไนหาน"],
         attractionsEn: ["Patong Beach", "Phi Phi Islands", "Kata Beach", "Big Buddha", "Phuket Old Town", "Nai Harn Beach"],
         photos: [
-            { name: "Patong Beach", emoji: "🏖️" },
-            { name: "Phi Phi Islands", emoji: "🏝️" },
-            { name: "Sunset View", emoji: "🌅" },
-            { name: "Longtail Boat", emoji: "⛵" }
+            { 
+                name: "Patong Beach", 
+                emoji: "🏖️",
+                url: "https://picsum.photos/800/600?random=9",
+                description: "Popular beach destination with crystal clear waters"
+            },
+            { 
+                name: "Phi Phi Islands", 
+                emoji: "🏝️",
+                url: "https://picsum.photos/800/600?random=10",
+                description: "Stunning limestone cliffs and turquoise waters"
+            },
+            { 
+                name: "Sunset View", 
+                emoji: "🌅",
+                url: "https://picsum.photos/800/600?random=11",
+                description: "Breathtaking sunset views over the Andaman Sea"
+            },
+            { 
+                name: "Longtail Boat", 
+                emoji: "⛵",
+                url: "https://picsum.photos/800/600?random=12",
+                description: "Traditional longtail boats at Maya Bay"
+            }
         ],
         weather: "28°C 🌊",
         bestTime: "November - April",
@@ -523,10 +583,30 @@ const locations = {
         attractions: ["วัดมหาธาตุ", "วัดพระศรีสรรเพชญ์", "วัดชัยวัฒนาราม", "พระราชวังหลวง", "ตลาดน้ำอยุธยา"],
         attractionsEn: ["Wat Mahathat", "Wat Phra Si Sanphet", "Wat Chaiwatthanaram", "Royal Palace", "Ayutthaya Floating Market"],
         photos: [
-            { name: "Buddha Head in Tree", emoji: "🌳" },
-            { name: "Ancient Ruins", emoji: "🏛️" },
-            { name: "Temple Complex", emoji: "🕌" },
-            { name: "Historical Site", emoji: "📿" }
+            { 
+                name: "Buddha Head in Tree", 
+                emoji: "🌳",
+                url: "https://picsum.photos/800/600?random=13",
+                description: "Famous Buddha head entwined in tree roots at Wat Mahathat"
+            },
+            { 
+                name: "Ancient Ruins", 
+                emoji: "🏛️",
+                url: "https://picsum.photos/800/600?random=14",
+                description: "Magnificent ancient temple ruins showcasing Ayutthaya's golden age"
+            },
+            { 
+                name: "Temple Complex", 
+                emoji: "🕌",
+                url: "https://picsum.photos/800/600?random=15",
+                description: "Well-preserved temple complex with intricate architecture"
+            },
+            { 
+                name: "Historical Site", 
+                emoji: "📿",
+                url: "https://picsum.photos/800/600?random=16",
+                description: "UNESCO World Heritage site with centuries of history"
+            }
         ],
         weather: "29°C ☀️",
         bestTime: "November - February",
@@ -2739,6 +2819,396 @@ function highlightComparedLocations(loc1Key, loc2Key) {
     }
 }
 
+// Custom Enhanced Gallery System with Swipe and Zoom functionality
+let currentGallery = null;
+let currentSlide = 0;
+let currentZoomLevel = 1;
+let isZoomed = false;
+let isDragging = false;
+let startX = 0;
+let startY = 0;
+let currentX = 0;
+let currentY = 0;
+
+function initializeCustomGallery() {
+    const gallery = document.querySelector('.custom-gallery');
+    if (!gallery) return;
+    
+    currentGallery = gallery;
+    currentSlide = 0;
+    currentZoomLevel = 1;
+    isZoomed = false;
+    
+    // Setup navigation
+    setupGalleryNavigation();
+    
+    // Setup touch/swipe gestures
+    setupSwipeGestures();
+    
+    // Setup zoom functionality
+    setupZoomControls();
+    setupImageZoomHandlers();
+    setupTouchZoomGestures();
+    setupWheelZoom();
+    
+    // Setup keyboard navigation
+    setupKeyboardNavigation();
+    
+    console.log('🖼️ Custom gallery with swipe and zoom ready!');
+}
+
+function setupGalleryNavigation() {
+    const prevBtn = document.querySelector('.gallery-prev');
+    const nextBtn = document.querySelector('.gallery-next');
+    const dots = document.querySelectorAll('.pagination-dot');
+    
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => goToPreviousSlide());
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => goToNextSlide());
+    }
+    
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => goToSlide(index));
+    });
+}
+
+function setupSwipeGestures() {
+    const gallery = currentGallery;
+    if (!gallery) return;
+    
+    let startX = 0;
+    let startY = 0;
+    let isDragging = false;
+    let threshold = 50; // minimum distance for swipe
+    
+    gallery.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1 && !isZoomed) {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            isDragging = true;
+        }
+    });
+    
+    gallery.addEventListener('touchmove', (e) => {
+        if (!isDragging || e.touches.length !== 1 || isZoomed) return;
+        e.preventDefault();
+    });
+    
+    gallery.addEventListener('touchend', (e) => {
+        if (!isDragging || isZoomed) return;
+        
+        const endX = e.changedTouches[0].clientX;
+        const endY = e.changedTouches[0].clientY;
+        const deltaX = endX - startX;
+        const deltaY = endY - startY;
+        
+        // Only trigger swipe if horizontal movement is greater than vertical
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > threshold) {
+            if (deltaX > 0) {
+                goToPreviousSlide();
+            } else {
+                goToNextSlide();
+            }
+        }
+        
+        isDragging = false;
+    });
+    
+    // Mouse events for desktop
+    let mouseDown = false;
+    let mouseStartX = 0;
+    
+    gallery.addEventListener('mousedown', (e) => {
+        if (!isZoomed) {
+            mouseDown = true;
+            mouseStartX = e.clientX;
+            gallery.style.cursor = 'grabbing';
+        }
+    });
+    
+    gallery.addEventListener('mousemove', (e) => {
+        if (!mouseDown || isZoomed) return;
+        e.preventDefault();
+    });
+    
+    gallery.addEventListener('mouseup', (e) => {
+        if (!mouseDown || isZoomed) return;
+        
+        const deltaX = e.clientX - mouseStartX;
+        if (Math.abs(deltaX) > threshold) {
+            if (deltaX > 0) {
+                goToPreviousSlide();
+            } else {
+                goToNextSlide();
+            }
+        }
+        
+        mouseDown = false;
+        gallery.style.cursor = 'grab';
+    });
+    
+    gallery.addEventListener('mouseleave', () => {
+        mouseDown = false;
+        gallery.style.cursor = 'grab';
+    });
+}
+
+function goToSlide(index) {
+    const slides = document.querySelectorAll('.gallery-slide');
+    const dots = document.querySelectorAll('.pagination-dot');
+    const totalSlides = slides.length;
+    
+    if (index < 0 || index >= totalSlides) return;
+    
+    // Reset zoom when changing slides
+    resetZoom();
+    
+    // Update current slide
+    currentSlide = index;
+    
+    // Update slides
+    slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+    });
+    
+    // Update pagination dots
+    dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+    });
+    
+    // Update track position
+    const track = document.querySelector('.gallery-track');
+    if (track) {
+        track.style.transform = `translateX(-${index * 100}%)`;
+    }
+    
+    // Update navigation buttons
+    updateNavigationButtons();
+    
+    // Update counter
+    updateImageCounter();
+}
+
+function goToNextSlide() {
+    const totalSlides = document.querySelectorAll('.gallery-slide').length;
+    const nextIndex = (currentSlide + 1) % totalSlides;
+    goToSlide(nextIndex);
+}
+
+function goToPreviousSlide() {
+    const totalSlides = document.querySelectorAll('.gallery-slide').length;
+    const prevIndex = currentSlide === 0 ? totalSlides - 1 : currentSlide - 1;
+    goToSlide(prevIndex);
+}
+
+function updateNavigationButtons() {
+    const prevBtn = document.querySelector('.gallery-prev');
+    const nextBtn = document.querySelector('.gallery-next');
+    const totalSlides = document.querySelectorAll('.gallery-slide').length;
+    
+    if (prevBtn && nextBtn) {
+        // Enable/disable buttons based on current position (optional - keeping circular navigation)
+        prevBtn.style.opacity = '1';
+        nextBtn.style.opacity = '1';
+    }
+}
+
+function setupKeyboardNavigation() {
+    document.addEventListener('keydown', (e) => {
+        if (!currentGallery) return;
+        
+        switch(e.key) {
+            case 'ArrowLeft':
+                e.preventDefault();
+                goToPreviousSlide();
+                break;
+            case 'ArrowRight':
+                e.preventDefault();
+                goToNextSlide();
+                break;
+            case 'Escape':
+                closeModal();
+                break;
+        }
+    });
+}
+
+function setupImageZoomHandlers() {
+    const images = document.querySelectorAll('.gallery-image');
+    
+    images.forEach((img, index) => {
+        // Handle image load
+        img.addEventListener('load', () => {
+            const loader = img.parentElement.querySelector('.image-loader');
+            if (loader) loader.style.display = 'none';
+        });
+        
+        // Double tap to zoom (mobile)
+        let lastTap = 0;
+        img.addEventListener('touchend', (e) => {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+            if (tapLength < 500 && tapLength > 0) {
+                e.preventDefault();
+                toggleZoom();
+            }
+            lastTap = currentTime;
+        });
+        
+        // Double click to zoom (desktop)
+        img.addEventListener('dblclick', (e) => {
+            e.preventDefault();
+            toggleZoom();
+        });
+    });
+}
+
+function setupZoomControls() {
+    const zoomInBtn = document.querySelector('.zoom-in');
+    const zoomOutBtn = document.querySelector('.zoom-out');
+    const zoomResetBtn = document.querySelector('.zoom-reset');
+    
+    if (zoomInBtn) {
+        zoomInBtn.addEventListener('click', () => zoomIn());
+    }
+    
+    if (zoomOutBtn) {
+        zoomOutBtn.addEventListener('click', () => zoomOut());
+    }
+    
+    if (zoomResetBtn) {
+        zoomResetBtn.addEventListener('click', () => resetZoom());
+    }
+}
+
+function setupTouchZoomGestures() {
+    const gallery = currentGallery;
+    if (!gallery) return;
+    
+    let initialDistance = 0;
+    let initialScale = 1;
+    
+    gallery.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            initialDistance = Math.sqrt(
+                Math.pow(touch2.pageX - touch1.pageX, 2) + 
+                Math.pow(touch2.pageY - touch1.pageY, 2)
+            );
+            initialScale = currentZoomLevel;
+        }
+    });
+    
+    gallery.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            const currentDistance = Math.sqrt(
+                Math.pow(touch2.pageX - touch1.pageX, 2) + 
+                Math.pow(touch2.pageY - touch1.pageY, 2)
+            );
+            
+            const scale = (currentDistance / initialDistance) * initialScale;
+            setZoom(Math.max(1, Math.min(3, scale)));
+        }
+    });
+}
+
+function setupWheelZoom() {
+    const gallery = currentGallery;
+    if (!gallery) return;
+    
+    gallery.addEventListener('wheel', (e) => {
+        if (e.ctrlKey || e.metaKey) {
+            e.preventDefault();
+            
+            const delta = e.deltaY > 0 ? -0.1 : 0.1;
+            const newZoom = Math.max(1, Math.min(3, currentZoomLevel + delta));
+            setZoom(newZoom);
+        }
+    });
+}
+
+function zoomIn() {
+    const newZoom = Math.min(3, currentZoomLevel + 0.2);
+    setZoom(newZoom);
+}
+
+function zoomOut() {
+    const newZoom = Math.max(1, currentZoomLevel - 0.2);
+    setZoom(newZoom);
+}
+
+function toggleZoom() {
+    if (currentZoomLevel > 1) {
+        resetZoom();
+    } else {
+        setZoom(2);
+    }
+}
+
+function setZoom(level) {
+    currentZoomLevel = level;
+    isZoomed = level > 1;
+    
+    const activeSlide = document.querySelector('.gallery-slide.active .gallery-image');
+    if (activeSlide) {
+        activeSlide.style.transform = `scale(${level})`;
+        activeSlide.style.transition = 'transform 0.3s ease';
+        
+        // Update container overflow for zoom
+        const container = activeSlide.closest('.gallery-image-container');
+        if (container) {
+            container.style.overflow = isZoomed ? 'hidden' : 'visible';
+        }
+    }
+    
+    // Update zoom button states
+    updateZoomButtonStates();
+}
+
+function resetZoom() {
+    setZoom(1);
+}
+
+function updateZoomButtonStates() {
+    const zoomInBtn = document.querySelector('.zoom-in');
+    const zoomOutBtn = document.querySelector('.zoom-out');
+    const zoomResetBtn = document.querySelector('.zoom-reset');
+    
+    if (zoomInBtn) {
+        zoomInBtn.disabled = currentZoomLevel >= 3;
+        zoomInBtn.style.opacity = currentZoomLevel >= 3 ? '0.5' : '1';
+    }
+    
+    if (zoomOutBtn) {
+        zoomOutBtn.disabled = currentZoomLevel <= 1;
+        zoomOutBtn.style.opacity = currentZoomLevel <= 1 ? '0.5' : '1';
+    }
+    
+    if (zoomResetBtn) {
+        zoomResetBtn.style.opacity = currentZoomLevel > 1 ? '1' : '0.5';
+    }
+}
+
+function updateImageCounter() {
+    const activeSlide = document.querySelector('.gallery-slide.active');
+    if (activeSlide) {
+        const counter = activeSlide.querySelector('.image-counter');
+        const index = parseInt(activeSlide.dataset.slide);
+        const total = document.querySelectorAll('.gallery-slide').length;
+        if (counter) {
+            counter.textContent = `${index + 1} / ${total}`;
+        }
+    }
+}
+
 // Enhanced modal system for location information with improved animations
 function showInfo(location) {
     const info = locations[location];
@@ -2796,14 +3266,77 @@ function showInfo(location) {
         </div>
     `;
     
-    // Create photo gallery
+    // Create enhanced photo gallery with swipe and zoom functionality
     if (info.photos) {
-        modalGallery.innerHTML = info.photos.map(photo => `
-            <div class="gallery-item">
-                <div style="font-size: 3rem; margin-bottom: 0.5rem;">${photo.emoji}</div>
-                <p style="font-size: 0.875rem;">${photo.name}</p>
+        const galleryHtml = `
+            <div class="enhanced-gallery-container">
+                <div class="custom-gallery" data-current-slide="0">
+                    <div class="gallery-track">
+                        ${info.photos.map((photo, index) => `
+                            <div class="gallery-slide ${index === 0 ? 'active' : ''}" data-slide="${index}">
+                                <div class="gallery-slide-content" data-photo-index="${index}">
+                                    <div class="gallery-image-container">
+                                        <img 
+                                            src="${photo.url}" 
+                                            alt="${photo.name}"
+                                            class="gallery-image"
+                                            loading="lazy"
+                                            onerror="this.parentElement.innerHTML='<div class=\\"photo-fallback\\"><div class=\\"fallback-emoji\\">${photo.emoji}</div><p>${photo.name}</p></div>'"
+                                        >
+                                        <div class="image-loader">
+                                            <div class="loader-spinner"></div>
+                                        </div>
+                                    </div>
+                                    <div class="gallery-image-info">
+                                        <h4 class="image-title">${photo.name}</h4>
+                                        <p class="image-description">${photo.description || ''}</p>
+                                        <div class="image-counter">${index + 1} / ${info.photos.length}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <!-- Navigation buttons -->
+                    <button class="gallery-nav gallery-prev" aria-label="Previous image">‹</button>
+                    <button class="gallery-nav gallery-next" aria-label="Next image">›</button>
+                    
+                    <!-- Pagination dots -->
+                    <div class="gallery-pagination">
+                        ${info.photos.map((_, index) => `
+                            <button class="pagination-dot ${index === 0 ? 'active' : ''}" data-slide="${index}" aria-label="Go to image ${index + 1}"></button>
+                        `).join('')}
+                    </div>
+                    
+                    <!-- Zoom controls -->
+                    <div class="gallery-zoom-controls">
+                        <button class="zoom-btn zoom-in" aria-label="Zoom in">
+                            <span>🔍+</span>
+                        </button>
+                        <button class="zoom-btn zoom-out" aria-label="Zoom out">
+                            <span>🔍-</span>
+                        </button>
+                        <button class="zoom-btn zoom-reset" aria-label="Reset zoom">
+                            <span>⚖️</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Gallery instructions -->
+                <div class="gallery-instructions">
+                    <p>💡 ${userPreferences.language === 'th' ? 
+                        'ปัดซ้าย-ขวาเพื่อดูรูป, ใช้นิ้วสองนิ้วซูม หรือกดปุ่มซูม' : 
+                        'Swipe left-right to navigate, pinch to zoom, or use zoom buttons'
+                    }</p>
+                </div>
             </div>
-        `).join('');
+        `;
+        modalGallery.innerHTML = galleryHtml;
+        
+        // Initialize custom gallery with enhanced features
+        setTimeout(() => {
+            initializeCustomGallery();
+        }, 100);
     } else {
         modalGallery.innerHTML = `<p>🖼️ ${userPreferences.language === 'th' ? 'ภาพประกอบจะมาเร็วๆ นี้' : 'Photos coming soon'}</p>`;
     }
@@ -2975,6 +3508,16 @@ function getCurrentAttractionName(info, index) {
 function closeModal() {
     const modal = document.getElementById('modalOverlay');
     if (modal) {
+        // Clean up gallery
+        if (currentGallery) {
+            currentGallery = null;
+        }
+        
+        // Reset zoom state
+        currentZoomLevel = 1;
+        isZoomed = false;
+        currentSlide = 0;
+        
         // Add exit animation
         const modalContent = modal.querySelector('.location-modal');
         if (modalContent) {
