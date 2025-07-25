@@ -4689,14 +4689,39 @@ function addNearbyAttractions(locationKey, centerLat, centerLng) {
         // Store marker for later management
         miniMapMarkers.push(marker);
         
-        // Add click handler
+        // Add enhanced click handler with feedback
         marker.on('click', () => {
             trackUserBehavior('attraction_view', {
                 location: locationKey,
                 attraction: attractionName
             });
+            
+            // Add visual feedback
+            announceToScreenReader(`${attractionName} selected`);
+        });
+        
+        // Add discovery animation with delay
+        setTimeout(() => {
+            const markerElement = marker.getElement();
+            if (markerElement) {
+                markerElement.classList.add('discovered');
+                
+                // Remove animation class after animation completes
+                setTimeout(() => {
+                    markerElement.classList.remove('discovered');
+                }, 1000);
+            }
+        }, index * 200); // Stagger animations
+        
+        // Enhanced mobile touch support
+        marker.on('touchstart', (e) => {
+            e.originalEvent.preventDefault();
+            marker.openPopup();
         });
     });
+    
+    // Announce attractions loaded to screen readers
+    announceToScreenReader(`${location.attractions.length} nearby attractions loaded on map`);
 }
 
 // Get attraction description
@@ -4838,18 +4863,82 @@ function updateMiniMapControls() {
     }
 }
 
-// Handle mini-map click events
-function handleMiniMapClick(e) {
-    const { lat, lng } = e.latlng;
+// Handle SVG map click events
+function handleSVGMapClick(event) {
+    const target = event.target;
     
     // Add ripple effect at click location
-    createMapRippleEffect(e.containerPoint);
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    createSVGRippleEffect(x, y, event.currentTarget);
     
-    // Track interaction
-    trackUserBehavior('minimap_click', {
-        coordinates: [lng, lat],
-        zoomLevel: miniMap.getZoom()
-    });
+    if (target.classList.contains('svg-attraction-marker')) {
+        const attractionName = target.getAttribute('data-attraction');
+        const title = target.getAttribute('title');
+        
+        // Add interaction feedback
+        target.style.transform = 'scale(1.5)';
+        setTimeout(() => {
+            target.style.transform = '';
+        }, 200);
+        
+        // Show attraction info
+        showNotification(`${attractionName}: ${getAttractionDescription(attractionName, 'bangkok')}`, 'info');
+        
+        // Track interaction
+        trackUserBehavior('svg_attraction_click', {
+            attraction: attractionName
+        });
+        
+        // Announce to screen readers
+        announceToScreenReader(`Selected attraction: ${attractionName}`);
+    } else if (target.classList.contains('svg-location-marker')) {
+        const locationKey = target.getAttribute('data-location');
+        if (locationKey && locationKey !== 'bangkok') {
+            showNotification(
+                userPreferences.language === 'th' ? 
+                `คลิกเพื่อดูข้อมูล${target.getAttribute('title')}` :
+                `Click to view ${target.getAttribute('title')}`,
+                'info'
+            );
+        }
+    }
+}
+
+// Create ripple effect on SVG map
+function createSVGRippleEffect(x, y, svgElement) {
+    // Create ripple circle
+    const ripple = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    ripple.setAttribute('cx', x);
+    ripple.setAttribute('cy', y);
+    ripple.setAttribute('r', '0');
+    ripple.setAttribute('fill', 'none');
+    ripple.setAttribute('stroke', '#48b1e8');
+    ripple.setAttribute('stroke-width', '2');
+    ripple.setAttribute('opacity', '0.8');
+    
+    // Add animation
+    const animation = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+    animation.setAttribute('attributeName', 'r');
+    animation.setAttribute('values', '0;30');
+    animation.setAttribute('dur', '0.6s');
+    
+    const opacityAnimation = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+    opacityAnimation.setAttribute('attributeName', 'opacity');
+    opacityAnimation.setAttribute('values', '0.8;0');
+    opacityAnimation.setAttribute('dur', '0.6s');
+    
+    ripple.appendChild(animation);
+    ripple.appendChild(opacityAnimation);
+    svgElement.appendChild(ripple);
+    
+    // Remove ripple after animation
+    setTimeout(() => {
+        if (ripple.parentNode) {
+            ripple.parentNode.removeChild(ripple);
+        }
+    }, 600);
 }
 
 // Create ripple effect on map click
