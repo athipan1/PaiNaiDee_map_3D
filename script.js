@@ -123,7 +123,310 @@ const texts = {
     }
 };
 
-// Enhanced distance calculation with route planning
+// ========================================
+// LAZY LOADING SYSTEM FOR PERFORMANCE
+// ========================================
+
+// Intersection Observer for lazy loading
+const lazyImageObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src;
+            img.classList.remove('lazy');
+            img.classList.add('lazy-loaded');
+            observer.unobserve(img);
+        }
+    });
+}, {
+    // Load images when they're 100px away from viewport
+    rootMargin: '100px 0px',
+    threshold: 0.01
+});
+
+// Initialize lazy loading for images
+function initializeLazyLoading() {
+    // Lazy load images in gallery
+    document.querySelectorAll('img[data-src]').forEach(img => {
+        img.classList.add('lazy');
+        lazyImageObserver.observe(img);
+    });
+    
+    // Lazy load background images
+    document.querySelectorAll('[data-bg]').forEach(element => {
+        lazyImageObserver.observe(element);
+    });
+}
+
+// Enhanced image loading with progressive enhancement
+function createLazyImage(src, alt, className = '') {
+    const img = document.createElement('img');
+    
+    // Create placeholder (low quality image placeholder)
+    const placeholder = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"%3E%3Crect width="800" height="600" fill="%23f0f0f0"/%3E%3Ctext x="50%" y="50%" text-anchor="middle" dy=".3em" fill="%23999" font-family="Arial, sans-serif" font-size="24"%3ELoading...%3C/text%3E%3C/svg%3E';
+    
+    img.src = placeholder;
+    img.dataset.src = src;
+    img.alt = alt;
+    img.className = `lazy ${className}`;
+    img.loading = 'lazy'; // Native lazy loading as fallback
+    
+    // Add loading state
+    img.style.transition = 'opacity 0.3s ease-in-out';
+    img.style.opacity = '0.7';
+    
+    // Enhanced error handling
+    img.onerror = function() {
+        this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"%3E%3Crect width="400" height="300" fill="%23f8f9fa" stroke="%23dee2e6"/%3E%3Ctext x="50%" y="45%" text-anchor="middle" fill="%23666" font-family="Arial, sans-serif" font-size="14"%3EImage not available%3C/text%3E%3Ctext x="50%" y="60%" text-anchor="middle" fill="%23999" font-family="Arial, sans-serif" font-size="12"%3E📷%3C/text%3E%3C/svg%3E';
+        this.classList.add('image-error');
+    };
+    
+    // When image loads successfully
+    img.onload = function() {
+        if (this.src !== placeholder && !this.classList.contains('image-error')) {
+            this.style.opacity = '1';
+            this.classList.add('lazy-loaded');
+        }
+    };
+    
+    return img;
+}
+
+// Preload critical images for better performance
+function preloadCriticalImages() {
+    const criticalImages = [
+        // Add any critical images that should load immediately
+        'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
+    ];
+    
+    criticalImages.forEach(src => {
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.href = src;
+        document.head.appendChild(link);
+    });
+}
+
+// Performance monitoring for images
+function trackImagePerformance() {
+    const imageLoadTimes = new Map();
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        const startTime = performance.now();
+        
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('load', () => {
+                const loadTime = performance.now() - startTime;
+                imageLoadTimes.set(img.src, loadTime);
+                
+                // Log slow loading images (> 2 seconds)
+                if (loadTime > 2000) {
+                    console.warn(`Slow image load: ${img.src} took ${loadTime.toFixed(2)}ms`);
+                }
+            });
+        });
+    });
+    
+    return imageLoadTimes;
+}
+
+// ========================================
+// ENHANCED TOUCH & MOBILE INTERACTIONS
+// ========================================
+
+// Touch handling for better mobile experience
+function initializeTouchEnhancements() {
+    // Disable default touch behaviors that interfere with custom interactions
+    document.addEventListener('touchstart', function(e) {
+        // Allow pinch-to-zoom but prevent other default behaviors on interactive elements
+        if (e.target.closest('.marker, button, .interactive-element')) {
+            if (e.touches.length === 1) {
+                // Single touch - allow custom handling
+                e.target.style.touchAction = 'manipulation';
+            }
+        }
+    }, { passive: false });
+    
+    // Enhanced touch feedback for markers
+    document.querySelectorAll('.marker').forEach(marker => {
+        marker.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            this.classList.add('touch-active');
+            // Provide haptic feedback if available
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+        }, { passive: false });
+        
+        marker.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            this.classList.remove('touch-active');
+            // Simulate click
+            this.click();
+        }, { passive: false });
+    });
+    
+    // Improved touch scrolling for panels
+    document.querySelectorAll('.controls, .info-panel, .location-modal').forEach(panel => {
+        panel.style.webkitOverflowScrolling = 'touch';
+        panel.style.overflowScrolling = 'touch';
+    });
+}
+
+// Responsive design adjustments based on device capabilities
+function initializeResponsiveEnhancements() {
+    // Detect device capabilities
+    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const isTablet = hasTouch && window.innerWidth >= 768 && window.innerWidth <= 1024;
+    const isMobile = hasTouch && window.innerWidth < 768;
+    
+    // Add device-specific classes
+    if (hasTouch) {
+        document.body.classList.add('touch-device');
+    }
+    if (isTablet) {
+        document.body.classList.add('tablet-device');
+    }
+    if (isMobile) {
+        document.body.classList.add('mobile-device');
+    }
+    
+    // Adjust globe size based on screen dimensions
+    adjustGlobeSize();
+    
+    // Handle orientation changes
+    window.addEventListener('orientationchange', function() {
+        setTimeout(() => {
+            adjustGlobeSize();
+            // Force re-render of globe
+            const globeElement = document.getElementById('globe3D');
+            if (globeElement) {
+                globeElement.style.transform = 'scale(0.99)';
+                requestAnimationFrame(() => {
+                    globeElement.style.transform = '';
+                });
+            }
+        }, 100);
+    });
+    
+    // Handle window resize with debouncing
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            adjustGlobeSize();
+            updateResponsiveLayout();
+        }, 250);
+    });
+}
+
+// Dynamic globe size adjustment
+function adjustGlobeSize() {
+    const globe = document.getElementById('globe3D');
+    if (!globe) return;
+    
+    const containerWidth = window.innerWidth;
+    const containerHeight = window.innerHeight;
+    const isLandscape = window.innerWidth > window.innerHeight;
+    
+    let size;
+    
+    if (containerWidth <= 360) {
+        size = 200;
+    } else if (containerWidth <= 480) {
+        size = 240;
+    } else if (containerWidth <= 768) {
+        size = isLandscape ? 250 : 280;
+    } else if (containerWidth <= 1024) {
+        size = 350;
+    } else if (containerWidth <= 1200) {
+        size = 400;
+    } else if (containerWidth <= 1400) {
+        size = 500;
+    } else {
+        size = 600;
+    }
+    
+    // Ensure globe doesn't exceed container height
+    const maxHeight = containerHeight * 0.6;
+    if (size > maxHeight) {
+        size = maxHeight;
+    }
+    
+    globe.style.width = `${size}px`;
+    globe.style.height = `${size}px`;
+}
+
+// Update layout based on current viewport
+function updateResponsiveLayout() {
+    const container = document.getElementById('mapContainer');
+    if (!container) return;
+    
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const isLandscape = width > height;
+    
+    // Adjust grid layout for different orientations and sizes
+    if (width <= 768 && isLandscape) {
+        container.style.gridTemplateAreas = '"info globe controls" "status status status"';
+        container.style.gridTemplateColumns = '300px 1fr 300px';
+    } else if (width <= 1200) {
+        container.style.gridTemplateAreas = '"info" "controls" "globe" "status"';
+        container.style.gridTemplateColumns = '1fr';
+    } else {
+        container.style.gridTemplateAreas = '"info controls" "globe globe" "status status"';
+        container.style.gridTemplateColumns = '1fr 1fr';
+    }
+}
+
+// Performance monitoring and optimization
+function initializePerformanceMonitoring() {
+    // Monitor frame rate and adjust animations if needed
+    let frameCount = 0;
+    let lastTime = performance.now();
+    let fps = 60;
+    
+    function measureFPS() {
+        frameCount++;
+        const currentTime = performance.now();
+        
+        if (currentTime >= lastTime + 1000) {
+            fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
+            frameCount = 0;
+            lastTime = currentTime;
+            
+            // Reduce animation complexity if FPS is low
+            if (fps < 30) {
+                document.body.classList.add('low-performance');
+                // Reduce animation duration for better performance
+                document.querySelectorAll('.marker').forEach(marker => {
+                    marker.style.animationDuration = '6s'; // Slower animation
+                });
+            } else if (fps > 45) {
+                document.body.classList.remove('low-performance');
+            }
+        }
+        
+        requestAnimationFrame(measureFPS);
+    }
+    
+    requestAnimationFrame(measureFPS);
+    
+    // Monitor memory usage if available
+    if (performance.memory) {
+        setInterval(() => {
+            const memory = performance.memory;
+            const usedMB = Math.round(memory.usedJSHeapSize / 1048576);
+            const limitMB = Math.round(memory.jsHeapSizeLimit / 1048576);
+            
+            // Warn if memory usage is high
+            if (usedMB > limitMB * 0.8) {
+                console.warn(`High memory usage: ${usedMB}MB / ${limitMB}MB`);
+            }
+        }, 10000); // Check every 10 seconds
+    }
+}
 function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // Earth's radius in kilometers
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -4509,9 +4812,9 @@ function showInfo(location) {
                                 <div class="gallery-slide-content" data-photo-index="${index}">
                                     <div class="gallery-image-container">
                                         <img 
-                                            src="${photo.url}" 
+                                            data-src="${photo.url}" 
                                             alt="${photo.name}"
-                                            class="gallery-image"
+                                            class="gallery-image lazy"
                                             loading="lazy"
                                             onerror="this.parentElement.innerHTML='<div class=\\"photo-fallback\\"><div class=\\"fallback-emoji\\">${photo.emoji}</div><p>${photo.name}</p></div>'"
                                         >
@@ -4568,6 +4871,8 @@ function showInfo(location) {
         // Initialize custom gallery with enhanced features
         setTimeout(() => {
             initializeCustomGallery();
+            // Initialize lazy loading for gallery images
+            initializeLazyLoading();
         }, 100);
     } else {
         modalGallery.innerHTML = `<p>🖼️ ${userPreferences.language === 'th' ? 'ภาพประกอบจะมาเร็วๆ นี้' : 'Photos coming soon'}</p>`;
@@ -4845,6 +5150,15 @@ function initializeMap() {
     initializeKeyboardNavigation();
     updateWeatherInfo();
     updateInterfaceLanguage();
+    
+    // Initialize performance features
+    preloadCriticalImages();
+    initializeLazyLoading();
+    
+    // Initialize responsive and touch enhancements
+    initializeTouchEnhancements();
+    initializeResponsiveEnhancements();
+    initializePerformanceMonitoring();
     
     // Initialize enhanced UX/UI features after short delay
     setTimeout(() => {

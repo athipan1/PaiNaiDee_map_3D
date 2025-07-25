@@ -174,7 +174,7 @@ body::before {
 
 #mapContainer {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     position: relative;
     background: var(--secondary-bg);
     display: grid;
@@ -187,6 +187,55 @@ body::before {
     gap: var(--spacing-md);
     padding: var(--spacing-lg);
     transition: background var(--transition-normal);
+    overflow: hidden;
+}
+
+/* Enhanced responsive breakpoints */
+@media (max-width: 1200px) {
+    #mapContainer {
+        grid-template-columns: 1fr;
+        grid-template-areas: 
+            "info"
+            "controls"
+            "globe"
+            "status";
+        grid-template-rows: auto auto 1fr auto;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-md);
+    }
+    
+    .info-panel, .controls {
+        max-width: 100%;
+        justify-self: center;
+    }
+}
+
+@media (max-width: 768px) {
+    #mapContainer {
+        height: 100vh;
+        padding: var(--spacing-sm);
+        gap: var(--spacing-xs);
+    }
+    
+    .info-panel, .controls {
+        padding: var(--spacing-md);
+        border-radius: var(--radius-lg);
+    }
+}
+
+@media (max-width: 480px) {
+    #mapContainer {
+        padding: 0.5rem;
+        height: 100vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .info-panel, .controls {
+        padding: var(--spacing-sm);
+        margin: 0;
+        border-radius: var(--radius-md);
+    }
 }
 
 /* Theme, Language, and Contrast toggle buttons */
@@ -216,6 +265,59 @@ body::before {
 
 .contrast-toggle {
     right: calc(var(--spacing-lg) + 160px);
+}
+
+/* Responsive positioning for toggle buttons */
+@media (max-width: 768px) {
+    .theme-toggle, .language-toggle, .contrast-toggle {
+        top: var(--spacing-sm);
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: var(--font-size-md);
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .theme-toggle {
+        right: var(--spacing-sm);
+    }
+    
+    .language-toggle {
+        right: calc(var(--spacing-sm) + 50px);
+    }
+    
+    .contrast-toggle {
+        right: calc(var(--spacing-sm) + 100px);
+    }
+}
+
+@media (max-width: 480px) {
+    .theme-toggle, .language-toggle, .contrast-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: var(--font-size-sm);
+    }
+    
+    .language-toggle {
+        right: calc(var(--spacing-sm) + 45px);
+    }
+    
+    .contrast-toggle {
+        right: calc(var(--spacing-sm) + 90px);
+    }
+}
+
+@media (max-width: 360px) {
+    .contrast-toggle {
+        display: none; /* Hide contrast toggle on very small screens */
+    }
+    
+    .language-toggle {
+        right: calc(var(--spacing-sm) + 45px);
+    }
 }
 
 .theme-toggle:hover, .language-toggle:hover, .contrast-toggle:hover {
@@ -630,6 +732,36 @@ body::before {
     animation: panelSlideInLeft 0.8s ease-out 0.2s forwards;
 }
 
+/* Responsive adjustments for info panel */
+@media (max-width: 1200px) {
+    .info-panel {
+        max-width: 100%;
+        transform: translateY(-30px);
+        animation: panelSlideInUp 0.8s ease-out 0.2s forwards;
+    }
+}
+
+@media (max-width: 768px) {
+    .info-panel {
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        font-size: var(--font-size-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    .info-panel {
+        padding: var(--spacing-md);
+        border-radius: var(--radius-md);
+        margin: 0 var(--spacing-xs);
+    }
+    
+    .info-panel h1 {
+        font-size: 1.5rem;
+        margin-bottom: var(--spacing-md);
+    }
+}
+
 .info-panel::before {
     content: '';
     position: absolute;
@@ -692,6 +824,42 @@ body::before {
     opacity: 0;
     transform: translateX(50px);
     animation: panelSlideInRight 0.8s ease-out 0.4s forwards;
+    max-height: 80vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Responsive adjustments for controls panel */
+@media (max-width: 1200px) {
+    .controls {
+        max-width: 100%;
+        justify-self: center;
+        transform: translateY(-30px);
+        animation: panelSlideInUp 0.8s ease-out 0.4s forwards;
+        max-height: 60vh;
+    }
+}
+
+@media (max-width: 768px) {
+    .controls {
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        max-height: 50vh;
+    }
+}
+
+@media (max-width: 480px) {
+    .controls {
+        padding: var(--spacing-md);
+        border-radius: var(--radius-md);
+        margin: 0 var(--spacing-xs);
+        max-height: 45vh;
+    }
+    
+    .controls h3 {
+        font-size: 1.1rem;
+        margin-bottom: var(--spacing-md);
+    }
 }
 
 .controls::before {
@@ -1009,6 +1177,44 @@ button:focus {
     gap: var(--spacing-sm);
     margin: var(--spacing-sm) 0;
     flex-wrap: wrap;
+    align-items: center;
+}
+
+/* Enhanced responsive button design */
+@media (max-width: 768px) {
+    .button-row {
+        gap: var(--spacing-xs);
+        margin: var(--spacing-xs) 0;
+    }
+    
+    .button-row button:first-child {
+        flex: 1;
+        min-width: 120px;
+    }
+    
+    .button-row .favorite-btn {
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .button-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--spacing-xs);
+    }
+    
+    .button-row button:first-child {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .button-row .favorite-btn {
+        align-self: flex-end;
+        position: absolute;
+        right: var(--spacing-sm);
+        margin-top: -40px;
+    }
 }
 
 /* Favorite button styles */
@@ -1036,6 +1242,7 @@ button:focus {
     color: white;
 }
 
+/* Enhanced responsive design for globe */
 #globe3D {
     grid-area: globe;
     justify-self: center;
@@ -1049,10 +1256,32 @@ button:focus {
     animation: globeScaleIn 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.6s forwards;
 }
 
-@media (min-width: 768px) {
+/* Responsive globe sizing */
+@media (min-width: 1200px) {
     #globe3D {
         width: 500px;
         height: 500px;
+    }
+}
+
+@media (max-width: 768px) {
+    #globe3D {
+        width: 280px;
+        height: 280px;
+    }
+}
+
+@media (max-width: 480px) {
+    #globe3D {
+        width: 240px;
+        height: 240px;
+    }
+}
+
+@media (max-width: 360px) {
+    #globe3D {
+        width: 200px;
+        height: 200px;
     }
 }
 
@@ -1074,6 +1303,10 @@ button:focus {
     cursor: grab;
     overflow: hidden;
     transition: box-shadow var(--transition-normal);
+    /* Performance optimizations */
+    will-change: transform;
+    backface-visibility: hidden;
+    perspective: 1000px;
 }
 
 /* Enhanced city lights layer */
@@ -1154,6 +1387,9 @@ button:focus {
         /* Australia */
         radial-gradient(ellipse 35px 20px at 75% 75%, #228B22 40%, transparent 60%);
     animation: rotateContinents3D 30s linear infinite;
+    /* Performance optimizations */
+    will-change: transform;
+    backface-visibility: hidden;
 }
 
 .atmosphere {
@@ -1165,6 +1401,9 @@ button:focus {
     left: -5%;
     background: radial-gradient(circle, transparent 45%, rgba(135, 206, 235, 0.3) 50%, rgba(135, 206, 235, 0.1) 70%, transparent 100%);
     animation: atmosphereGlow 4s ease-in-out infinite alternate;
+    /* Performance optimizations */
+    will-change: transform, opacity;
+    backface-visibility: hidden;
 }
 
 .marker {
@@ -1188,6 +1427,9 @@ button:focus {
     background-clip: padding-box;
     opacity: 0;
     animation: markerFadeIn 0.8s ease-out forwards, markerPulseGentle 3s ease-in-out infinite 0.8s;
+    /* Performance optimizations */
+    will-change: transform, opacity;
+    backface-visibility: hidden;
 }
 
 .marker::before {
@@ -1232,45 +1474,45 @@ button:focus {
         0 0 0 3px var(--accent-color);
 }
 
-/* Enhanced marker animations */
+/* Enhanced marker animations with hardware acceleration */
 @keyframes markerFadeIn {
     0% {
         opacity: 0;
-        transform: scale(0.3) translateY(-20px);
+        transform: scale(0.3) translateY(-20px) translate3d(0, 0, 0);
     }
     60% {
         opacity: 1;
-        transform: scale(1.2) translateY(-5px);
+        transform: scale(1.2) translateY(-5px) translate3d(0, 0, 0);
     }
     100% {
         opacity: 1;
-        transform: scale(1) translateY(0);
+        transform: scale(1) translateY(0) translate3d(0, 0, 0);
     }
 }
 
 @keyframes markerClickEffect {
     0% {
-        transform: scale(1.2);
+        transform: scale(1.2) translate3d(0, 0, 0);
         box-shadow: 0 0 30px rgba(255, 215, 0, 1);
     }
     50% {
-        transform: scale(1.6);
+        transform: scale(1.6) translate3d(0, 0, 0);
         box-shadow: 0 0 50px rgba(255, 215, 0, 1), 0 0 80px rgba(72, 177, 232, 0.6);
     }
     100% {
-        transform: scale(1.4);
+        transform: scale(1.4) translate3d(0, 0, 0);
         box-shadow: 0 0 30px rgba(255, 215, 0, 1);
     }
 }
 
-/* Enhanced marker pulse - gentler animation for better clickability */
+/* Enhanced marker pulse - gentler animation for better clickability with hardware acceleration */
 @keyframes markerPulseGentle {
     0%, 100% { 
-        transform: scale(1);
+        transform: scale(1) translate3d(0, 0, 0);
         box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
     }
     50% { 
-        transform: scale(1.05);
+        transform: scale(1.05) translate3d(0, 0, 0);
         box-shadow: 0 0 25px rgba(255, 215, 0, 0.9);
     }
 }
@@ -1395,19 +1637,19 @@ button:focus {
 
 @keyframes rotate3D {
     from { 
-        transform: rotateY(0deg) rotateX(-10deg);
+        transform: rotateY(0deg) rotateX(-10deg) translate3d(0, 0, 0);
     }
     to { 
-        transform: rotateY(360deg) rotateX(-10deg);
+        transform: rotateY(360deg) rotateX(-10deg) translate3d(0, 0, 0);
     }
 }
 
 @keyframes rotateContinents3D {
     from { 
-        transform: rotateY(0deg);
+        transform: rotateY(0deg) translate3d(0, 0, 0);
     }
     to { 
-        transform: rotateY(360deg);
+        transform: rotateY(360deg) translate3d(0, 0, 0);
     }
 }
 
@@ -1437,11 +1679,11 @@ button:focus {
 @keyframes atmosphereGlow {
     0% { 
         opacity: 0.6;
-        transform: scale(1);
+        transform: scale(1) translate3d(0, 0, 0);
     }
     100% { 
         opacity: 0.8;
-        transform: scale(1.02);
+        transform: scale(1.02) translate3d(0, 0, 0);
     }
 }
 
@@ -1524,6 +1766,53 @@ button:focus {
         0 30px 80px rgba(0, 0, 0, 0.4),
         inset 0 1px 0 rgba(255, 255, 255, 0.1),
         0 0 100px rgba(72, 177, 232, 0.2);
+    -webkit-overflow-scrolling: touch;
+    width: 90vw;
+    margin: var(--spacing-md);
+}
+
+/* Enhanced responsive modal design */
+@media (max-width: 768px) {
+    .location-modal {
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        max-width: 95vw;
+        max-height: 90vh;
+        width: 95vw;
+        margin: var(--spacing-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    .location-modal {
+        padding: var(--spacing-md);
+        border-radius: var(--radius-md);
+        max-width: 98vw;
+        max-height: 95vh;
+        width: 98vw;
+        margin: var(--spacing-xs);
+        font-size: var(--font-size-sm);
+    }
+    
+    .modal-close {
+        top: var(--spacing-sm);
+        right: var(--spacing-sm);
+        width: 35px;
+        height: 35px;
+        font-size: var(--font-size-lg);
+    }
+}
+
+@media (max-width: 360px) {
+    .location-modal {
+        padding: var(--spacing-sm);
+        max-height: 98vh;
+        width: 100vw;
+        margin: 0;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
 }
 
 .modal-overlay.show .location-modal {
@@ -3393,8 +3682,163 @@ button:focus {
 }
 
 /* ========================================
-   ENHANCED UX/UI IMPROVEMENTS & ANIMATIONS
+   LAZY LOADING & PERFORMANCE STYLES
    ======================================== */
+
+/* Lazy loading image states */
+.lazy {
+    opacity: 0.7;
+    transition: opacity 0.3s ease-in-out;
+    filter: blur(2px);
+}
+
+.lazy-loaded {
+    opacity: 1;
+    filter: blur(0);
+}
+
+.image-error {
+    opacity: 0.8;
+    filter: grayscale(1);
+}
+
+/* Loading skeleton for images */
+.gallery-image-container {
+    position: relative;
+    background: linear-gradient(90deg, var(--glass-bg) 25%, rgba(255,255,255,0.1) 50%, var(--glass-bg) 75%);
+    background-size: 200% 100%;
+    animation: loading-shimmer 1.5s infinite;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gallery-image-container img {
+    width: 100%;
+    height: auto;
+    position: relative;
+    z-index: 2;
+}
+
+.gallery-image-container .image-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.gallery-image-container img.lazy-loaded + .image-loader {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Performance optimization classes */
+.will-change-transform {
+    will-change: transform;
+}
+
+.will-change-opacity {
+    will-change: opacity;
+}
+
+.will-change-auto {
+    will-change: auto;
+}
+
+/* Hardware acceleration helpers */
+.gpu-accelerated {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Smooth scroll for better performance */
+html {
+    scroll-behavior: smooth;
+}
+
+@supports (scroll-behavior: smooth) {
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+/* ========================================
+   ENHANCED RESPONSIVE DESIGN IMPROVEMENTS
+   ======================================== */
+
+/* ========================================
+   TOUCH & PERFORMANCE DEVICE OPTIMIZATIONS
+   ======================================== */
+
+/* Touch-specific enhancements */
+.touch-device .marker:active,
+.marker.touch-active {
+    transform: scale(1.8) translate3d(0, 0, 0);
+    transition: transform 0.1s ease;
+}
+
+.touch-device button:active {
+    transform: translateY(1px) scale(0.98);
+    transition: transform 0.1s ease;
+}
+
+/* Performance optimizations for low-end devices */
+.low-performance * {
+    animation-duration: 2s !important;
+    transition-duration: 0.1s !important;
+}
+
+.low-performance .marker {
+    animation: markerPulseSimple 4s ease-in-out infinite !important;
+}
+
+@keyframes markerPulseSimple {
+    0%, 100% { 
+        opacity: 0.8;
+    }
+    50% { 
+        opacity: 1;
+    }
+}
+
+/* Device-specific optimizations */
+.mobile-device .info-panel,
+.mobile-device .controls {
+    backdrop-filter: blur(10px); /* Reduce blur for better performance */
+}
+
+.tablet-device .globe-sphere {
+    animation-duration: 40s; /* Slower rotation for tablets */
+}
+
+/* Enhanced scrolling for touch devices */
+.touch-device .controls,
+.touch-device .info-panel,
+.touch-device .location-modal {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+}
+
+/* Safe area insets for devices with notches */
+@supports (padding: max(0px)) {
+    .theme-toggle, .language-toggle, .contrast-toggle {
+        top: max(var(--spacing-lg), env(safe-area-inset-top, 0px));
+    }
+    
+    #mapContainer {
+        padding-left: max(var(--spacing-lg), env(safe-area-inset-left, 0px));
+        padding-right: max(var(--spacing-lg), env(safe-area-inset-right, 0px));
+        padding-bottom: max(var(--spacing-lg), env(safe-area-inset-bottom, 0px));
+    }
+}
 
 /* Core Animation Classes for UX Enhancement */
 .fade-in {
@@ -3548,6 +3992,17 @@ button:focus {
     }
 }
 
+@keyframes panelSlideInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 @keyframes globeScaleIn {
     0% {
         opacity: 0;
@@ -3651,7 +4106,145 @@ button:focus-visible {
     transform: scale(1.2);
 }
 
-/* Mobile-First Touch Improvements */
+/* ========================================
+   ENHANCED MOBILE & TOUCH INTERACTIONS
+   ======================================== */
+
+/* Touch-friendly interactions */
+@media (hover: none) and (pointer: coarse) {
+    /* Mobile/touch device specific styles */
+    .marker:hover {
+        transform: scale(1.6);
+        animation-play-state: running; /* Keep animation running on touch devices */
+    }
+    
+    button:hover {
+        transform: translateY(-2px) scale(1.02);
+    }
+    
+    .feature-item:hover {
+        transform: translateY(-5px) scale(1.02);
+    }
+}
+
+/* Enhanced touch targets */
+@media (max-width: 768px) {
+    /* Larger touch targets for better accessibility */
+    button {
+        min-height: 48px;
+        min-width: 48px;
+        padding: var(--spacing-md) var(--spacing-lg);
+        font-size: var(--font-size-md);
+    }
+    
+    .marker {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .marker::before {
+        top: -25px;
+        left: -25px;
+        right: -25px;
+        bottom: -25px;
+    }
+    
+    /* Better spacing for mobile */
+    .controls, .info-panel {
+        margin: var(--spacing-sm);
+        max-width: calc(100vw - var(--spacing-lg));
+    }
+    
+    /* Improved search input for mobile */
+    .search-input {
+        font-size: 16px; /* Prevent zoom on iOS */
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+}
+
+/* Landscape orientation optimizations */
+@media (max-width: 768px) and (orientation: landscape) {
+    #mapContainer {
+        grid-template-areas: 
+            "info globe controls"
+            "status status status";
+        grid-template-columns: 300px 1fr 300px;
+        grid-template-rows: 1fr auto;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-sm);
+    }
+    
+    .info-panel, .controls {
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
+        font-size: var(--font-size-xs);
+        padding: var(--spacing-md);
+    }
+    
+    #globe3D {
+        width: 250px;
+        height: 250px;
+    }
+}
+
+/* Very small screens (< 360px) */
+@media (max-width: 360px) {
+    .info-panel, .controls {
+        font-size: 0.8rem;
+        padding: var(--spacing-sm);
+    }
+    
+    .button-row button:first-child {
+        font-size: 0.8rem;
+        padding: var(--spacing-sm);
+    }
+    
+    .search-input {
+        font-size: 14px;
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+}
+
+/* Tablet-specific optimizations */
+@media (min-width: 768px) and (max-width: 1024px) {
+    #mapContainer {
+        grid-template-areas: 
+            "info controls"
+            "globe globe"
+            "status status";
+        grid-template-columns: 1fr 1fr;
+        padding: var(--spacing-lg);
+        gap: var(--spacing-md);
+    }
+    
+    .info-panel, .controls {
+        max-width: 100%;
+        padding: var(--spacing-lg);
+    }
+    
+    #globe3D {
+        width: 350px;
+        height: 350px;
+    }
+}
+
+/* Desktop large screens */
+@media (min-width: 1400px) {
+    #mapContainer {
+        padding: var(--spacing-2xl);
+        gap: var(--spacing-lg);
+    }
+    
+    .info-panel, .controls {
+        max-width: 420px;
+        padding: 2.5rem;
+    }
+    
+    #globe3D {
+        width: 600px;
+        height: 600px;
+    }
+}
 @media (max-width: 768px) {
     /* Larger touch targets */
     button {
