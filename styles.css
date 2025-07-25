@@ -2288,6 +2288,214 @@ button:focus {
     transform: translateX(4px);
 }
 
+/* Personalized Recommendations section */
+.recommendations-section {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--glass-border);
+}
+
+.recommendations-section h4 {
+    color: var(--accent-color);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.recommendations-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.recommendation-item {
+    background: linear-gradient(145deg, var(--glass-bg), rgba(255, 255, 255, 0.05));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all var(--transition-normal);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.recommendation-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.6), transparent);
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+}
+
+.recommendation-item:hover::before {
+    opacity: 1;
+}
+
+.recommendation-item:hover {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+    transform: translateY(-2px) translateX(2px);
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.15),
+        0 0 20px rgba(255, 215, 0, 0.1);
+    border-color: rgba(255, 215, 0, 0.3);
+}
+
+.recommendation-content {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    cursor: pointer;
+    flex: 1;
+}
+
+.recommendation-icon {
+    font-size: 1.8rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    animation: recommendationIconFloat 3s ease-in-out infinite;
+}
+
+@keyframes recommendationIconFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-2px);
+    }
+}
+
+.recommendation-details {
+    flex: 1;
+}
+
+.recommendation-title {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    color: var(--panel-text);
+    margin: 0 0 var(--spacing-xs) 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.recommendation-reason {
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    font-weight: 500;
+}
+
+.recommendation-badge {
+    display: inline-block;
+    background: rgba(255, 215, 0, 0.2);
+    color: #FFD700;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-top: var(--spacing-xs);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.recommendation-favorite {
+    background: transparent;
+    border: 2px solid var(--accent-color);
+    color: var(--accent-color);
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    font-size: 1.2rem;
+    backdrop-filter: blur(5px);
+    margin: 0;
+}
+
+.recommendation-favorite:hover {
+    background: var(--accent-color);
+    color: white;
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 4px 15px rgba(72, 177, 232, 0.4);
+}
+
+.recommendation-favorite.active {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border-color: #FFD700;
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
+
+.recommendation-favorite.active:hover {
+    background: linear-gradient(135deg, #FFA500, #FF8C00);
+    transform: scale(1.1) rotate(-5deg);
+    box-shadow: 0 6px 20px rgba(255, 165, 0, 0.5);
+}
+
+/* Responsive design for recommendations */
+@media (max-width: 768px) {
+    .recommendation-item {
+        padding: var(--spacing-sm);
+    }
+    
+    .recommendation-content {
+        gap: var(--spacing-sm);
+    }
+    
+    .recommendation-icon {
+        font-size: 1.5rem;
+    }
+    
+    .recommendation-title {
+        font-size: var(--font-size-sm);
+    }
+    
+    .recommendation-reason {
+        font-size: 0.7rem;
+    }
+    
+    .recommendation-favorite {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+}
+
+/* Animation for new recommendations */
+.recommendation-item {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: recommendationSlideIn 0.5s ease-out forwards;
+}
+
+.recommendation-item:nth-child(1) { animation-delay: 0.1s; }
+.recommendation-item:nth-child(2) { animation-delay: 0.2s; }
+.recommendation-item:nth-child(3) { animation-delay: 0.3s; }
+.recommendation-item:nth-child(4) { animation-delay: 0.4s; }
+.recommendation-item:nth-child(5) { animation-delay: 0.5s; }
+.recommendation-item:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes recommendationSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* Info stats */
 .info-stats {
     margin-top: var(--spacing-lg);

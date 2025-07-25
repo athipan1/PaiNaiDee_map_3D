@@ -11,6 +11,18 @@ let userPreferences = JSON.parse(localStorage.getItem('painaidee-preferences')) 
     highContrast: false
 };
 
+// User Behavior Tracking for Personalized Recommendations
+let userBehavior = JSON.parse(localStorage.getItem('painaidee-user-behavior')) || {
+    locationViews: {},
+    categoryViews: {},
+    searchQueries: [],
+    timeSpent: {},
+    sessionStart: Date.now(),
+    totalSessions: 0,
+    favoriteActions: [],
+    lastRecommendationUpdate: 0
+};
+
 // Mascot System Variables
 let mascotTips = [];
 let currentTipIndex = 0;
@@ -47,7 +59,12 @@ const texts = {
         mascotGreeting: "สวัสดีค่ะ! ฉันชื่อ PaiNai ช้างน้อยผู้นำทาง 🐘",
         mascotWelcome: "ยินดีต้อนรับสู่แผนที่ 3 มิติของเรา!",
         mascotClickForTips: "คลิกที่ฉันเพื่อรับคำแนะนำการใช้งาน!",
-        mascotTipButton: "💡 คำแนะนำ"
+        mascotTipButton: "💡 คำแนะนำ",
+        recommendationsTitle: "แนะนำสำหรับคุณ",
+        basedOnInterest: "ตามความสนใจของคุณ",
+        popularDestination: "จุดหมายยอดนิยม",
+        recommendedForYou: "แนะนำสำหรับคุณ",
+        previouslyViewed: "เคยดูแล้ว"
     },
     en: {
         welcome: "Welcome to the 3D Interactive Globe!",
@@ -77,7 +94,12 @@ const texts = {
         mascotGreeting: "Hello! I'm PaiNai, your little elephant guide 🐘",
         mascotWelcome: "Welcome to our 3D interactive map!",
         mascotClickForTips: "Click me for helpful tips!",
-        mascotTipButton: "💡 Tips"
+        mascotTipButton: "💡 Tips",
+        recommendationsTitle: "Recommended for You",
+        basedOnInterest: "Based on your interests",
+        popularDestination: "Popular destination",
+        recommendedForYou: "Recommended for you",
+        previouslyViewed: "Previously viewed"
     }
 };
 
@@ -172,8 +194,356 @@ function getText(key) {
 }
 
 // ========================================
-// MASCOT SYSTEM & INTERACTIVE FEATURES
+// USER BEHAVIOR TRACKING & RECOMMENDATIONS
 // ========================================
+
+// Track user interactions for personalized recommendations
+function trackUserBehavior(action, data) {
+    const timestamp = Date.now();
+    
+    switch (action) {
+        case 'location_view':
+            // Track location views
+            if (!userBehavior.locationViews[data.location]) {
+                userBehavior.locationViews[data.location] = { count: 0, lastViewed: 0, totalTime: 0 };
+            }
+            userBehavior.locationViews[data.location].count++;
+            userBehavior.locationViews[data.location].lastViewed = timestamp;
+            
+            // Track category views based on location
+            if (data.categories && Array.isArray(data.categories)) {
+                data.categories.forEach(category => {
+                    if (!userBehavior.categoryViews[category]) {
+                        userBehavior.categoryViews[category] = { count: 0, lastViewed: 0 };
+                    }
+                    userBehavior.categoryViews[category].count++;
+                    userBehavior.categoryViews[category].lastViewed = timestamp;
+                });
+            }
+            break;
+            
+        case 'search_query':
+            // Track search patterns
+            userBehavior.searchQueries.push({
+                query: data.query,
+                timestamp: timestamp,
+                resultClicked: data.resultClicked || null
+            });
+            
+            // Keep only last 50 searches
+            if (userBehavior.searchQueries.length > 50) {
+                userBehavior.searchQueries = userBehavior.searchQueries.slice(-50);
+            }
+            break;
+            
+        case 'favorite_toggle':
+            // Track favorite actions
+            userBehavior.favoriteActions.push({
+                location: data.location,
+                action: data.action, // 'add' or 'remove'
+                timestamp: timestamp
+            });
+            
+            // Keep only last 30 favorite actions
+            if (userBehavior.favoriteActions.length > 30) {
+                userBehavior.favoriteActions = userBehavior.favoriteActions.slice(-30);
+            }
+            break;
+            
+        case 'time_spent':
+            // Track time spent on locations
+            if (!userBehavior.timeSpent[data.location]) {
+                userBehavior.timeSpent[data.location] = 0;
+            }
+            userBehavior.timeSpent[data.location] += data.duration;
+            break;
+    }
+    
+    // Save to localStorage
+    saveBehaviorData();
+}
+
+// Save behavior data to localStorage
+function saveBehaviorData() {
+    try {
+        localStorage.setItem('painaidee-user-behavior', JSON.stringify(userBehavior));
+    } catch (error) {
+        console.warn('Could not save user behavior data:', error);
+    }
+}
+
+// Generate personalized recommendations based on user behavior
+function generatePersonalizedRecommendations() {
+    const recommendations = [];
+    const currentTime = Date.now();
+    
+    // Don't update recommendations too frequently (once per hour)
+    if (currentTime - userBehavior.lastRecommendationUpdate < 3600000) {
+        return getStoredRecommendations();
+    }
+    
+    try {
+        // 1. Most viewed categories - recommend similar locations
+        const categoryScores = calculateCategoryPreferences();
+        const categoryBasedRecs = getRecommendationsByCategory(categoryScores);
+        recommendations.push(...categoryBasedRecs);
+        
+        // 2. Similar locations to frequently viewed ones
+        const locationScores = calculateLocationPreferences();
+        const similarLocationRecs = getSimilarLocationRecommendations(locationScores);
+        recommendations.push(...similarLocationRecs);
+        
+        // 3. Popular destinations not yet explored
+        const unexploredRecs = getUnexploredPopularDestinations();
+        recommendations.push(...unexploredRecs);
+        
+        // 4. Based on search patterns
+        const searchBasedRecs = getSearchBasedRecommendations();
+        recommendations.push(...searchBasedRecs);
+        
+        // Remove duplicates and limit to top 6 recommendations
+        const uniqueRecs = [...new Set(recommendations)];
+        const finalRecs = uniqueRecs.slice(0, 6);
+        
+        // Store recommendations
+        userBehavior.lastRecommendations = finalRecs;
+        userBehavior.lastRecommendationUpdate = currentTime;
+        saveBehaviorData();
+        
+        return finalRecs;
+        
+    } catch (error) {
+        console.warn('Error generating recommendations:', error);
+        return getDefaultRecommendations();
+    }
+}
+
+// Calculate user's category preferences based on behavior
+function calculateCategoryPreferences() {
+    const categoryScores = {};
+    
+    // Score based on category views
+    Object.entries(userBehavior.categoryViews).forEach(([category, data]) => {
+        const recencyScore = Math.max(0, 1 - (Date.now() - data.lastViewed) / (30 * 24 * 60 * 60 * 1000)); // 30 days
+        categoryScores[category] = (data.count * 2) + (recencyScore * 3);
+    });
+    
+    // Score based on favorite locations' categories
+    favorites.forEach(locationKey => {
+        const location = locations[locationKey];
+        if (location && location.categories) {
+            location.categories.forEach(category => {
+                categoryScores[category] = (categoryScores[category] || 0) + 1.5;
+            });
+        }
+    });
+    
+    return categoryScores;
+}
+
+// Calculate user's location preferences
+function calculateLocationPreferences() {
+    const locationScores = {};
+    
+    Object.entries(userBehavior.locationViews).forEach(([location, data]) => {
+        const recencyScore = Math.max(0, 1 - (Date.now() - data.lastViewed) / (7 * 24 * 60 * 60 * 1000)); // 7 days
+        const timeScore = (userBehavior.timeSpent[location] || 0) / 60000; // Convert to minutes
+        locationScores[location] = (data.count * 2) + (recencyScore * 3) + (timeScore * 0.1);
+    });
+    
+    return locationScores;
+}
+
+// Get recommendations based on preferred categories
+function getRecommendationsByCategory(categoryScores) {
+    const recommendations = [];
+    const sortedCategories = Object.entries(categoryScores)
+        .sort(([,a], [,b]) => b - a)
+        .slice(0, 3); // Top 3 categories
+    
+    sortedCategories.forEach(([category]) => {
+        Object.entries(locations).forEach(([locationKey, locationData]) => {
+            if (locationData.categories && locationData.categories.includes(category)) {
+                // Don't recommend already heavily viewed locations
+                const viewCount = userBehavior.locationViews[locationKey]?.count || 0;
+                if (viewCount < 5 && !recommendations.includes(locationKey)) {
+                    recommendations.push(locationKey);
+                }
+            }
+        });
+    });
+    
+    return recommendations.slice(0, 3);
+}
+
+// Get recommendations for similar locations
+function getSimilarLocationRecommendations(locationScores) {
+    const recommendations = [];
+    const topLocations = Object.entries(locationScores)
+        .sort(([,a], [,b]) => b - a)
+        .slice(0, 2); // Top 2 viewed locations
+    
+    topLocations.forEach(([viewedLocation]) => {
+        const viewedLocationData = locations[viewedLocation];
+        if (!viewedLocationData || !viewedLocationData.categories) return;
+        
+        Object.entries(locations).forEach(([locationKey, locationData]) => {
+            if (locationKey === viewedLocation) return;
+            
+            // Find locations with similar categories
+            if (locationData.categories) {
+                const commonCategories = viewedLocationData.categories.filter(cat => 
+                    locationData.categories.includes(cat)
+                );
+                
+                if (commonCategories.length >= 2 && !recommendations.includes(locationKey)) {
+                    const viewCount = userBehavior.locationViews[locationKey]?.count || 0;
+                    if (viewCount < 3) {
+                        recommendations.push(locationKey);
+                    }
+                }
+            }
+        });
+    });
+    
+    return recommendations.slice(0, 2);
+}
+
+// Get popular destinations that user hasn't explored much
+function getUnexploredPopularDestinations() {
+    const popularDestinations = ['bangkok', 'chiangmai', 'phuket', 'ayutthaya', 'krabi'];
+    const recommendations = [];
+    
+    popularDestinations.forEach(location => {
+        const viewCount = userBehavior.locationViews[location]?.count || 0;
+        if (viewCount < 2 && !favorites.includes(location)) {
+            recommendations.push(location);
+        }
+    });
+    
+    return recommendations.slice(0, 2);
+}
+
+// Get recommendations based on search patterns
+function getSearchBasedRecommendations() {
+    const recommendations = [];
+    const recentSearches = userBehavior.searchQueries.slice(-10);
+    
+    recentSearches.forEach(search => {
+        const query = search.query.toLowerCase();
+        
+        Object.entries(locations).forEach(([locationKey, locationData]) => {
+            // Check if search matches location name or attractions
+            const nameMatch = locationData.name.toLowerCase().includes(query) || 
+                             locationData.nameEn.toLowerCase().includes(query);
+            
+            const attractionMatch = locationData.attractions?.some(attraction => 
+                attraction.toLowerCase().includes(query)
+            ) || locationData.attractionsEn?.some(attraction => 
+                attraction.toLowerCase().includes(query)
+            );
+            
+            if ((nameMatch || attractionMatch) && !recommendations.includes(locationKey)) {
+                const viewCount = userBehavior.locationViews[locationKey]?.count || 0;
+                if (viewCount < 3) {
+                    recommendations.push(locationKey);
+                }
+            }
+        });
+    });
+    
+    return recommendations.slice(0, 2);
+}
+
+// Get stored recommendations or default ones
+function getStoredRecommendations() {
+    return userBehavior.lastRecommendations || getDefaultRecommendations();
+}
+
+// Default recommendations for new users
+function getDefaultRecommendations() {
+    return ['bangkok', 'chiangmai', 'phuket', 'ayutthaya', 'krabi', 'sukhothai'];
+}
+
+// Update recommendations UI
+function updateRecommendationsUI() {
+    const recommendations = generatePersonalizedRecommendations();
+    const recommendationsSection = document.getElementById('recommendationsSection');
+    
+    if (!recommendationsSection) return;
+    
+    const isThaiLang = userPreferences.language === 'th';
+    
+    // Show section if we have recommendations
+    if (recommendations.length > 0) {
+        recommendationsSection.style.display = 'block';
+        
+        const recommendationsList = document.getElementById('recommendationsList');
+        if (recommendationsList) {
+            recommendationsList.innerHTML = recommendations.map(locationKey => {
+                const location = locations[locationKey];
+                if (!location) return '';
+                
+                const locationName = isThaiLang ? location.name : location.nameEn;
+                const viewCount = userBehavior.locationViews[locationKey]?.count || 0;
+                const isFavorite = favorites.includes(locationKey);
+                
+                return `
+                    <div class="recommendation-item" data-location="${locationKey}">
+                        <div class="recommendation-content" onclick="showInfo('${locationKey}')">
+                            <div class="recommendation-icon">${location.emoji}</div>
+                            <div class="recommendation-details">
+                                <h5 class="recommendation-title">${locationName}</h5>
+                                <p class="recommendation-reason">${getRecommendationReason(locationKey, isThaiLang)}</p>
+                                ${viewCount > 0 ? `<span class="recommendation-badge">${isThaiLang ? 'เคยดูแล้ว' : 'Previously viewed'}</span>` : ''}
+                            </div>
+                        </div>
+                        <button class="recommendation-favorite ${isFavorite ? 'active' : ''}" 
+                                onclick="toggleFavorite('${locationKey}')" 
+                                aria-label="${isFavorite ? 'Remove from favorites' : 'Add to favorites'}">
+                            ${isFavorite ? '⭐' : '☆'}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+    } else {
+        recommendationsSection.style.display = 'none';
+    }
+}
+
+// Get reason text for recommendation
+function getRecommendationReason(locationKey, isThaiLang) {
+    const location = locations[locationKey];
+    const reasons = [];
+    
+    // Check if it's based on category preference
+    if (location.categories) {
+        const topCategory = Object.entries(userBehavior.categoryViews)
+            .sort(([,a], [,b]) => b.count - a.count)[0];
+        
+        if (topCategory && location.categories.includes(topCategory[0])) {
+            const categoryName = locationCategories[topCategory[0]];
+            reasons.push(isThaiLang ? 
+                `คุณสนใจ${categoryName?.nameTh || topCategory[0]}` : 
+                `Based on your interest in ${categoryName?.nameEn || topCategory[0]}`
+            );
+        }
+    }
+    
+    // Check if it's popular
+    const popularDestinations = ['bangkok', 'chiangmai', 'phuket'];
+    if (popularDestinations.includes(locationKey)) {
+        reasons.push(isThaiLang ? 'จุดหมายยอดนิยม' : 'Popular destination');
+    }
+    
+    // Default reason
+    if (reasons.length === 0) {
+        reasons.push(isThaiLang ? 'แนะนำสำหรับคุณ' : 'Recommended for you');
+    }
+    
+    return reasons[0];
+}
 
 // Mascot Tips Database
 function initializeMascotTips() {
@@ -1458,6 +1828,9 @@ function handleSearch(e) {
         return;
     }
     
+    // Track search behavior for recommendations
+    trackUserBehavior('search_query', { query: query });
+    
     const filteredLocations = Object.keys(locations).filter(key => {
         const location = locations[key];
         return location.name.toLowerCase().includes(query) ||
@@ -1824,6 +2197,7 @@ function initializeFavorites() {
 
 function toggleFavorite(locationKey) {
     const index = favorites.indexOf(locationKey);
+    const action = index === -1 ? 'add' : 'remove';
     
     if (index === -1) {
         favorites.push(locationKey);
@@ -1833,9 +2207,20 @@ function toggleFavorite(locationKey) {
         showNotification(getText('removedFavorite'), 'info');
     }
     
+    // Track favorite action for recommendations
+    trackUserBehavior('favorite_toggle', {
+        location: locationKey,
+        action: action
+    });
+    
     localStorage.setItem('painaidee-favorites', JSON.stringify(favorites));
     updateFavoritesDisplay();
     updateFavoriteButtons();
+    
+    // Update recommendations after favorite change
+    setTimeout(() => {
+        updateRecommendationsUI();
+    }, 300);
 }
 
 function updateFavoriteButtons() {
@@ -3214,6 +3599,19 @@ function showInfo(location) {
     const info = locations[location];
     if (!info) return;
     
+    // Track user behavior for recommendations
+    const viewStartTime = Date.now();
+    trackUserBehavior('location_view', {
+        location: location,
+        categories: info.categories || []
+    });
+    
+    // Track time spent when modal is closed
+    window.currentLocationView = {
+        location: location,
+        startTime: viewStartTime
+    };
+    
     const modal = document.getElementById('modalOverlay');
     const modalTitle = document.getElementById('modalTitle');
     const modalBody = document.getElementById('modalBody');
@@ -3508,6 +3906,16 @@ function getCurrentAttractionName(info, index) {
 function closeModal() {
     const modal = document.getElementById('modalOverlay');
     if (modal) {
+        // Track time spent on modal if we have viewStartTime stored
+        if (window.currentLocationView) {
+            const timeSpent = Date.now() - window.currentLocationView.startTime;
+            trackUserBehavior('time_spent', {
+                location: window.currentLocationView.location,
+                duration: timeSpent
+            });
+            window.currentLocationView = null;
+        }
+        
         // Clean up gallery
         if (currentGallery) {
             currentGallery = null;
@@ -3542,6 +3950,11 @@ function closeModal() {
         
         // Announce modal closure to screen readers
         announceToScreenReader('Location information dialog closed');
+        
+        // Update recommendations after viewing location
+        setTimeout(() => {
+            updateRecommendationsUI();
+        }, 500);
     }
 }
 
@@ -3561,6 +3974,11 @@ function updateStatus(textTh, textEn) {
 function initializeMap() {
     // Show loading spinner immediately
     showLoadingSpinner();
+    
+    // Initialize user behavior tracking
+    userBehavior.totalSessions++;
+    userBehavior.sessionStart = Date.now();
+    saveBehaviorData();
     
     // Initialize core features first
     initializeTheme();
@@ -3585,6 +4003,10 @@ function initializeMap() {
     // Initialize enhanced UX/UI features after short delay
     setTimeout(() => {
         initializeEnhancedUX();
+        
+        // Initialize recommendations system
+        updateRecommendationsUI();
+        
         hideLoadingSpinner();
         updateStatus('🌍 สร้างโลก 3D ปรับปรุงแล้วสำเร็จ!', '🌍 Enhanced 3D Globe created successfully!');
         console.log('🗺️ PaiNaiDee Enhanced 3D Map with Mascot loaded successfully!');
