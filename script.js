@@ -2390,7 +2390,7 @@ function highlightComparedLocations(loc1Key, loc2Key) {
     }
 }
 
-// Enhanced modal system for location information
+// Enhanced modal system for location information with improved animations
 function showInfo(location) {
     const info = locations[location];
     if (!info) return;
@@ -2459,8 +2459,34 @@ function showInfo(location) {
         modalGallery.innerHTML = `<p>🖼️ ${userPreferences.language === 'th' ? 'ภาพประกอบจะมาเร็วๆ นี้' : 'Photos coming soon'}</p>`;
     }
     
+    // Enhanced modal animation sequence
     modal.style.display = 'flex';
-    setTimeout(() => modal.classList.add('show'), 10);
+    modal.classList.remove('show');
+    
+    // Trigger animations with proper timing
+    requestAnimationFrame(() => {
+        modal.classList.add('show');
+        
+        // Add fade-in animations to modal content elements
+        setTimeout(() => {
+            const modalContent = modal.querySelector('.modal-content');
+            if (modalContent) {
+                modalContent.classList.add('fade-in');
+            }
+            
+            // Animate gallery items with stagger effect
+            const galleryItems = modal.querySelectorAll('.gallery-item');
+            galleryItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    item.style.transition = 'all 0.4s ease-out';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
+        }, 100);
+    });
     
     // Focus location on map
     focusLocation(location);
@@ -2475,7 +2501,7 @@ function showInfo(location) {
         setTimeout(() => {
             marker.style.transform = '';
             marker.style.zIndex = '100';
-            marker.style.animation = 'markerPulse 2s ease-in-out infinite';
+            marker.style.animation = 'markerPulseGentle 3s ease-in-out infinite';
         }, 1000);
     }
     
@@ -2501,9 +2527,18 @@ function getCurrentAttractionName(info, index) {
 function closeModal() {
     const modal = document.getElementById('modalOverlay');
     if (modal) {
+        // Add exit animation
+        const modalContent = modal.querySelector('.location-modal');
+        if (modalContent) {
+            modalContent.style.animation = 'modalSlideOut 0.3s ease-in forwards';
+        }
+        
         modal.classList.remove('show');
         setTimeout(() => {
             modal.style.display = 'none';
+            if (modalContent) {
+                modalContent.style.animation = '';
+            }
         }, 300);
     }
 }
@@ -2787,12 +2822,21 @@ function showLoadingState(element, text = 'Loading...') {
     return loadingOverlay;
 }
 
-// Enhanced button interactions
+// Enhanced button interactions with animations
 function enhanceButtonInteractions() {
     const buttons = document.querySelectorAll('button:not(.enhanced)');
     
-    buttons.forEach(button => {
+    buttons.forEach((button, index) => {
         button.classList.add('enhanced');
+        
+        // Add staggered entrance animation
+        button.style.opacity = '0';
+        button.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            button.style.transition = 'all 0.4s ease-out';
+            button.style.opacity = '1';
+            button.style.transform = 'translateY(0)';
+        }, 50 * index);
         
         // Add loading state capability
         button.addEventListener('click', function(e) {
@@ -2801,13 +2845,9 @@ function enhanceButtonInteractions() {
             // Add ripple effect
             const rect = this.getBoundingClientRect();
             const ripple = document.createElement('div');
+            ripple.className = 'button-ripple';
             ripple.style.cssText = `
                 position: absolute;
-                background: rgba(255, 255, 255, 0.3);
-                border-radius: 50%;
-                transform: scale(0);
-                animation: ripple 0.6s linear;
-                pointer-events: none;
                 left: ${e.clientX - rect.left - 10}px;
                 top: ${e.clientY - rect.top - 10}px;
                 width: 20px;
@@ -2823,11 +2863,56 @@ function enhanceButtonInteractions() {
     });
 }
 
+// Function to add fade-in animations to content sections
+function addContentAnimations() {
+    // Add fade-in classes to main content sections
+    const infoPanel = document.querySelector('.info-panel');
+    const controls = document.querySelector('.controls');
+    const globe = document.querySelector('#globe3D');
+    
+    if (infoPanel) {
+        infoPanel.classList.add('slide-in-left');
+    }
+    
+    if (controls) {
+        controls.classList.add('slide-in-right');
+    }
+    
+    if (globe) {
+        globe.classList.add('scale-in-center');
+    }
+    
+    // Add staggered animations to category filter buttons
+    const categoryButtons = document.querySelectorAll('.category-filter-btn');
+    categoryButtons.forEach((btn, index) => {
+        btn.style.opacity = '0';
+        btn.style.transform = 'translateY(10px)';
+        setTimeout(() => {
+            btn.style.transition = 'all 0.3s ease-out';
+            btn.style.opacity = '1';
+            btn.style.transform = 'translateY(0)';
+        }, 100 + (index * 50));
+    });
+    
+    // Add animations to location buttons
+    const locationButtons = document.querySelectorAll('.button-row');
+    locationButtons.forEach((row, index) => {
+        row.style.opacity = '0';
+        row.style.transform = 'translateX(-20px)';
+        setTimeout(() => {
+            row.style.transition = 'all 0.4s ease-out';
+            row.style.opacity = '1';
+            row.style.transform = 'translateX(0)';
+        }, 200 + (index * 80));
+    });
+}
+
 // Initialize enhanced interactions
 function initializeEnhancedUX() {
     enhanceMarkerInteractions();
     enhanceFavoriteButtons();
     enhanceButtonInteractions();
+    addContentAnimations();
     
     // Add interactive classes to elements
     document.querySelectorAll('.info-panel, .controls, button').forEach(el => {
