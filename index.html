@@ -17,6 +17,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'; this.onerror=function(){this.remove();}">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
     
+    <!-- Leaflet CSS for mini-map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -634,12 +639,34 @@
             <div class="modal-content">
                 <h2 id="modalTitle"></h2>
                 <div class="modal-body" id="modalBody"></div>
+                
+                <!-- Mini-Map Section -->
+                <div class="mini-map-section" id="miniMapSection" style="display: none;">
+                    <div class="mini-map-header">
+                        <h4 id="miniMapTitle">🗺️ Mini-Map: Nearby Attractions</h4>
+                        <button class="mini-map-toggle" id="miniMapToggle" aria-label="Toggle mini-map">
+                            📍 Show Map
+                        </button>
+                    </div>
+                    <div class="mini-map-container" id="miniMapContainer">
+                        <div id="miniMap" class="mini-map"></div>
+                        <div class="mini-map-controls">
+                            <button class="map-control-btn" id="centerMapBtn" title="Center on location">🎯</button>
+                            <button class="map-control-btn" id="toggleAttractionsBtn" title="Toggle attractions">🏛️</button>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="modal-gallery" id="modalGallery" role="img" aria-label="Location photo gallery"></div>
             </div>
         </div>
     </div>
 
     <!-- Scripts -->
+    <!-- Leaflet JavaScript for mini-map -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -64,7 +64,17 @@ const texts = {
         basedOnInterest: "ตามความสนใจของคุณ",
         popularDestination: "จุดหมายยอดนิยม",
         recommendedForYou: "แนะนำสำหรับคุณ",
-        previouslyViewed: "เคยดูแล้ว"
+        previouslyViewed: "เคยดูแล้ว",
+        miniMapTitle: "แผนที่ย่อย",
+        showMap: "แสดงแผนที่",
+        hideMap: "ซ่อนแผนที่",
+        nearbyAttractions: "สถานที่ใกล้เคียง",
+        viewDetails: "ดูรายละเอียด",
+        centerMap: "กลับไปจุดกลาง",
+        toggleAttractions: "เปิด/ปิดสถานที่ท่องเที่ยว",
+        loadingMap: "กำลังโหลดแผนที่...",
+        mapError: "ไม่สามารถโหลดแผนที่ได้",
+        retry: "ลองใหม่"
     },
     en: {
         welcome: "Welcome to the 3D Interactive Globe!",
@@ -99,7 +109,17 @@ const texts = {
         basedOnInterest: "Based on your interests",
         popularDestination: "Popular destination",
         recommendedForYou: "Recommended for you",
-        previouslyViewed: "Previously viewed"
+        previouslyViewed: "Previously viewed",
+        miniMapTitle: "Mini-Map",
+        showMap: "Show Map",
+        hideMap: "Hide Map",
+        nearbyAttractions: "Nearby Attractions",
+        viewDetails: "View Details",
+        centerMap: "Center Map",
+        toggleAttractions: "Toggle Attractions",
+        loadingMap: "Loading map...",
+        mapError: "Unable to load map",
+        retry: "Retry"
     }
 };
 
@@ -3594,7 +3614,813 @@ function updateImageCounter() {
     }
 }
 
-// Enhanced modal system for location information with improved animations
+// ========================================
+// INTERACTIVE MINI-MAP FUNCTIONALITY
+// ========================================
+
+let miniMap = null;
+let miniMapVisible = false;
+let miniMapMarkers = [];
+let mainLocationMarker = null;
+
+// Initialize mini-map functionality
+function initializeMiniMap() {
+    const miniMapToggle = document.getElementById('miniMapToggle');
+    const centerMapBtn = document.getElementById('centerMapBtn');
+    const toggleAttractionsBtn = document.getElementById('toggleAttractionsBtn');
+    
+    if (miniMapToggle) {
+        miniMapToggle.addEventListener('click', toggleMiniMap);
+    }
+    
+    if (centerMapBtn) {
+        centerMapBtn.addEventListener('click', centerMiniMapOnLocation);
+    }
+    
+    if (toggleAttractionsBtn) {
+        toggleAttractionsBtn.addEventListener('click', toggleAttractionMarkers);
+    }
+}
+
+// Toggle mini-map visibility
+function toggleMiniMap() {
+    const miniMapContainer = document.getElementById('miniMapContainer');
+    const miniMapToggle = document.getElementById('miniMapToggle');
+    const miniMapSection = document.getElementById('miniMapSection');
+    
+    miniMapVisible = !miniMapVisible;
+    
+    if (miniMapVisible) {
+        miniMapContainer.classList.remove('collapsed');
+        miniMapToggle.textContent = '📍 Hide Map';
+        miniMapToggle.classList.add('active');
+        miniMapSection.classList.add('active');
+        
+        // Initialize map if not already done
+        if (!miniMap) {
+            setTimeout(() => {
+                initializeLeafletMap();
+            }, 300); // Wait for container to expand
+        } else {
+            // Invalidate size to handle container resize
+            setTimeout(() => {
+                miniMap.invalidateSize();
+            }, 300);
+        }
+        
+        // Announce to screen readers
+        announceToScreenReader('Mini-map opened. Use arrow keys to navigate the map.');
+    } else {
+        miniMapContainer.classList.add('collapsed');
+        miniMapToggle.textContent = '📍 Show Map';
+        miniMapToggle.classList.remove('active');
+        
+        // Announce to screen readers
+        announceToScreenReader('Mini-map closed.');
+    }
+}
+
+// Initialize Leaflet map
+function initializeLeafletMap() {
+    const mapContainer = document.getElementById('miniMap');
+    if (!mapContainer || miniMap) return;
+    
+    try {
+        // Show loading state
+        showMiniMapLoading();
+        
+        // Check if Leaflet is available
+        if (typeof L === 'undefined') {
+            console.warn('Leaflet library not available, using fallback SVG map');
+            setTimeout(() => {
+                hideMiniMapLoading();
+                initializeFallbackMap();
+            }, 1000);
+            return;
+        }
+        
+        // Initialize map with default center (Bangkok)
+        miniMap = L.map('miniMap', {
+            zoomControl: false,
+            attributionControl: false,
+            scrollWheelZoom: true,
+            doubleClickZoom: true,
+            touchZoom: true,
+            keyboard: true,
+            dragging: true
+        }).setView([13.7563, 100.5018], 10);
+        
+        // Add tile layer with a nice style
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(miniMap);
+        
+        // Add custom zoom control
+        L.control.zoom({
+            position: 'bottomleft'
+        }).addTo(miniMap);
+        
+        // Wait for map to load, then show current location
+        miniMap.whenReady(() => {
+            hideMiniMapLoading();
+            
+            // Get current location from window context if available
+            if (window.currentLocationView && window.currentLocationView.location) {
+                showLocationOnMiniMap(window.currentLocationView.location);
+            }
+        });
+        
+        // Handle map events
+        miniMap.on('click', handleMiniMapClick);
+        miniMap.on('zoomend', updateMiniMapControls);
+        
+        console.log('🗺️ Mini-map initialized successfully');
+        
+    } catch (error) {
+        console.error('Error initializing mini-map:', error);
+        hideMiniMapLoading();
+        setTimeout(() => {
+            initializeFallbackMap();
+        }, 500);
+    }
+}
+
+// Fallback SVG map implementation
+function initializeFallbackMap() {
+    const mapContainer = document.getElementById('miniMap');
+    if (!mapContainer) return;
+    
+    // Create SVG-based mini-map
+    const svgMap = createSVGMap();
+    mapContainer.innerHTML = svgMap;
+    
+    // Add click handlers for SVG map
+    const svgElement = mapContainer.querySelector('svg');
+    if (svgElement) {
+        svgElement.addEventListener('click', handleSVGMapClick);
+    }
+    
+    // Show current location on SVG map
+    if (window.currentLocationView && window.currentLocationView.location) {
+        showLocationOnSVGMap(window.currentLocationView.location);
+    }
+    
+    console.log('🗺️ Fallback SVG mini-map initialized');
+}
+
+// Create SVG-based map
+function createSVGMap() {
+    return `
+        <svg viewBox="0 0 400 300" class="svg-mini-map" style="width: 100%; height: 100%; background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);">
+            <!-- Thailand outline -->
+            <path d="M200 50 L250 80 L280 120 L270 160 L250 200 L220 240 L180 250 L150 230 L130 200 L120 160 L140 120 L170 80 Z" 
+                  fill="#4caf50" stroke="#2e7d3e" stroke-width="2" opacity="0.8"/>
+            
+            <!-- Bangkok area -->
+            <circle cx="200" cy="140" r="8" fill="#f44336" stroke="#fff" stroke-width="2" class="svg-location-marker main-location" data-location="bangkok">
+                <animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite"/>
+            </circle>
+            
+            <!-- Nearby attractions around Bangkok -->
+            <circle cx="190" cy="130" r="4" fill="#ff9800" stroke="#fff" stroke-width="1" class="svg-attraction-marker" data-attraction="วัดพระแก้ว" title="วัดพระแก้ว / Wat Phra Kaew"/>
+            <circle cx="210" cy="135" r="4" fill="#ff9800" stroke="#fff" stroke-width="1" class="svg-attraction-marker" data-attraction="พระบรมมหาราชวัง" title="พระบรมมหาราชวัง / Grand Palace"/>
+            <circle cx="185" cy="150" r="4" fill="#ff9800" stroke="#fff" stroke-width="1" class="svg-attraction-marker" data-attraction="วัดโพธิ์" title="วัดโพธิ์ / Wat Pho"/>
+            <circle cx="220" cy="125" r="4" fill="#ff9800" stroke="#fff" stroke-width="1" class="svg-attraction-marker" data-attraction="ตลาดจตุจักร" title="ตลาดจตุจักร / Chatuchak Market"/>
+            <circle cx="180" cy="155" r="4" fill="#ff9800" stroke="#fff" stroke-width="1" class="svg-attraction-marker" data-attraction="วัดอรุณ" title="วัดอรุณ / Wat Arun"/>
+            <circle cx="215" cy="145" r="4" fill="#ff9800" stroke="#fff" stroke-width="1" class="svg-attraction-marker" data-attraction="เยาวราช" title="เยาวราช / Chinatown"/>
+            
+            <!-- Other major cities for context -->
+            <circle cx="180" cy="90" r="5" fill="#2196f3" stroke="#fff" stroke-width="1" class="svg-location-marker other-location" data-location="chiangmai" title="เชียงใหม่ / Chiang Mai"/>
+            <circle cx="160" cy="220" r="5" fill="#2196f3" stroke="#fff" stroke-width="1" class="svg-location-marker other-location" data-location="phuket" title="ภูเก็ต / Phuket"/>
+            
+            <!-- Legend -->
+            <g transform="translate(10, 10)" class="svg-legend">
+                <rect x="0" y="0" width="120" height="70" fill="rgba(255,255,255,0.9)" stroke="#ccc" rx="5"/>
+                <text x="10" y="15" font-size="12" font-weight="bold" fill="#333">Legend</text>
+                <circle cx="15" cy="28" r="4" fill="#f44336"/>
+                <text x="25" y="32" font-size="10" fill="#333">Main Location</text>
+                <circle cx="15" cy="42" r="3" fill="#ff9800"/>
+                <text x="25" y="46" font-size="10" fill="#333">Attractions</text>
+                <circle cx="15" cy="56" r="3" fill="#2196f3"/>
+                <text x="25" y="60" font-size="10" fill="#333">Other Cities</text>
+            </g>
+            
+            <!-- Scale indicator -->
+            <g transform="translate(300, 260)" class="svg-scale">
+                <line x1="0" y1="0" x2="50" y2="0" stroke="#333" stroke-width="2"/>
+                <line x1="0" y1="-3" x2="0" y2="3" stroke="#333" stroke-width="2"/>
+                <line x1="50" y1="-3" x2="50" y2="3" stroke="#333" stroke-width="2"/>
+                <text x="25" y="15" font-size="10" text-anchor="middle" fill="#333">~10km</text>
+            </g>
+            
+            <!-- Compass -->
+            <g transform="translate(350, 50)" class="svg-compass">
+                <circle cx="0" cy="0" r="20" fill="rgba(255,255,255,0.9)" stroke="#333"/>
+                <path d="M0,-15 L5,0 L0,15 L-5,0 Z" fill="#f44336"/>
+                <text x="0" y="-25" font-size="12" text-anchor="middle" fill="#333">N</text>
+            </g>
+        </svg>
+    `;
+}
+
+// Show location on mini-map
+function showLocationOnMiniMap(locationKey) {
+    if (!miniMap || !locations[locationKey]) return;
+    
+    const location = locations[locationKey];
+    if (!location.coordinates) return;
+    
+    const [lng, lat] = location.coordinates;
+    
+    // Clear existing markers
+    clearMiniMapMarkers();
+    
+    // Center map on location
+    miniMap.setView([lat, lng], 12);
+    
+    // Add main location marker
+    mainLocationMarker = L.marker([lat, lng], {
+        icon: createMainLocationIcon()
+    }).addTo(miniMap);
+    
+    const locationName = getCurrentLocationName(location);
+    mainLocationMarker.bindPopup(`
+        <div class="mini-map-popup">
+            <h5>${location.emoji} ${locationName}</h5>
+            <p>${getCurrentLocationDescription(location)}</p>
+        </div>
+    `);
+    
+    // Add nearby attractions
+    addNearbyAttractions(locationKey, lat, lng);
+    
+    // Update map title
+    updateMiniMapTitle(locationName);
+}
+
+// Create custom icon for main location
+function createMainLocationIcon() {
+    return L.divIcon({
+        className: 'main-location-marker',
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [0, -10]
+    });
+}
+
+// Create custom icon for attractions
+function createAttractionIcon(attraction) {
+    return L.divIcon({
+        className: 'attraction-marker',
+        html: `<span style="font-size: 8px; line-height: 16px; text-align: center; display: block;">${getAttractionEmoji(attraction)}</span>`,
+        iconSize: [16, 16],
+        iconAnchor: [8, 8],
+        popupAnchor: [0, -8]
+    });
+}
+
+// Get appropriate emoji for attraction type
+function getAttractionEmoji(attraction) {
+    const attractionLower = attraction.toLowerCase();
+    
+    if (attractionLower.includes('temple') || attractionLower.includes('วัด')) return '🏛️';
+    if (attractionLower.includes('palace') || attractionLower.includes('วัง')) return '🏰';
+    if (attractionLower.includes('beach') || attractionLower.includes('หาด')) return '🏖️';
+    if (attractionLower.includes('market') || attractionLower.includes('ตลาด')) return '🛍️';
+    if (attractionLower.includes('park') || attractionLower.includes('อุทยาน')) return '🌳';
+    if (attractionLower.includes('museum') || attractionLower.includes('พิพิธภัณฑ์')) return '🏛️';
+    if (attractionLower.includes('bridge') || attractionLower.includes('สะพาน')) return '🌉';
+    if (attractionLower.includes('waterfall') || attractionLower.includes('น้ำตก')) return '💧';
+    if (attractionLower.includes('island') || attractionLower.includes('เกาะ')) return '🏝️';
+    if (attractionLower.includes('mountain') || attractionLower.includes('ดอย') || attractionLower.includes('เขา')) return '⛰️';
+    
+    return '📍'; // Default icon
+}
+
+// Add nearby attractions to the map
+function addNearbyAttractions(locationKey, centerLat, centerLng) {
+    const location = locations[locationKey];
+    if (!location || !location.attractions) return;
+    
+    // Generate approximate coordinates for attractions around the main location
+    location.attractions.forEach((attraction, index) => {
+        const attractionName = getCurrentAttractionName(location, index);
+        
+        // Generate coordinates in a radius around the main location
+        const radius = 0.05; // ~5km radius
+        const angle = (index * (360 / location.attractions.length)) * (Math.PI / 180);
+        const offsetRadius = radius * (0.3 + Math.random() * 0.7); // Random distance within radius
+        
+        const attractionLat = centerLat + (offsetRadius * Math.cos(angle));
+        const attractionLng = centerLng + (offsetRadius * Math.sin(angle));
+        
+        const marker = L.marker([attractionLat, attractionLng], {
+            icon: createAttractionIcon(attractionName)
+        }).addTo(miniMap);
+        
+        // Create popup with attraction details
+        const popupContent = `
+            <div class="mini-map-popup">
+                <h5>${getAttractionEmoji(attractionName)} ${attractionName}</h5>
+                <p>${getAttractionDescription(attractionName, locationKey)}</p>
+                <button onclick="showAttractionDetails('${locationKey}', ${index})" class="attraction-details-btn">
+                    ${userPreferences.language === 'th' ? 'ดูรายละเอียด' : 'View Details'}
+                </button>
+            </div>
+        `;
+        
+        marker.bindPopup(popupContent);
+        
+        // Store marker for later management
+        miniMapMarkers.push(marker);
+        
+        // Add click handler
+        marker.on('click', () => {
+            trackUserBehavior('attraction_view', {
+                location: locationKey,
+                attraction: attractionName
+            });
+        });
+    });
+}
+
+// Get attraction description
+function getAttractionDescription(attractionName, locationKey) {
+    const descriptions = {
+        th: {
+            'วัดพระแก้ว': 'วัดศักดิ์สิทธิ์ที่สำคัญที่สุดของไทย',
+            'พระบรมมหาราชวัง': 'พระราชวังหลวงที่งดงามของไทย',
+            'วัดโพธิ์': 'วัดเก่าแก่ที่มีพระพุทธรูปนอนขนาดใหญ่',
+            'ตลาดจตุจักร': 'ตลาดสุดสัปดาห์ที่ใหญ่ที่สุดในโลก',
+            'วัดอรุณ': 'วัดแห่งรุ่งอรุณริมแม่น้ำเจ้าพระยา'
+        },
+        en: {
+            'Wat Phra Kaew': 'Thailand\'s most sacred temple',
+            'Grand Palace': 'Magnificent royal palace complex',
+            'Wat Pho': 'Ancient temple with giant reclining Buddha',
+            'Chatuchak Market': 'World\'s largest weekend market',
+            'Wat Arun': 'Temple of Dawn by the Chao Phraya River'
+        }
+    };
+    
+    const langDescriptions = descriptions[userPreferences.language] || descriptions.en;
+    return langDescriptions[attractionName] || 
+           (userPreferences.language === 'th' ? 'สถานที่ท่องเที่ยวที่น่าสนใจ' : 'Interesting tourist attraction');
+}
+
+// Show attraction details
+function showAttractionDetails(locationKey, attractionIndex) {
+    const location = locations[locationKey];
+    if (!location || !location.attractions || !location.attractions[attractionIndex]) return;
+    
+    const attractionName = getCurrentAttractionName(location, attractionIndex);
+    const description = getAttractionDescription(attractionName, locationKey);
+    
+    // Create a detailed popup or modal
+    const content = `
+        <div class="attraction-detail-modal">
+            <h4>${getAttractionEmoji(attractionName)} ${attractionName}</h4>
+            <p>${description}</p>
+            <div class="attraction-actions">
+                <button onclick="centerOnAttraction('${locationKey}', ${attractionIndex})" class="btn-primary">
+                    ${userPreferences.language === 'th' ? 'ไปที่สถานที่' : 'Go to Location'}
+                </button>
+            </div>
+        </div>
+    `;
+    
+    // Show in a notification or update existing popup
+    showNotification(`${attractionName}: ${description}`, 'info');
+}
+
+// Center map on specific attraction
+function centerOnAttraction(locationKey, attractionIndex) {
+    // This would center the map on the specific attraction marker
+    if (miniMapMarkers[attractionIndex]) {
+        const marker = miniMapMarkers[attractionIndex];
+        miniMap.setView(marker.getLatLng(), 15);
+        marker.openPopup();
+    }
+}
+
+// Clear all markers from mini-map
+function clearMiniMapMarkers() {
+    if (!miniMap) return;
+    
+    // Remove main location marker
+    if (mainLocationMarker) {
+        miniMap.removeLayer(mainLocationMarker);
+        mainLocationMarker = null;
+    }
+    
+    // Remove attraction markers
+    miniMapMarkers.forEach(marker => {
+        miniMap.removeLayer(marker);
+    });
+    miniMapMarkers = [];
+}
+
+// Center mini-map on current location
+function centerMiniMapOnLocation() {
+    if (!miniMap || !mainLocationMarker) return;
+    
+    const latLng = mainLocationMarker.getLatLng();
+    miniMap.setView(latLng, 12);
+    
+    // Add visual feedback
+    const btn = document.getElementById('centerMapBtn');
+    if (btn) {
+        btn.style.transform = 'scale(1.2)';
+        setTimeout(() => {
+            btn.style.transform = 'scale(1)';
+        }, 200);
+    }
+    
+    showNotification(
+        userPreferences.language === 'th' ? 'กลับไปที่ตำแหน่งหลัก' : 'Centered on main location',
+        'info'
+    );
+}
+
+// Toggle attraction markers visibility
+function toggleAttractionMarkers() {
+    const btn = document.getElementById('toggleAttractionsBtn');
+    if (!btn || !miniMap) return;
+    
+    const isHidden = btn.classList.contains('active');
+    
+    miniMapMarkers.forEach(marker => {
+        if (isHidden) {
+            marker.addTo(miniMap);
+        } else {
+            miniMap.removeLayer(marker);
+        }
+    });
+    
+    btn.classList.toggle('active');
+    btn.title = isHidden ? 
+        (userPreferences.language === 'th' ? 'ซ่อนสถานที่ท่องเที่ยว' : 'Hide attractions') :
+        (userPreferences.language === 'th' ? 'แสดงสถานที่ท่องเที่ยว' : 'Show attractions');
+    
+    showNotification(
+        isHidden ? 
+            (userPreferences.language === 'th' ? 'แสดงสถานที่ท่องเที่ยว' : 'Attractions shown') :
+            (userPreferences.language === 'th' ? 'ซ่อนสถานที่ท่องเที่ยว' : 'Attractions hidden'),
+        'info'
+    );
+}
+
+// Update mini-map controls
+function updateMiniMapControls() {
+    // Update any controls based on zoom level or other map state
+    const zoomLevel = miniMap ? miniMap.getZoom() : 0;
+    
+    // You can add logic here to show/hide certain features based on zoom level
+    if (zoomLevel > 14) {
+        // Show more detailed markers at high zoom
+    } else {
+        // Show simplified markers at low zoom
+    }
+}
+
+// Handle mini-map click events
+function handleMiniMapClick(e) {
+    const { lat, lng } = e.latlng;
+    
+    // Add ripple effect at click location
+    createMapRippleEffect(e.containerPoint);
+    
+    // Track interaction
+    trackUserBehavior('minimap_click', {
+        coordinates: [lng, lat],
+        zoomLevel: miniMap.getZoom()
+    });
+}
+
+// Create ripple effect on map click
+function createMapRippleEffect(point) {
+    const mapContainer = document.getElementById('miniMap');
+    if (!mapContainer) return;
+    
+    const ripple = document.createElement('div');
+    ripple.style.cssText = `
+        position: absolute;
+        left: ${point.x - 10}px;
+        top: ${point.y - 10}px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: rgba(72, 177, 232, 0.6);
+        transform: scale(0);
+        animation: mapRipple 0.6s ease-out;
+        pointer-events: none;
+        z-index: 1000;
+    `;
+    
+    mapContainer.appendChild(ripple);
+    
+    setTimeout(() => {
+        ripple.remove();
+    }, 600);
+}
+
+// Show mini-map loading state
+function showMiniMapLoading() {
+    const miniMapContainer = document.getElementById('miniMapContainer');
+    if (!miniMapContainer) return;
+    
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.className = 'mini-map-loading';
+    loadingOverlay.innerHTML = `
+        <div class="spinner"></div>
+        <p style="margin-top: 1rem; color: var(--panel-text);">
+            ${userPreferences.language === 'th' ? 'กำลังโหลดแผนที่...' : 'Loading map...'}
+        </p>
+    `;
+    
+    miniMapContainer.appendChild(loadingOverlay);
+}
+
+// Hide mini-map loading state
+function hideMiniMapLoading() {
+    const loadingOverlay = document.querySelector('.mini-map-loading');
+    if (loadingOverlay) {
+        loadingOverlay.remove();
+    }
+}
+
+// Show mini-map error state
+function showMiniMapError() {
+    const miniMapContainer = document.getElementById('miniMapContainer');
+    if (!miniMapContainer) return;
+    
+    const errorOverlay = document.createElement('div');
+    errorOverlay.className = 'mini-map-loading';
+    errorOverlay.innerHTML = `
+        <div style="text-align: center; color: var(--panel-text);">
+            <div style="font-size: 2rem; margin-bottom: 1rem;">⚠️</div>
+            <p>${userPreferences.language === 'th' ? 'ไม่สามารถโหลดแผนที่ได้' : 'Unable to load map'}</p>
+            <button onclick="retryMiniMapLoad()" class="retry-btn" style="margin-top: 1rem; padding: 0.5rem 1rem; background: var(--accent-color); color: white; border: none; border-radius: 0.5rem; cursor: pointer;">
+                ${userPreferences.language === 'th' ? 'ลองใหม่' : 'Retry'}
+            </button>
+        </div>
+    `;
+    
+    miniMapContainer.appendChild(errorOverlay);
+}
+
+// Retry mini-map loading
+function retryMiniMapLoad() {
+    const errorOverlay = document.querySelector('.mini-map-loading');
+    if (errorOverlay) {
+        errorOverlay.remove();
+    }
+    
+    // Reset map
+    miniMap = null;
+    
+    // Try to initialize again
+    setTimeout(() => {
+        initializeLeafletMap();
+    }, 500);
+}
+
+// Update mini-map title
+function updateMiniMapTitle(locationName) {
+    const miniMapTitle = document.getElementById('miniMapTitle');
+    if (miniMapTitle) {
+        miniMapTitle.textContent = `🗺️ ${userPreferences.language === 'th' ? 'แผนที่ย่อย' : 'Mini-Map'}: ${locationName}`;
+    }
+}
+
+// Cleanup mini-map when modal closes
+function cleanupMiniMap() {
+    if (miniMap) {
+        clearMiniMapMarkers();
+        // Reset map view
+        miniMap.setView([13.7563, 100.5018], 10);
+    }
+    
+    // Reset toggle state
+    const miniMapToggle = document.getElementById('miniMapToggle');
+    const miniMapContainer = document.getElementById('miniMapContainer');
+    const miniMapSection = document.getElementById('miniMapSection');
+    
+    if (miniMapToggle && miniMapContainer) {
+        miniMapVisible = false;
+        miniMapContainer.classList.add('collapsed');
+        miniMapToggle.textContent = '📍 Show Map';
+        miniMapToggle.classList.remove('active');
+        if (miniMapSection) {
+            miniMapSection.classList.remove('active');
+        }
+    }
+}
+
+// Handle SVG map click events
+function handleSVGMapClick(e) {
+    const target = e.target;
+    
+    if (target.classList.contains('svg-attraction-marker')) {
+        const attraction = target.dataset.attraction;
+        const title = target.getAttribute('title');
+        
+        // Create popup for attraction
+        showSVGPopup(e.clientX, e.clientY, attraction, title);
+        
+        // Track interaction
+        trackUserBehavior('attraction_view', {
+            attraction: attraction,
+            mapType: 'svg_fallback'
+        });
+    } else if (target.classList.contains('svg-location-marker')) {
+        const location = target.dataset.location;
+        if (location && location !== window.currentLocationView?.location) {
+            // Navigate to different location
+            showInfo(location);
+        }
+    }
+    
+    // Add ripple effect
+    createSVGRippleEffect(e);
+}
+
+// Show location on SVG map
+function showLocationOnSVGMap(locationKey) {
+    const mapContainer = document.getElementById('miniMap');
+    if (!mapContainer) return;
+    
+    const location = locations[locationKey];
+    if (!location) return;
+    
+    // Find the SVG and update it to show the correct location
+    const svg = mapContainer.querySelector('svg');
+    if (!svg) return;
+    
+    // Remove existing main location markers
+    const existingMain = svg.querySelectorAll('.main-location');
+    existingMain.forEach(marker => {
+        marker.classList.remove('main-location');
+        marker.setAttribute('r', '5');
+        marker.setAttribute('fill', '#2196f3');
+    });
+    
+    // Find and highlight the current location
+    const currentMarker = svg.querySelector(`[data-location="${locationKey}"]`);
+    if (currentMarker) {
+        currentMarker.classList.add('main-location');
+        currentMarker.setAttribute('r', '8');
+        currentMarker.setAttribute('fill', '#f44336');
+        
+        // Add pulsing animation
+        const animate = currentMarker.querySelector('animate');
+        if (!animate) {
+            const newAnimate = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+            newAnimate.setAttribute('attributeName', 'r');
+            newAnimate.setAttribute('values', '8;12;8');
+            newAnimate.setAttribute('dur', '2s');
+            newAnimate.setAttribute('repeatCount', 'indefinite');
+            currentMarker.appendChild(newAnimate);
+        }
+    }
+    
+    // Update attractions around the location
+    updateSVGAttractions(locationKey);
+}
+
+// Update SVG attractions based on location
+function updateSVGAttractions(locationKey) {
+    const mapContainer = document.getElementById('miniMap');
+    const svg = mapContainer?.querySelector('svg');
+    if (!svg) return;
+    
+    const location = locations[locationKey];
+    if (!location || !location.attractions) return;
+    
+    // Remove existing attraction markers
+    const existingAttractions = svg.querySelectorAll('.svg-attraction-marker');
+    existingAttractions.forEach(marker => marker.remove());
+    
+    // Add new attraction markers around the main location
+    const mainMarker = svg.querySelector('.main-location');
+    if (!mainMarker) return;
+    
+    const centerX = parseFloat(mainMarker.getAttribute('cx'));
+    const centerY = parseFloat(mainMarker.getAttribute('cy'));
+    const radius = 20; // Radius around main location
+    
+    location.attractions.forEach((attraction, index) => {
+        const angle = (index * (360 / location.attractions.length)) * (Math.PI / 180);
+        const x = centerX + (radius * Math.cos(angle));
+        const y = centerY + (radius * Math.sin(angle));
+        
+        const attractionMarker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        attractionMarker.setAttribute('cx', x);
+        attractionMarker.setAttribute('cy', y);
+        attractionMarker.setAttribute('r', '4');
+        attractionMarker.setAttribute('fill', '#ff9800');
+        attractionMarker.setAttribute('stroke', '#fff');
+        attractionMarker.setAttribute('stroke-width', '1');
+        attractionMarker.className.baseVal = 'svg-attraction-marker';
+        attractionMarker.dataset.attraction = attraction;
+        attractionMarker.setAttribute('title', `${attraction} / ${getCurrentAttractionName(location, index)}`);
+        attractionMarker.style.cursor = 'pointer';
+        
+        // Add hover effect
+        attractionMarker.addEventListener('mouseenter', function() {
+            this.setAttribute('r', '6');
+            this.setAttribute('fill', '#f57c00');
+        });
+        
+        attractionMarker.addEventListener('mouseleave', function() {
+            this.setAttribute('r', '4');
+            this.setAttribute('fill', '#ff9800');
+        });
+        
+        svg.appendChild(attractionMarker);
+    });
+}
+
+// Show SVG popup
+function showSVGPopup(x, y, attraction, title) {
+    // Remove existing popup
+    const existingPopup = document.querySelector('.svg-popup');
+    if (existingPopup) {
+        existingPopup.remove();
+    }
+    
+    const popup = document.createElement('div');
+    popup.className = 'svg-popup';
+    popup.innerHTML = `
+        <div class="svg-popup-content">
+            <h5>${getAttractionEmoji(attraction)} ${attraction}</h5>
+            <p>${title || attraction}</p>
+            <button onclick="this.parentElement.parentElement.remove()" class="popup-close">×</button>
+        </div>
+    `;
+    
+    popup.style.cssText = `
+        position: fixed;
+        left: ${x + 10}px;
+        top: ${y - 50}px;
+        background: var(--panel-bg);
+        color: var(--panel-text);
+        padding: var(--spacing-md);
+        border-radius: var(--radius-lg);
+        box-shadow: 0 8px 25px var(--shadow-color);
+        backdrop-filter: blur(15px);
+        border: 1px solid var(--glass-border);
+        z-index: 1000;
+        max-width: 200px;
+        animation: popupFadeIn 0.3s ease-out;
+        pointer-events: auto;
+    `;
+    
+    document.body.appendChild(popup);
+    
+    // Auto-remove after 3 seconds
+    setTimeout(() => {
+        if (popup.parentElement) {
+            popup.remove();
+        }
+    }, 3000);
+}
+
+// Create ripple effect for SVG map
+function createSVGRippleEffect(e) {
+    const mapContainer = document.getElementById('miniMap');
+    if (!mapContainer) return;
+    
+    const rect = mapContainer.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const ripple = document.createElement('div');
+    ripple.style.cssText = `
+        position: absolute;
+        left: ${x - 10}px;
+        top: ${y - 10}px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: rgba(72, 177, 232, 0.6);
+        transform: scale(0);
+        animation: mapRipple 0.6s ease-out;
+        pointer-events: none;
+        z-index: 1000;
+    `;
+    
+    mapContainer.appendChild(ripple);
+    
+    setTimeout(() => {
+        ripple.remove();
+    }, 600);
+}
+
+// ========================================
+// ENHANCED MODAL SYSTEM FOR LOCATION INFORMATION
+// ========================================
 function showInfo(location) {
     const info = locations[location];
     if (!info) return;
@@ -3663,6 +4489,14 @@ function showInfo(location) {
             </div>
         </div>
     `;
+    
+    // Show mini-map section if location has coordinates
+    const miniMapSection = document.getElementById('miniMapSection');
+    if (miniMapSection && info.coordinates) {
+        miniMapSection.style.display = 'block';
+        // Update mini-map title
+        updateMiniMapTitle(getCurrentLocationName(info));
+    }
     
     // Create enhanced photo gallery with swipe and zoom functionality
     if (info.photos) {
@@ -3797,6 +4631,15 @@ function showInfo(location) {
     }
     
     updateStatus(`📍 ${getText('description')}: ${getCurrentLocationName(info)}`, `📍 Viewing: ${getCurrentLocationName(info)}`);
+    
+    // Initialize mini-map after modal is fully shown
+    setTimeout(() => {
+        initializeMiniMap();
+        // Show location on mini-map if coordinates are available
+        if (info.coordinates) {
+            showLocationOnMiniMap(location);
+        }
+    }, 500);
 }
 
 // Enhanced keyboard navigation and accessibility
@@ -3920,6 +4763,9 @@ function closeModal() {
         if (currentGallery) {
             currentGallery = null;
         }
+        
+        // Clean up mini-map
+        cleanupMiniMap();
         
         // Reset zoom state
         currentZoomLevel = 1;
@@ -4614,3 +5460,75 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeMap();
     initializeEnhancedStartup();
 });
+
+// Add CSS animations for mini-map features
+const mapRippleStyle = document.createElement('style');
+mapRippleStyle.textContent = `
+    @keyframes mapRipple {
+        0% {
+            transform: scale(0);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+    
+    @keyframes popupFadeIn {
+        0% {
+            opacity: 0;
+            transform: translateY(10px) scale(0.9);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+    
+    .svg-mini-map {
+        cursor: crosshair;
+    }
+    
+    .svg-attraction-marker {
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .svg-location-marker {
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .svg-location-marker:hover {
+        stroke-width: 3 !important;
+    }
+    
+    .svg-popup-content {
+        position: relative;
+    }
+    
+    .popup-close {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: var(--accent-color);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        font-size: 12px;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .popup-close:hover {
+        background: #ff4444;
+        transform: scale(1.1);
+    }
+`;
+document.head.appendChild(mapRippleStyle);
