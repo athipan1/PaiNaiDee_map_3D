@@ -29,6 +29,8 @@
     <link rel="stylesheet" href="iterative-design.css">
     <!-- User Testing System Styles -->
     <link rel="stylesheet" href="user-testing.css">
+    <!-- UX Improvements Styles -->
+    <link rel="stylesheet" href="ux-improvements.css">
 </head>
 <body>
     <!-- Skip Navigation Links for Screen Readers -->
@@ -145,6 +147,22 @@
                         <span role="img" aria-label="ไอคอนฟ้าผ่า">⚡</span> ข้ามไปที่แผนที่ / Skip to Map
                     </button>
                     <div class="sr-only" id="skip-button-desc">ข้ามการแนะนำและไปที่แผนที่โดยตรง</div>
+                    
+                    <!-- Smart Quick Start Options -->
+                    <div class="smart-quick-start" id="smartQuickStart" style="display: none;">
+                        <h4>🎯 เริ่มต้นอย่างรวดเร็ว / Quick Start</h4>
+                        <div class="quick-start-buttons">
+                            <button class="quick-start-btn" onclick="quickStartCultural()" type="button">
+                                <span>🏛️</span> วัฒนธรรมไทย / Thai Culture
+                            </button>
+                            <button class="quick-start-btn" onclick="quickStartNature()" type="button">
+                                <span>🏔️</span> ธรรมชาติ / Nature
+                            </button>
+                            <button class="quick-start-btn" onclick="quickStartBeach()" type="button">
+                                <span>🏝️</span> ทะเลและเกาะ / Beaches
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -840,6 +858,8 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
             crossorigin=""></script>
+    <!-- UX Improvements System -->
+    <script src="ux-improvements.js"></script>
     <!-- Iterative Design System -->
     <script src="iterative-design.js"></script>
     <!-- User Testing System -->
