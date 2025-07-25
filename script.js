@@ -1594,25 +1594,25 @@ const locations = {
             { 
                 name: "Grand Palace", 
                 emoji: "🏰",
-                url: "https://picsum.photos/800/600?random=1",
+                url: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSJsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjRkZEQjAwIDAlLCAjRkY4NzAwIDUwJSwgI0ZGNEUwMCAxMDAlKSIvPgo8dGV4dCB4PSI0MDAiIHk9IjI4MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0NCIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+8J+PsDwvdGV4dD4KPHR5cGUgeD0iNDAwIiB5PSIzNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzNiIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R3JhbmQgUGFsYWNlPC90ZXh0Pgo8L3N2Zz4K",
                 description: "The Grand Palace complex in Bangkok, Thailand's most famous landmark"
             },
             { 
                 name: "Wat Arun", 
                 emoji: "🕌",
-                url: "https://picsum.photos/800/600?random=2", 
+                url: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSJsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjNjc0RUEgMCUsICM3NjRCQTIgNTAlLCAjNEU1NEMyIDEwMCUpIi8+Cjx0ZXh0IHg9IjQwMCIgeT0iMjgwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQ0IiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7wn5aM4oOpPC90ZXh0Pgo8dGV4dCB4PSI0MDAiIHk9IjM0MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjM2IiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5XYXQgQXJ1bjwvdGV4dD4KPC9zdmc+Cg==", 
                 description: "Temple of Dawn, one of Bangkok's most iconic temples"
             },
             { 
                 name: "Floating Market", 
                 emoji: "🛶",
-                url: "https://picsum.photos/800/600?random=3",
+                url: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSJsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjMEJBQjY0IDAlLCAjMDU5NjY5IDUwJSwgIzA4N0Y4RiAxMDAlKSIvPgo8dGV4dCB4PSI0MDAiIHk9IjI4MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0NCIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+8J+RtjwvdGV4dD4KPHR5cGUgeD0iNDAwIiB5PSIzNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzNiIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+RmxvYXRpbmcgTWFya2V0PC90ZXh0Pgo8L3N2Zz4K",
                 description: "Traditional floating market showcasing local culture and food"
             },
             { 
                 name: "Tuk Tuk", 
                 emoji: "🛺",
-                url: "https://picsum.photos/800/600?random=4",
+                url: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSJsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjRkZENzAwIDAlLCAjRkYxOTQ0IDUwJSwgI0ZGMDAwMCAxMDAlKSIvPgo8dGV4dCB4PSI0MDAiIHk9IjI4MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0NCIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+8J+RujwvdGV4dD4KPHR5cGUgeD0iNDAwIiB5PSIzNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzNiIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VHVrIFR1azwvdGV4dD4KPC9zdmc+Cg==",
                 description: "Iconic three-wheeled taxi, a symbol of Bangkok transportation"
             }
         ],
@@ -1634,25 +1634,25 @@ const locations = {
             { 
                 name: "Doi Suthep", 
                 emoji: "⛰️",
-                url: "https://picsum.photos/800/600?random=5",
+                url: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSJsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjNEY0NjQxIDAlLCAjOEI0NTEzIDUwJSwgI0Q2OTNBNiAxMDAlKSIvPgo8dGV4dCB4PSI0MDAiIHk9IjI4MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0NCIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+4ruuvve+uDwvdGV4dD4KPHR5cGUgeD0iNDAwIiB5PSIzNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzNiIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+RG9pIFN1dGhlcDwvdGV4dD4KPC9zdmc+Cg==",
                 description: "Sacred mountain temple with panoramic city views"
             },
             { 
                 name: "Night Bazaar", 
                 emoji: "🌃",
-                url: "https://picsum.photos/800/600?random=6",
+                url: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSJsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjMUUxRTFFIDAlLCAjNjM0M0E2IDUwJSwgI0ZGOEM1QSAxMDAlKSIvPgo8dGV4dCB4PSI0MDAiIHk9IjI4MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0NCIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+8J+MnDwvdGV4dD4KPHR5cGUgeD0iNDAwIiB5PSIzNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzNiIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TmlnaHQgQmF6YWFyPC90ZXh0Pgo8L3N2Zz4K",
                 description: "Vibrant night market in the heart of Chiang Mai"
             },
             { 
                 name: "Elephant Sanctuary", 
                 emoji: "🐘",
-                url: "https://picsum.photos/800/600?random=7",
+                url: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSJsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjMjJDNTVFIDAlLCAjMTY1MDBCIDUwJSwgIzRGRkY0MSAxMDAlKSIvPgo8dGV4dCB4PSI0MDAiIHk9IjI4MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0NCIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+8J+QmDwvdGV4dD4KPHR5cGUgeD0iNDAwIiB5PSIzNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzNiIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+RWxlcGhhbnQgU2FuY3R1YXJ5PC90ZXh0Pgo8L3N2Zz4K",
                 description: "Ethical elephant sanctuary in the mountains"
             },
             { 
                 name: "Lanna Temple", 
                 emoji: "🏯",
-                url: "https://picsum.photos/800/600?random=8",
+                url: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSJsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjOEEyQkUyIDAlLCAjNjQ3NEU0IDUwJSwgI0Y0M0Y1RSAxMDAlKSIvPgo8dGV4dCB4PSI0MDAiIHk9IjI4MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0NCIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+8J+PlzwvdGV4dD4KPHR5cGUgeD0iNDAwIiB5PSIzNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzNiIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TGFubmEgVGVtcGxlPC90ZXh0Pgo8L3N2Zz4K",
                 description: "Traditional Lanna architecture temple"
             }
         ],
@@ -1674,25 +1674,25 @@ const locations = {
             { 
                 name: "Patong Beach", 
                 emoji: "🏖️",
-                url: "https://picsum.photos/800/600?random=9",
+                url: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSJsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjMDA5RkZEIDAlLCAjMDBCQ0Y0IDUwJSwgIzAwRTBGMyAxMDAlKSIvPgo8dGV4dCB4PSI0MDAiIHk9IjI4MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0NCIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+8J+PluKPuWYgPC90ZXh0Pgo8dGV4dCB4PSI0MDAiIHk9IjM0MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjM2IiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5QYXR1bmcgQmVhY2g8L3RleHQ+Cjwvc3ZnPgo=",
                 description: "Popular beach destination with crystal clear waters"
             },
             { 
                 name: "Phi Phi Islands", 
                 emoji: "🏝️",
-                url: "https://picsum.photos/800/600?random=10",
+                url: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSJsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjMDAzOTFCIDAlLCAjMDBCNzk4IDUwJSwgIzAwRkZCNyAxMDAlKSIvPgo8dGV4dCB4PSI0MDAiIHk9IjI4MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0NCIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+8J+PnSw8L3RleHQ+Cjx0ZXh0IHg9IjQwMCIgeT0iMzQwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzYiIGZpbGw9IiNGRkYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPlBoaSBQaGkgSXNsYW5kczwvdGV4dD4KPC9zdmc+Cg==",
                 description: "Stunning limestone cliffs and turquoise waters"
             },
             { 
                 name: "Sunset View", 
                 emoji: "🌅",
-                url: "https://picsum.photos/800/600?random=11",
+                url: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSJsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjRkY2RjAwIDAlLCAjRkZBNTAwIDUwJSwgI0ZGNzMwMCAxMDAlKSIvPgo8dGV4dCB4PSI0MDAiIHk9IjI4MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0NCIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+8J+MhTwvdGV4dD4KPHR5cGUgeD0iNDAwIiB5PSIzNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzNiIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+U3Vuc2V0IFZpZXc8L3RleHQ+Cjwvc3ZnPgo=",
                 description: "Breathtaking sunset views over the Andaman Sea"
             },
             { 
                 name: "Longtail Boat", 
                 emoji: "⛵",
-                url: "https://picsum.photos/800/600?random=12",
+                url: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSJsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjMjE5NEYzIDAlLCAjMUU4OEU1IDUwJSwgIzU5ODdEQiAxMDAlKSIvPgo8dGV4dCB4PSI0MDAiIHk9IjI4MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0NCIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+46e1PC90ZXh0Pgo8dGV4dCB4PSI0MDAiIHk9IjM0MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjM2IiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Mb25ndGFpbCBCb2F0PC90ZXh0Pgo8L3N2Zz4K",
                 description: "Traditional longtail boats at Maya Bay"
             }
         ],
@@ -4041,19 +4041,47 @@ function setupSwipeGestures() {
     let startX = 0;
     let startY = 0;
     let isDragging = false;
-    let threshold = 50; // minimum distance for swipe
+    let threshold = 40; // reduced threshold for better responsiveness
+    let velocity = 0;
+    let lastMoveTime = 0;
+    let lastMoveX = 0;
     
+    // Enhanced touch events with velocity tracking
     gallery.addEventListener('touchstart', (e) => {
         if (e.touches.length === 1 && !isZoomed) {
             startX = e.touches[0].clientX;
             startY = e.touches[0].clientY;
+            lastMoveX = startX;
+            lastMoveTime = Date.now();
             isDragging = true;
+            velocity = 0;
+            
+            // Add visual feedback
+            gallery.style.transition = 'none';
+            addTouchFeedback();
         }
     });
     
     gallery.addEventListener('touchmove', (e) => {
         if (!isDragging || e.touches.length !== 1 || isZoomed) return;
-        e.preventDefault();
+        
+        const currentX = e.touches[0].clientX;
+        const currentTime = Date.now();
+        const deltaTime = currentTime - lastMoveTime;
+        
+        if (deltaTime > 0) {
+            velocity = (currentX - lastMoveX) / deltaTime;
+            lastMoveX = currentX;
+            lastMoveTime = currentTime;
+        }
+        
+        // Prevent scrolling when swiping horizontally
+        const deltaX = Math.abs(currentX - startX);
+        const deltaY = Math.abs(e.touches[0].clientY - startY);
+        
+        if (deltaX > deltaY) {
+            e.preventDefault();
+        }
     });
     
     gallery.addEventListener('touchend', (e) => {
@@ -4064,32 +4092,63 @@ function setupSwipeGestures() {
         const deltaX = endX - startX;
         const deltaY = endY - startY;
         
-        // Only trigger swipe if horizontal movement is greater than vertical
-        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > threshold) {
+        // Restore transition
+        gallery.style.transition = '';
+        removeTouchFeedback();
+        
+        // Check for swipe with velocity consideration
+        const isHorizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY);
+        const hasMinimumDistance = Math.abs(deltaX) > threshold;
+        const hasVelocity = Math.abs(velocity) > 0.3;
+        
+        if (isHorizontalSwipe && (hasMinimumDistance || hasVelocity)) {
             if (deltaX > 0) {
                 goToPreviousSlide();
             } else {
                 goToNextSlide();
             }
+            
+            // Add haptic feedback on supported devices
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
         }
         
         isDragging = false;
+        velocity = 0;
     });
     
-    // Mouse events for desktop
+    // Enhanced mouse events for desktop
     let mouseDown = false;
     let mouseStartX = 0;
+    let mouseVelocity = 0;
+    let lastMouseMoveTime = 0;
+    let lastMouseX = 0;
     
     gallery.addEventListener('mousedown', (e) => {
         if (!isZoomed) {
             mouseDown = true;
             mouseStartX = e.clientX;
+            lastMouseX = e.clientX;
+            lastMouseMoveTime = Date.now();
+            mouseVelocity = 0;
             gallery.style.cursor = 'grabbing';
+            gallery.style.transition = 'none';
         }
     });
     
     gallery.addEventListener('mousemove', (e) => {
         if (!mouseDown || isZoomed) return;
+        
+        const currentTime = Date.now();
+        const deltaTime = currentTime - lastMouseMoveTime;
+        
+        if (deltaTime > 0) {
+            mouseVelocity = (e.clientX - lastMouseX) / deltaTime;
+            lastMouseX = e.clientX;
+            lastMouseMoveTime = currentTime;
+        }
+        
         e.preventDefault();
     });
     
@@ -4097,7 +4156,50 @@ function setupSwipeGestures() {
         if (!mouseDown || isZoomed) return;
         
         const deltaX = e.clientX - mouseStartX;
-        if (Math.abs(deltaX) > threshold) {
+        const hasMinimumDistance = Math.abs(deltaX) > threshold;
+        const hasVelocity = Math.abs(mouseVelocity) > 0.5;
+        
+        gallery.style.cursor = 'grab';
+        gallery.style.transition = '';
+        
+        if (hasMinimumDistance || hasVelocity) {
+            if (deltaX > 0) {
+                goToPreviousSlide();
+            } else {
+                goToNextSlide();
+            }
+        }
+        
+        mouseDown = false;
+        mouseVelocity = 0;
+    });
+    
+    // Prevent dragging when mouse leaves gallery
+    gallery.addEventListener('mouseleave', () => {
+        if (mouseDown) {
+            gallery.style.cursor = 'grab';
+            gallery.style.transition = '';
+            mouseDown = false;
+        }
+    });
+}
+
+// Add visual feedback for touch interactions
+function addTouchFeedback() {
+    const gallery = currentGallery;
+    if (gallery) {
+        gallery.style.transform = 'scale(0.98)';
+        gallery.style.filter = 'brightness(0.95)';
+    }
+}
+
+function removeTouchFeedback() {
+    const gallery = currentGallery;
+    if (gallery) {
+        gallery.style.transform = '';
+        gallery.style.filter = '';
+    }
+}
             if (deltaX > 0) {
                 goToPreviousSlide();
             } else {
@@ -4120,46 +4222,83 @@ function goToSlide(index) {
     const dots = document.querySelectorAll('.pagination-dot');
     const totalSlides = slides.length;
     
-    if (index < 0 || index >= totalSlides) return;
+    if (index < 0 || index >= totalSlides || index === currentSlide) return;
     
     // Reset zoom when changing slides
     resetZoom();
     
-    // Update current slide
-    currentSlide = index;
-    
-    // Update slides
-    slides.forEach((slide, i) => {
-        slide.classList.toggle('active', i === index);
-    });
-    
-    // Update pagination dots
-    dots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === index);
-    });
-    
-    // Update track position
+    // Add slide animation with direction detection
+    const direction = index > currentSlide ? 'next' : 'prev';
     const track = document.querySelector('.gallery-track');
+    
+    // Enhanced transition with custom easing
     if (track) {
+        track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
         track.style.transform = `translateX(-${index * 100}%)`;
     }
     
-    // Update navigation buttons
+    // Update current slide
+    const oldSlide = currentSlide;
+    currentSlide = index;
+    
+    // Enhanced slide updates with staggered animations
+    slides.forEach((slide, i) => {
+        slide.classList.remove('active');
+        
+        // Add direction classes for enhanced animations
+        slide.classList.remove('slide-in-left', 'slide-in-right', 'slide-out-left', 'slide-out-right');
+        
+        if (i === index) {
+            setTimeout(() => {
+                slide.classList.add('active');
+                slide.classList.add(direction === 'next' ? 'slide-in-right' : 'slide-in-left');
+            }, 50);
+        } else if (i === oldSlide) {
+            slide.classList.add(direction === 'next' ? 'slide-out-left' : 'slide-out-right');
+        }
+    });
+    
+    // Enhanced pagination dots with ripple effect
+    dots.forEach((dot, i) => {
+        dot.classList.remove('active');
+        if (i === index) {
+            setTimeout(() => {
+                dot.classList.add('active');
+                addRippleEffect(dot);
+            }, 100);
+        }
+    });
+    
+    // Update navigation buttons with visual feedback
     updateNavigationButtons();
     
-    // Update counter
+    // Update counter with animation
     updateImageCounter();
+    
+    // Add subtle vibration on mobile for better feedback
+    if (navigator.vibrate && 'ontouchstart' in window) {
+        navigator.vibrate(30);
+    }
+    
+    // Preload adjacent images for smoother experience
+    preloadAdjacentImages(index);
 }
 
 function goToNextSlide() {
     const totalSlides = document.querySelectorAll('.gallery-slide').length;
     const nextIndex = (currentSlide + 1) % totalSlides;
+    
+    // Add slide direction animation
+    addSlideAnimation('next');
     goToSlide(nextIndex);
 }
 
 function goToPreviousSlide() {
     const totalSlides = document.querySelectorAll('.gallery-slide').length;
     const prevIndex = currentSlide === 0 ? totalSlides - 1 : currentSlide - 1;
+    
+    // Add slide direction animation
+    addSlideAnimation('prev');
     goToSlide(prevIndex);
 }
 
@@ -4169,10 +4308,72 @@ function updateNavigationButtons() {
     const totalSlides = document.querySelectorAll('.gallery-slide').length;
     
     if (prevBtn && nextBtn) {
-        // Enable/disable buttons based on current position (optional - keeping circular navigation)
-        prevBtn.style.opacity = '1';
-        nextBtn.style.opacity = '1';
+        // Add visual feedback with pulse animation
+        prevBtn.style.opacity = '0.8';
+        nextBtn.style.opacity = '0.8';
+        
+        // Enhance button state with animations
+        prevBtn.style.transform = 'translateY(-50%) scale(1)';
+        nextBtn.style.transform = 'translateY(-50%) scale(1)';
+        
+        // Enable hover effects
+        prevBtn.addEventListener('mouseenter', () => {
+            prevBtn.style.transform = 'translateY(-50%) scale(1.1)';
+            prevBtn.style.opacity = '1';
+        });
+        
+        nextBtn.addEventListener('mouseenter', () => {
+            nextBtn.style.transform = 'translateY(-50%) scale(1.1)';
+            nextBtn.style.opacity = '1';
+        });
     }
+}
+
+// Helper functions for enhanced animations
+function addSlideAnimation(direction) {
+    const gallery = currentGallery;
+    if (gallery) {
+        gallery.classList.add(`sliding-${direction}`);
+        setTimeout(() => {
+            gallery.classList.remove(`sliding-${direction}`);
+        }, 500);
+    }
+}
+
+function addRippleEffect(element) {
+    const ripple = document.createElement('div');
+    ripple.className = 'ripple-effect';
+    element.appendChild(ripple);
+    
+    setTimeout(() => {
+        ripple.remove();
+    }, 600);
+}
+
+function preloadAdjacentImages(currentIndex) {
+    const slides = document.querySelectorAll('.gallery-slide');
+    const totalSlides = slides.length;
+    
+    // Preload previous and next images
+    const prevIndex = currentIndex === 0 ? totalSlides - 1 : currentIndex - 1;
+    const nextIndex = (currentIndex + 1) % totalSlides;
+    
+    [prevIndex, nextIndex].forEach(index => {
+        const slide = slides[index];
+        if (slide) {
+            const img = slide.querySelector('.gallery-image[data-src]');
+            if (img && img.dataset.src) {
+                const preloadImg = new Image();
+                preloadImg.src = img.dataset.src;
+                
+                preloadImg.onload = () => {
+                    img.src = img.dataset.src;
+                    img.removeAttribute('data-src');
+                    img.classList.remove('lazy');
+                };
+            }
+        }
+    });
 }
 
 function setupKeyboardNavigation() {
