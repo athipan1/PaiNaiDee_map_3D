@@ -70,19 +70,48 @@ jobs:
       - name: Test Application Startup
         run: |
           echo "🚀 Testing application startup..."
-          # Start a simple HTTP server in background
-          python3 -m http.server 8080 &
-          SERVER_PID=$!
           
-          # Wait for server to start
-          sleep 2
+          # Find an available port starting from 8080
+          PORT=8080
+          while netstat -tuln 2>/dev/null | grep -q ":$PORT " && [ $PORT -lt 8090 ]; do
+            PORT=$((PORT + 1))
+          done
+          echo "📡 Using port: $PORT"
+          
+          # Start a simple HTTP server in background
+          python3 -m http.server $PORT > server.log 2>&1 &
+          SERVER_PID=$!
+          echo "🔧 Server started with PID: $SERVER_PID"
+          
+          # Wait for server to start and verify it's running
+          sleep 3
+          if ! kill -0 $SERVER_PID 2>/dev/null; then
+            echo "❌ Server failed to start"
+            cat server.log
+            exit 1
+          fi
           
           # Test if the application loads
-          curl -s http://localhost:8080 | grep -q "PaiNaiDee 3D Map" && echo "✅ Application loads successfully" || exit 1
+          echo "🔍 Testing application response..."
+          RESPONSE=$(curl -s "http://localhost:$PORT" 2>/dev/null)
+          if echo "$RESPONSE" | grep -q "PaiNaiDee 3D Map"; then
+            echo "✅ Application loads successfully"
+            TEST_RESULT=0
+          else
+            echo "❌ Application failed to load properly"
+            echo "Response preview:"
+            echo "$RESPONSE" | head -10
+            TEST_RESULT=1
+          fi
           
           # Clean up
-          kill $SERVER_PID
+          echo "🧹 Cleaning up..."
+          kill $SERVER_PID 2>/dev/null
+          wait $SERVER_PID 2>/dev/null || true
+          rm -f server.log
+          
           echo "✅ Application startup test completed"
+          exit $TEST_RESULT
 
   # Deploy job (can be extended for actual deployment)
   deploy:
