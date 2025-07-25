@@ -868,41 +868,133 @@ function getRecommendationReason(locationKey, isThaiLang) {
     return reasons[0];
 }
 
-// Mascot Tips Database
+// Enhanced Mascot Tips Database with AI-like Intelligence
 function initializeMascotTips() {
     mascotTips = {
         th: [
+            // Basic navigation tips
             "🎯 คลิกจุดสีทองบนโลกเพื่อดูข้อมูลสถานที่!",
             "🔍 ใช้ช่องค้นหาเพื่อหาสถานที่ที่คุณสนใจ",
             "⭐ กดปุ่มดาวเพื่อเพิ่มสถานที่ในรายการโปรด",
             "🌍 ลากเมาส์เพื่อหมุนโลกและสำรวจมุมมองใหม่",
             "⚡ เปลี่ยนความเร็วการหมุนด้วยปุ่มควบคุม",
+            
+            // Advanced features
             "🗺️ ใช้ Trip Planner เพื่อวางแผนการเดินทาง",
             "📏 เปรียบเทียบระยะทางระหว่างสถานที่ต่างๆ",
             "🌙 เปลี่ยนธีมเป็นโหมดกลางคืนเพื่อประสบการณ์ใหม่",
             "🇹🇭🇬🇧 สลับภาษาไทย-อังกฤษได้ตลอดเวลา",
             "📱 แอปใช้งานได้ดีบนมือถือด้วยนะ!",
             "🏖️ ลองดูข้อมูลสภาพอากาศของแต่ละสถานที่",
-            "🎨 ใช้ Category Filter เพื่อกรองสถานที่ตามประเภท"
+            "🎨 ใช้ Category Filter เพื่อกรองสถานที่ตามประเภท",
+            
+            // AI-like personalized tips
+            "🤖 ฉันจำความชอบของคุณได้นะ! มาดูสถานที่ที่แนะนำกัน",
+            "🎪 คุณชอบประเภทไหน? ชายหาด ภูเขา หรือประวัติศาสตร์?",
+            "🌟 จากที่คุณเคยดู ฉันคิดว่าคุณจะชอบ${location}",
+            "🎭 มาลองสำรวจวัฒนธรรมไทยกันไหม? แนะนำ${culturalSite}",
+            "🍜 หิวไหม? สถานที่นี้มีอาหารอร่อยมากเลย!",
+            "🏨 คุณกำลังวางแผนเที่ยวใช่มั้ย? ให้ฉันช่วยหาที่พักดีๆ",
+            "📸 สถานที่นี้ถ่ายรูปสวยมาก! เหมาะสำหรับอินสตาแกรม",
+            "🌅 ตอนนี้เป็นช่วงเวลาที่ดีสำหรับไป${destination}",
+            "💡 เคล็ดลับ: ${tip} จะทำให้ทริปคุณสนุกขึ้น!",
+            "🎯 ดูเหมือนคุณจะสนใจ${category} ลองดู${recommendation}สิ",
+            
+            // Seasonal and time-based tips
+            "🌸 ช่วงนี้เป็นฤดูที่ดีสำหรับไป${seasonalDestination}",
+            "🎆 มีเทศกาลพิเศษที่${festivalLocation}ในช่วงนี้นะ!",
+            "🌧️ หน่วยฝนแล้ว แนะนำสถานที่ในร่มที่น่าสนใจ",
+            "☀️ อากาศดีแบบนี้เหมาะไปเที่ยวธรรมชาติมาก!",
+            
+            // Interactive encouragement
+            "🎮 เก่งมาก! คุณเริ่มเป็นนักสำรวจแล้วเนี่ย",
+            "🏆 คุณดูแล้ว${count}สถานที่แล้ว! ยอดเยี่ยม!",
+            "💫 ฉันชอบความอยากรู้อยากเห็นของคุณ!",
+            "🌈 การเดินทางคือการเรียนรู้ มาเรียนรู้ไปด้วยกัน!"
         ],
         en: [
+            // Basic navigation tips
             "🎯 Click golden dots on the globe to explore locations!",
             "🔍 Use the search box to find places you're interested in",
             "⭐ Click the star button to add places to your favorites",
             "🌍 Drag to rotate the globe and explore new perspectives",
             "⚡ Change rotation speed with the control buttons",
+            
+            // Advanced features
             "🗺️ Use Trip Planner to organize your travels",
             "📏 Compare distances between different locations",
             "🌙 Switch to dark theme for a different experience",
             "🇹🇭🇬🇧 Toggle between Thai and English anytime",
             "📱 The app works great on mobile devices too!",
             "🏖️ Check weather information for each location",
-            "🎨 Use Category Filters to find specific types of places"
+            "🎨 Use Category Filters to find specific types of places",
+            
+            // AI-like personalized tips
+            "🤖 I remember your preferences! Check out my recommendations",
+            "🎪 What's your style? Beaches, mountains, or historical sites?",
+            "🌟 Based on what you've viewed, I think you'd love ${location}",
+            "🎭 Want to explore Thai culture? I recommend ${culturalSite}",
+            "🍜 Feeling hungry? This place has amazing local food!",
+            "🏨 Planning a trip? Let me help you find great accommodations",
+            "📸 This spot is Instagram-perfect! Great for photos",
+            "🌅 Now is a perfect time to visit ${destination}",
+            "💡 Pro tip: ${tip} will make your trip even better!",
+            "🎯 You seem interested in ${category}, try ${recommendation}",
+            
+            // Seasonal and time-based tips
+            "🌸 This season is perfect for visiting ${seasonalDestination}",
+            "🎆 There's a special festival at ${festivalLocation} right now!",
+            "🌧️ Rainy season ahead, here are great indoor attractions",
+            "☀️ Perfect weather for outdoor adventures!",
+            
+            // Interactive encouragement
+            "🎮 Great job! You're becoming a real explorer",
+            "🏆 You've viewed ${count} locations! Impressive!",
+            "💫 I love your curiosity and sense of adventure!",
+            "🌈 Travel is learning, let's learn together!"
         ]
+    };
+    
+    // AI-Enhanced contextual tip categories
+    mascotContextualTips = {
+        th: {
+            firstVisit: "สวัสดีครั้งแรก! ฉันคือ PaiNai ผู้ช่วยน้อยของคุณ 🐘",
+            returning: "ยินดีต้อนรับกลับมา! มีสถานที่ใหม่ๆ ให้สำรวจเยอะเลย",
+            morning: "สวัสดีตอนเช้า! พร้อมสำรวจโลกกันหรือยัง? ☀️",
+            afternoon: "สวัสดีตอนบ่าย! มาดูสถานที่สวยๆ กันเถอะ 🌤️",
+            evening: "สวัสดีตอนเย็น! ลองดูสถานที่ที่สวยยามค่ำคืนกันไหม? 🌙",
+            searchActive: "เห็นคุณค้นหาอยู่ ให้ฉันช่วยแนะนำมั้ย? 🔍",
+            favoriteAdded: "เยี่ยม! เพิ่มในรายการโปรดแล้ว ฉันจะจำไว้ให้ ⭐",
+            categorySelected: "หมวดหมู่ที่เลือกน่าสนใจมาก! มีอีกหลายที่เลย",
+            tripPlanning: "วางแผนทริปหรือ? ให้ฉันช่วยคำนวณเส้นทางดีที่สุด 🗺️",
+            locationFocus: "สถานที่นี้ดีมาก! อยากรู้เรื่องราวเพิ่มเติมมั้ย?",
+            longSession: "เล่นมานานแล้วนะ! พักสายตาบ้างไหม? 😊",
+            mobileUser: "ใช้มือถือสะดวกดีนะ! ลองใช้สองนิ้วซูมดูสิ 📱",
+            weatherCheck: "อยากรู้สภาพอากาศมั้ย? คลิกดูในแต่ละสถานที่ได้เลย 🌤️",
+            similarInterests: "เห็นคุณชอบ${category} ลองดู${suggestion}ไหม?",
+            timeBasedTip: "ช่วงเวลานี้เหมาะสำหรับ${activity}มาก!"
+        },
+        en: {
+            firstVisit: "First time here! I'm PaiNai, your little travel assistant 🐘",
+            returning: "Welcome back! There are many new places to explore",
+            morning: "Good morning! Ready to explore the world? ☀️",
+            afternoon: "Good afternoon! Let's discover beautiful places 🌤️",
+            evening: "Good evening! How about places that shine at night? 🌙",
+            searchActive: "I see you're searching! Want me to help suggest places? 🔍",
+            favoriteAdded: "Excellent! Added to favorites, I'll remember this ⭐",
+            categorySelected: "Great category choice! There are many more like this",
+            tripPlanning: "Planning a trip? Let me help calculate the best routes 🗺️",
+            locationFocus: "Great choice! Want to know more about this place?",
+            longSession: "You've been exploring for a while! Maybe take a break? 😊",
+            mobileUser: "Mobile works great! Try pinch-to-zoom on the globe 📱",
+            weatherCheck: "Want weather info? Click on any location to check 🌤️",
+            similarInterests: "I see you like ${category}, how about ${suggestion}?",
+            timeBasedTip: "This time is perfect for ${activity}!"
+        }
     };
 }
 
-// Mascot Interactive Functions
+// Enhanced AI-like Mascot Interactive Functions
 function initializeMascot() {
     initializeMascotTips();
     
@@ -911,23 +1003,82 @@ function initializeMascot() {
     if (floatingMascot) {
         floatingMascot.addEventListener('click', handleMascotClick);
         
-        // Show initial tip after a delay
+        // AI-like initial greeting based on time and user status
         setTimeout(() => {
-            showMascotTip();
-        }, 5000);
+            showContextualGreeting();
+        }, 3000);
         
-        // Periodic tip showing
+        // Intelligent tip showing based on user behavior
         setInterval(() => {
-            if (Date.now() - lastMascotInteraction > 30000) { // Show tip every 30 seconds if no interaction
-                showMascotTip();
+            if (Date.now() - lastMascotInteraction > 25000) { // More frequent, AI-like interaction
+                showIntelligentTip();
             }
-        }, 30000);
+        }, 25000);
+        
+        // Monitor user behavior for contextual responses
+        initializeBehaviorMonitoring();
     }
     
     // Update welcome mascot message
     updateWelcomeMascotMessage();
 }
 
+// AI-like behavior monitoring
+function initializeBehaviorMonitoring() {
+    let userActivity = {
+        searchCount: 0,
+        locationViews: 0,
+        favoritesAdded: 0,
+        sessionDuration: 0,
+        lastActivity: Date.now()
+    };
+    
+    // Monitor search usage
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            userActivity.searchCount++;
+            userActivity.lastActivity = Date.now();
+            
+            if (userActivity.searchCount === 3) {
+                setTimeout(() => showContextualTip('searchActive'), 1000);
+            }
+        });
+    }
+    
+    // Monitor location focus
+    window.addEventListener('locationFocused', (e) => {
+        userActivity.locationViews++;
+        userActivity.lastActivity = Date.now();
+        
+        if (userActivity.locationViews === 5) {
+            setTimeout(() => showContextualTip('locationExplorer'), 2000);
+        }
+    });
+    
+    // Monitor favorites
+    window.addEventListener('favoriteToggled', (e) => {
+        if (e.detail.action === 'add') {
+            userActivity.favoritesAdded++;
+            showContextualTip('favoriteAdded');
+        }
+    });
+    
+    // Monitor session duration for helpful breaks
+    setInterval(() => {
+        userActivity.sessionDuration++;
+        if (userActivity.sessionDuration === 30) { // 5 minutes (30 * 10 seconds)
+            showContextualTip('longSession');
+        }
+    }, 10000);
+    
+    // Detect mobile users
+    if (window.innerWidth <= 768) {
+        setTimeout(() => showContextualTip('mobileUser'), 8000);
+    }
+}
+
+// Enhanced mascot click handler with AI-like responses
 function handleMascotClick() {
     const floatingMascot = document.getElementById('floatingMascot');
     const mascotSpeech = document.getElementById('mascotSpeechSmall');
@@ -935,24 +1086,134 @@ function handleMascotClick() {
     mascotInteractionCount++;
     lastMascotInteraction = Date.now();
     
-    // Add click animation
+    // Enhanced click animation with personality
     floatingMascot.classList.add('active');
+    floatingMascot.style.transform = 'scale(1.2) rotate(5deg)';
+    
+    // Add click sound effect (visual feedback)
+    createEnhancedClickEffect();
+    
     setTimeout(() => {
         floatingMascot.classList.remove('active');
+        floatingMascot.style.transform = '';
     }, 300);
     
-    // Show next tip or greeting
+    // AI-like response selection based on interaction history and context
     if (mascotInteractionCount === 1) {
         showMascotGreeting();
+    } else if (mascotInteractionCount % 5 === 0) {
+        // Every 5th click, show personalized insight
+        showPersonalizedInsight();
+    } else if (Date.now() - userBehavior.sessionStart > 300000) { // 5 minutes
+        // Long session, offer break or encouragement
+        showSessionBasedTip();
     } else {
-        showMascotTip();
+        // Regular intelligent tip
+        showIntelligentTip();
     }
     
-    // Show speech bubble
-    floatingMascot.classList.add('speaking');
+    // Enhanced speaking animation
+    showMascotSpeaking();
+}
+
+// Show personalized insights based on user behavior
+function showPersonalizedInsight() {
+    const mascotTip = document.getElementById('mascotTip');
+    if (!mascotTip) return;
+    
+    const isThaiLang = userPreferences.language === 'th';
+    const totalLocations = Object.keys(userBehavior.locationViews).length;
+    const totalSearches = userBehavior.searchQueries.length;
+    const favoritesCount = favorites.length;
+    
+    let insight = '';
+    
+    if (totalLocations > 10) {
+        insight = isThaiLang ?
+            `🏆 วาว! คุณเป็นนักสำรวจตัวจริง ดูไป ${totalLocations} สถานที่แล้ว! คุณชอบการผจญภัยจริงๆ` :
+            `🏆 Wow! You're a true explorer with ${totalLocations} locations viewed! You really love adventure`;
+    } else if (favoritesCount > 5) {
+        insight = isThaiLang ?
+            `⭐ คุณมีรายการโปรด ${favoritesCount} สถานที่! ฉันเห็นว่าคุณวางแผนดีมาก` :
+            `⭐ You have ${favoritesCount} favorite places! I can see you're a great planner`;
+    } else if (totalSearches > 5) {
+        insight = isThaiLang ?
+            `🔍 คุณชอบค้นคว้าข้อมูลจริงๆ! ค้นหาไปแล้ว ${totalSearches} ครั้ง ฉันชอบความอยากรู้ของคุณ` :
+            `🔍 You really love researching! ${totalSearches} searches show your curiosity`;
+    } else {
+        insight = isThaiLang ?
+            `🌟 คุณเริ่มต้นได้ดีมาก! มาสำรวจสถานที่ใหม่ๆ กันต่อเถอะ` :
+            `🌟 You're off to a great start! Let's discover more amazing places`;
+    }
+    
+    mascotTip.innerHTML = insight;
+}
+
+// Session-based tips for long-time users
+function showSessionBasedTip() {
+    const mascotTip = document.getElementById('mascotTip');
+    if (!mascotTip) return;
+    
+    const isThaiLang = userPreferences.language === 'th';
+    const sessionMinutes = Math.floor((Date.now() - userBehavior.sessionStart) / 60000);
+    
+    const sessionTips = {
+        th: [
+            `⏰ เล่นมา ${sessionMinutes} นาทีแล้ว! พักสายตาบ้างไหม? สุขภาพสำคัญนะ`,
+            `💪 ความอยากรู้ของคุณน่าชื่นชม! แต่อย่าลืมพักผ่อนบ้างนะ`,
+            `🎯 คุณสำรวจมาเยอะแล้ว! ลองใช้ Trip Planner วางแผนจริงๆ ไหม?`,
+            `☕ ช่วงพักการสำรวจ! ดื่มน้ำแล้วกลับมาเที่ยวต่อกันนะ`
+        ],
+        en: [
+            `⏰ You've been exploring for ${sessionMinutes} minutes! How about a quick break?`,
+            `💪 Your curiosity is admirable! But don't forget to rest your eyes`,
+            `🎯 Great exploration session! Ready to plan a real trip with our Trip Planner?`,
+            `☕ Break time! Stay hydrated and come back for more adventures`
+        ]
+    };
+    
+    const tips = sessionTips[userPreferences.language];
+    const randomTip = tips[Math.floor(Math.random() * tips.length)];
+    
+    mascotTip.innerHTML = randomTip;
+}
+
+// Enhanced click effect with visual feedback
+function createEnhancedClickEffect() {
+    const floatingMascot = document.getElementById('floatingMascot');
+    if (!floatingMascot) return;
+    
+    // Create multiple sparkle effects
+    const colors = ['#FFD700', '#FF69B4', '#00CED1', '#98FB98', '#DDA0DD'];
+    const rect = floatingMascot.getBoundingClientRect();
+    
+    for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+            const sparkle = document.createElement('div');
+            sparkle.textContent = ['✨', '💫', '⭐', '🌟', '💖'][i];
+            sparkle.style.cssText = `
+                position: fixed;
+                left: ${rect.left + Math.random() * rect.width}px;
+                top: ${rect.top + Math.random() * rect.height}px;
+                font-size: 1.5rem;
+                pointer-events: none;
+                z-index: 1001;
+                animation: enhancedSparkle 2s ease-out forwards;
+                filter: drop-shadow(0 0 10px ${colors[i]});
+            `;
+            document.body.appendChild(sparkle);
+            
+            setTimeout(() => sparkle.remove(), 2000);
+        }, i * 100);
+    }
+    
+    // Add pulsing effect to mascot
+    floatingMascot.style.animation = 'none';
+    floatingMascot.style.animation = 'mascotPulse 0.6s ease-out';
+    
     setTimeout(() => {
-        floatingMascot.classList.remove('speaking');
-    }, 4000);
+        floatingMascot.style.animation = 'floatingMascotBounce 4s ease-in-out infinite';
+    }, 600);
 }
 
 function showMascotGreeting() {
@@ -984,17 +1245,190 @@ function showMascotGreeting() {
     }
 }
 
-function showMascotTip() {
+// Enhanced AI-like contextual greeting
+function showContextualGreeting() {
+    const hour = new Date().getHours();
+    const isFirstVisit = !localStorage.getItem('painaidee-seen-welcome');
+    const isReturning = localStorage.getItem('painaidee-user-behavior');
+    
+    let contextKey = 'firstVisit';
+    
+    if (!isFirstVisit && isReturning) {
+        contextKey = 'returning';
+    } else if (hour >= 5 && hour < 12) {
+        contextKey = 'morning';
+    } else if (hour >= 12 && hour < 17) {
+        contextKey = 'afternoon';
+    } else {
+        contextKey = 'evening';
+    }
+    
+    showContextualTip(contextKey);
+}
+
+// Smart tip selection based on user behavior and context
+function showIntelligentTip() {
     const mascotTip = document.getElementById('mascotTip');
-    if (mascotTip && mascotTips[userPreferences.language]) {
+    if (!mascotTip) return;
+    
+    const recentSearches = userBehavior.searchQueries.slice(-3);
+    const recentViews = Object.keys(userBehavior.locationViews).slice(-3);
+    const userPreferredCategories = Object.keys(userBehavior.categoryViews)
+        .sort((a, b) => userBehavior.categoryViews[b].count - userBehavior.categoryViews[a].count)
+        .slice(0, 2);
+    
+    let intelligentTip = '';
+    const isThaiLang = userPreferences.language === 'th';
+    
+    // AI-like tip selection based on behavior patterns
+    if (recentSearches.length > 0) {
+        // User has been searching
+        const lastSearch = recentSearches[recentSearches.length - 1].query;
+        intelligentTip = isThaiLang ? 
+            `🔍 เห็นคุณค้นหา "${lastSearch}" ลองดูหมวดหมู่ที่เกี่ยวข้องไหม?` :
+            `🔍 I saw you searched for "${lastSearch}", want to explore related categories?`;
+    } else if (userPreferredCategories.length > 0) {
+        // User has category preferences
+        const topCategory = userPreferredCategories[0];
+        const categoryInfo = locationCategories[topCategory];
+        if (categoryInfo) {
+            intelligentTip = isThaiLang ?
+                `🎯 คุณดูเหมือนจะชอบ${categoryInfo.nameTh} มีสถานที่ใหม่ๆ ให้สำรวจอีกเยอะ!` :
+                `🎯 You seem to love ${categoryInfo.nameEn}, there are more amazing places to discover!`;
+        }
+    } else if (recentViews.length > 0) {
+        // User has viewed locations
+        const lastLocation = recentViews[recentViews.length - 1];
+        const locationData = locations[lastLocation];
+        if (locationData) {
+            intelligentTip = isThaiLang ?
+                `💫 คุณเพิ่งดู${locationData.name} ลองดูสถานที่ใกล้เคียงไหม?` :
+                `💫 You just viewed ${locationData.nameEn}, want to see nearby places?`;
+        }
+    } else {
+        // Fallback to regular tips
         const tips = mascotTips[userPreferences.language];
-        const tip = tips[currentTipIndex % tips.length];
+        intelligentTip = tips[Math.floor(Math.random() * tips.length)];
+    }
+    
+    // Add personalization variables
+    intelligentTip = personalizeTip(intelligentTip);
+    
+    mascotTip.innerHTML = intelligentTip;
+    currentTipIndex++;
+    
+    // Add sparkle effect for intelligent tips
+    createMascotSparkles();
+    showMascotSpeaking();
+}
+
+// Enhanced contextual tip showing
+function showContextualTip(context) {
+    const mascotTip = document.getElementById('mascotTip');
+    if (mascotTip && mascotContextualTips[userPreferences.language] && mascotContextualTips[userPreferences.language][context]) {
+        let tip = mascotContextualTips[userPreferences.language][context];
+        
+        // Personalize the tip
+        tip = personalizeTip(tip);
         
         mascotTip.innerHTML = tip;
-        currentTipIndex++;
         
-        // Add sparkle effect to the mascot
-        createMascotSparkles();
+        // Show mascot speaking with enhanced animation
+        showMascotSpeaking();
+        
+        lastMascotInteraction = Date.now();
+    }
+}
+
+// Personalize tips with dynamic content
+function personalizeTip(tip) {
+    const userPreferredCategories = Object.keys(userBehavior.categoryViews)
+        .sort((a, b) => userBehavior.categoryViews[b].count - userBehavior.categoryViews[a].count);
+    
+    const recentViews = Object.keys(userBehavior.locationViews);
+    const totalViews = recentViews.length;
+    
+    // Replace placeholders with dynamic content
+    tip = tip.replace('${count}', totalViews);
+    
+    if (userPreferredCategories.length > 0) {
+        const topCategory = userPreferredCategories[0];
+        const categoryInfo = locationCategories[topCategory];
+        if (categoryInfo) {
+            const isThaiLang = userPreferences.language === 'th';
+            tip = tip.replace('${category}', isThaiLang ? categoryInfo.nameTh : categoryInfo.nameEn);
+        }
+    }
+    
+    // Add location suggestions based on preferences
+    if (tip.includes('${location}') || tip.includes('${recommendation}')) {
+        const suggestions = generateSmartSuggestions();
+        if (suggestions.length > 0) {
+            const suggestion = suggestions[0];
+            const locationData = locations[suggestion];
+            if (locationData) {
+                const isThaiLang = userPreferences.language === 'th';
+                const locationName = isThaiLang ? locationData.name : locationData.nameEn;
+                tip = tip.replace(/\$\{location\}|\$\{recommendation\}/g, locationName);
+            }
+        }
+    }
+    
+    // Add time-based suggestions
+    const hour = new Date().getHours();
+    if (tip.includes('${activity}')) {
+        const activities = {
+            th: hour < 12 ? 'ชมพระอาทิตย์ขึ้น' : hour < 18 ? 'เที่ยวกลางวัน' : 'ดูพระอาทิตย์ตก',
+            en: hour < 12 ? 'sunrise viewing' : hour < 18 ? 'daytime exploration' : 'sunset watching'
+        };
+        tip = tip.replace('${activity}', activities[userPreferences.language]);
+    }
+    
+    return tip;
+}
+
+// Generate smart location suggestions based on user behavior
+function generateSmartSuggestions() {
+    const userCategories = Object.keys(userBehavior.categoryViews)
+        .sort((a, b) => userBehavior.categoryViews[b].count - userBehavior.categoryViews[a].count);
+    
+    const viewedLocations = Object.keys(userBehavior.locationViews);
+    const suggestions = [];
+    
+    // Find locations that match user preferences but haven't been viewed much
+    Object.keys(locations).forEach(locationKey => {
+        const location = locations[locationKey];
+        if (!location.categories) return;
+        
+        const viewCount = userBehavior.locationViews[locationKey]?.count || 0;
+        if (viewCount < 2) { // Not heavily viewed
+            // Check if location matches user's preferred categories
+            const matchingCategories = location.categories.filter(cat => 
+                userCategories.includes(cat)
+            );
+            
+            if (matchingCategories.length > 0) {
+                suggestions.push(locationKey);
+            }
+        }
+    });
+    
+    return suggestions.slice(0, 3); // Return top 3 suggestions
+}
+
+// Enhanced speaking animation
+function showMascotSpeaking() {
+    const floatingMascot = document.getElementById('floatingMascot');
+    if (floatingMascot) {
+        floatingMascot.classList.add('speaking');
+        
+        // Add enhanced speaking animation
+        floatingMascot.style.animation = 'floatingMascotTalk 0.5s ease-in-out 3';
+        
+        setTimeout(() => {
+            floatingMascot.classList.remove('speaking');
+            floatingMascot.style.animation = 'floatingMascotBounce 4s ease-in-out infinite';
+        }, 4000);
     }
 }
 
@@ -1050,38 +1484,39 @@ function updateMascotLanguage() {
     }
 }
 
-// Context-aware mascot responses
-function showContextualMascotTip(context) {
+// Context-aware mascot responses for specific events
+function showContextualMascotTip(context, data = {}) {
     const contextTips = {
         th: {
-            locationFocus: "ดีมาก! คุณกำลังดูข้อมูล${location} อยู่นะ 🎯<br>ลองคลิกจุดทองอื่นๆ ดูสิ!",
-            searchUsed: "เก่งมาก! การค้นหาช่วยให้หาสถานที่ได้ง่ายขึ้น 🔍<br>ลองใช้ Category Filter ด้วยนะ!",
-            favoriteAdded: "ยอดเยี่ยม! บันทึกสถานที่โปรดแล้ว ⭐<br>จะได้หาง่ายในครั้งหน้า!",
-            tripPlanning: "สุดยอด! กำลังวางแผนทริปใช่มั้ย? 🗺️<br>อย่าลืมดูข้อมูลสภาพอากาศด้วยนะ!",
-            themeChanged: "สวยใหม่เลย! ธีมใหม่ทำให้ดูดีขึ้นมาก 🎨<br>ลองเปลี่ยนไปมาดูสิ!"
+            locationFocus: `ดีมาก! คุณกำลังดู${data.location ? locations[data.location]?.name || data.location : 'สถานที่นี้'} 🎯\nลองคลิกจุดทองอื่นๆ ดูสิ!`,
+            searchActive: "เห็นคุณค้นหาอยู่ ให้ฉันช่วยแนะนำมั้ย? 🔍\nลองใช้ Category Filter ด้วยนะ!",
+            favoriteAdded: `ยอดเยี่ยม! บันทึก${data.location ? locations[data.location]?.name || 'สถานที่' : 'สถานที่'}ไว้แล้ว ⭐\nจะได้หาง่ายในครั้งหน้า!`,
+            tripPlanning: "สุดยอด! กำลังวางแผนทริปใช่มั้ย? 🗺️\nอย่าลืมดูข้อมูลสภาพอากาศด้วยนะ!",
+            themeChanged: "สวยใหม่เลย! ธีมใหม่ทำให้ดูดีขึ้นมาก 🎨\nลองเปลี่ยนไปมาดูสิ!",
+            locationExplorer: "เยี่ยมมาก! คุณเป็นนักสำรวจตัวจริง 🏆\nมาดูสถานที่ใหม่ๆ กันต่อเถอะ!",
+            longSession: "เล่นมานานแล้วนะ! พักสายตาบ้างไหม? 😊\nสุขภาพสำคัญนะคะ",
+            mobileUser: "ใช้มือถือสะดวกดีนะ! 📱\nลองใช้สองนิ้วซูมและปัดดูโลกสิ"
         },
         en: {
-            locationFocus: "Great! You're viewing ${location} 🎯<br>Try clicking other golden dots too!",
-            searchUsed: "Excellent! Search makes finding places easier 🔍<br>Try the Category Filters too!",
-            favoriteAdded: "Awesome! Location saved to favorites ⭐<br>Easy to find next time!",
-            tripPlanning: "Perfect! Planning a trip? 🗺️<br>Don't forget to check weather info!",
-            themeChanged: "Looking good! The new theme is beautiful 🎨<br>Feel free to switch back and forth!"
+            locationFocus: `Great! You're viewing ${data.location ? locations[data.location]?.nameEn || data.location : 'this location'} 🎯\nTry clicking other golden dots too!`,
+            searchActive: "I see you're searching! Want me to help suggest places? 🔍\nTry the Category Filters too!",
+            favoriteAdded: `Awesome! ${data.location ? locations[data.location]?.nameEn || 'Location' : 'Location'} saved to favorites ⭐\nEasy to find next time!`,
+            tripPlanning: "Perfect! Planning a trip? 🗺️\nDon't forget to check weather info!",
+            themeChanged: "Looking good! The new theme is beautiful 🎨\nFeel free to switch back and forth!",
+            locationExplorer: "Amazing! You're a true explorer 🏆\nLet's discover more places together!",
+            longSession: "You've been exploring for a while! How about a break? 😊\nTake care of your eyes!",
+            mobileUser: "Mobile works great! 📱\nTry pinch-to-zoom and swipe to explore the globe"
         }
     };
     
     const mascotTip = document.getElementById('mascotTip');
     if (mascotTip && contextTips[userPreferences.language] && contextTips[userPreferences.language][context]) {
-        const tip = contextTips[userPreferences.language][context];
+        let tip = contextTips[userPreferences.language][context];
+        
         mascotTip.innerHTML = tip;
         
-        // Show mascot speaking
-        const floatingMascot = document.getElementById('floatingMascot');
-        if (floatingMascot) {
-            floatingMascot.classList.add('speaking');
-            setTimeout(() => {
-                floatingMascot.classList.remove('speaking');
-            }, 3000);
-        }
+        // Show mascot speaking with enhanced animation
+        showMascotSpeaking();
         
         lastMascotInteraction = Date.now();
     }
@@ -2098,7 +2533,7 @@ function focusLocation(location) {
         // Highlight the specific marker
         const marker = document.querySelector(`.marker.${location}`);
         if (marker) {
-            // Add focus animation
+            // Enhanced focus animation
             marker.style.animation = 'markerFocus 1s ease-in-out';
             setTimeout(() => {
                 marker.style.animation = 'markerPulse 2s ease-in-out infinite';
@@ -2107,10 +2542,16 @@ function focusLocation(location) {
         
         updateStatus(`${info.emoji} ${info.name}`, `${info.emoji} ${info.nameEn}`);
         
-        // Show contextual mascot tip
+        // Show contextual mascot tip with location info
         setTimeout(() => {
-            showContextualMascotTip('locationFocus');
+            showContextualMascotTip('locationFocus', { location: location });
         }, 1000);
+        
+        // Dispatch custom event for behavior monitoring
+        window.dispatchEvent(new CustomEvent('locationFocused', { 
+            detail: { location: location } 
+        }));
+        
     } else if (location === 'world') {
         // Reset all markers
         document.querySelectorAll('.marker').forEach(marker => {
@@ -2525,6 +2966,11 @@ function toggleFavorite(locationKey) {
     if (index === -1) {
         favorites.push(locationKey);
         showNotification(getText('addedFavorite'), 'success');
+        
+        // Trigger contextual mascot response for adding favorites
+        setTimeout(() => {
+            showContextualMascotTip('favoriteAdded', { location: locationKey });
+        }, 500);
     } else {
         favorites.splice(index, 1);
         showNotification(getText('removedFavorite'), 'info');
@@ -2535,6 +2981,11 @@ function toggleFavorite(locationKey) {
         location: locationKey,
         action: action
     });
+    
+    // Dispatch event for behavior monitoring
+    window.dispatchEvent(new CustomEvent('favoriteToggled', { 
+        detail: { location: locationKey, action: action } 
+    }));
     
     localStorage.setItem('painaidee-favorites', JSON.stringify(favorites));
     updateFavoritesDisplay();
