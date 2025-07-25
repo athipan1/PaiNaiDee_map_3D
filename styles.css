@@ -29,6 +29,20 @@
     --dark-shadow-color: rgba(0, 0, 0, 0.5);
     --dark-status-bg: rgba(0, 0, 0, 0.8);
     
+    /* High contrast theme colors */
+    --contrast-primary-bg: #000000;
+    --contrast-secondary-bg: #000000;
+    --contrast-panel-bg: #000000;
+    --contrast-panel-text: #ffffff;
+    --contrast-accent-color: #ffff00;
+    --contrast-button-bg: #ffffff;
+    --contrast-button-hover: #ffff00;
+    --contrast-card-bg: #000000;
+    --contrast-glass-bg: #000000;
+    --contrast-glass-border: #ffffff;
+    --contrast-shadow-color: rgba(255, 255, 255, 0.5);
+    --contrast-status-bg: #000000;
+    
     /* Typography */
     --font-primary: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
     --font-size-xs: 0.75rem;
@@ -77,6 +91,34 @@
     --glass-border: var(--dark-glass-border);
     --shadow-color: var(--dark-shadow-color);
     --status-bg: var(--dark-status-bg);
+}
+
+[data-theme="contrast"] {
+    --primary-bg: var(--contrast-primary-bg);
+    --secondary-bg: var(--contrast-secondary-bg);
+    --panel-bg: var(--contrast-panel-bg);
+    --panel-text: var(--contrast-panel-text);
+    --accent-color: var(--contrast-accent-color);
+    --button-bg: var(--contrast-button-bg);
+    --button-hover: var(--contrast-button-hover);
+    --card-bg: var(--contrast-card-bg);
+    --glass-bg: var(--contrast-glass-bg);
+    --glass-border: var(--contrast-glass-border);
+    --shadow-color: var(--contrast-shadow-color);
+    --status-bg: var(--contrast-status-bg);
+}
+
+/* Screen reader only content */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 * {
@@ -147,8 +189,8 @@ body::before {
     transition: background var(--transition-normal);
 }
 
-/* Theme and Language toggle buttons */
-.theme-toggle, .language-toggle {
+/* Theme, Language, and Contrast toggle buttons */
+.theme-toggle, .language-toggle, .contrast-toggle {
     position: fixed;
     top: var(--spacing-lg);
     z-index: var(--z-modal);
@@ -172,7 +214,11 @@ body::before {
     right: calc(var(--spacing-lg) + 80px);
 }
 
-.theme-toggle:hover, .language-toggle:hover {
+.contrast-toggle {
+    right: calc(var(--spacing-lg) + 160px);
+}
+
+.theme-toggle:hover, .language-toggle:hover, .contrast-toggle:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 40px var(--shadow-color);
 }
@@ -733,10 +779,17 @@ body::before {
     cursor: pointer;
     transition: background-color var(--transition-fast);
     border-bottom: 1px solid var(--glass-border);
+    role: option;
 }
 
-.search-result-item:hover {
+.search-result-item:hover,
+.search-result-item.selected {
     background-color: var(--card-bg);
+}
+
+.search-result-item:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: -2px;
 }
 
 .search-result-item:last-child {
@@ -1895,6 +1948,11 @@ button:focus {
         right: calc(var(--spacing-md) + 60px);
     }
     
+    .contrast-toggle {
+        top: var(--spacing-md);
+        right: calc(var(--spacing-md) + 120px);
+    }
+    
     .button-row {
         flex-direction: column;
     }
@@ -1954,6 +2012,74 @@ button:focus {
         --panel-bg: rgba(255, 255, 255, 0.95);
         --panel-text: #000000;
     }
+}
+
+/* High contrast theme specific styles */
+[data-theme="contrast"] {
+    color: #ffffff;
+}
+
+[data-theme="contrast"] button {
+    background: #ffffff;
+    color: #000000;
+    border: 2px solid #ffffff;
+}
+
+[data-theme="contrast"] button:hover,
+[data-theme="contrast"] button:focus {
+    background: #ffff00;
+    color: #000000;
+    border-color: #ffff00;
+}
+
+[data-theme="contrast"] .marker {
+    background: #ffff00;
+    border: 3px solid #ffffff;
+    box-shadow: 0 0 20px #ffff00;
+}
+
+[data-theme="contrast"] .info-panel,
+[data-theme="contrast"] .controls {
+    background: #000000;
+    border: 3px solid #ffffff;
+    color: #ffffff;
+}
+
+[data-theme="contrast"] .search-input {
+    background: #000000;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+}
+
+[data-theme="contrast"] .search-input::placeholder {
+    color: #ffffff;
+}
+
+[data-theme="contrast"] .modal-overlay {
+    background: rgba(0, 0, 0, 0.95);
+}
+
+[data-theme="contrast"] .location-modal {
+    background: #000000;
+    border: 3px solid #ffffff;
+    color: #ffffff;
+}
+
+[data-theme="contrast"] .category-filter-btn {
+    background: #000000;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+}
+
+[data-theme="contrast"] .category-filter-btn.active {
+    background: #ffff00;
+    color: #000000;
+}
+
+[data-theme="contrast"] .globe-sphere {
+    background: #000000;
+    border: 3px solid #ffffff;
+    box-shadow: 0 0 50px #ffffff;
 }
 
 /* Reduced motion support */
@@ -2539,10 +2665,51 @@ button:not(.theme-toggle):not(.language-toggle):hover {
 /* Enhanced Focus Styles for Accessibility */
 button:focus-visible,
 input:focus-visible,
-select:focus-visible {
-    outline: 2px solid var(--accent-color);
+select:focus-visible,
+.marker:focus-visible,
+[tabindex]:focus-visible {
+    outline: 3px solid var(--accent-color);
     outline-offset: 2px;
-    box-shadow: 0 0 0 4px rgba(72, 177, 232, 0.2);
+    box-shadow: 0 0 0 6px rgba(72, 177, 232, 0.3);
+    border-radius: var(--radius-md);
+}
+
+/* High contrast focus styles */
+[data-theme="contrast"] button:focus-visible,
+[data-theme="contrast"] input:focus-visible,
+[data-theme="contrast"] select:focus-visible,
+[data-theme="contrast"] .marker:focus-visible,
+[data-theme="contrast"] [tabindex]:focus-visible {
+    outline: 4px solid #ffff00;
+    outline-offset: 3px;
+    box-shadow: 0 0 0 8px rgba(255, 255, 0, 0.5);
+}
+
+/* Enhanced focus for buttons */
+button:focus-visible {
+    transform: translateY(-2px) scale(1.05);
+    z-index: 100;
+}
+
+/* Focus for globe markers */
+.marker:focus-visible {
+    transform: scale(1.5);
+    z-index: 300;
+    animation-play-state: paused;
+}
+
+/* Focus for search input */
+.search-input:focus-visible {
+    transform: scale(1.03);
+    border-color: var(--accent-color);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
+}
+
+/* Focus for modal close button */
+.modal-close:focus-visible {
+    background: var(--accent-color);
+    color: white;
+    transform: scale(1.2);
 }
 
 /* Mobile-First Touch Improvements */
