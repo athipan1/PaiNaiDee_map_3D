@@ -49,6 +49,8 @@
     <link rel="stylesheet" href="iterative-design.css">
     <!-- User Testing System Styles -->
     <link rel="stylesheet" href="user-testing.css">
+    <!-- User Research System Styles -->
+    <link rel="stylesheet" href="user-research-system.css">
     <!-- UX Improvements Styles -->
     <link rel="stylesheet" href="ux-improvements.css">
 </head>
@@ -277,6 +279,28 @@
         </div>
     </div>
     <div class="sr-only" id="floating-mascot-desc">ผู้ช่วยมาสคอตจะให้คำแนะนำการใช้งานแผนที่ การนำทาง และคุณสมบัติต่างๆ</div>
+
+    <!-- User Research Widget -->
+    <div class="floating-research-widget" id="floatingResearchWidget" 
+         role="button" 
+         tabindex="0"
+         aria-label="เปิดระบบวิจัยผู้ใช้ คลิกเพื่อร่วมสำรวจและให้ข้อเสนอแนะ / Open User Research System - Click to participate in surveys and provide feedback"
+         aria-describedby="research-widget-desc"
+         onclick="toggleResearchPanel()"
+         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleResearchPanel();}">
+        <div class="research-icon">
+            <span role="img" aria-label="แบบสำรวจ">📋</span>
+        </div>
+        <div class="research-text">
+            <span class="research-label-th">วิจัยผู้ใช้</span>
+            <span class="research-label-en">User Research</span>
+        </div>
+        <div class="research-pulse" aria-hidden="true"></div>
+    </div>
+    <div class="sr-only" id="research-widget-desc">
+        ระบบวิจัยผู้ใช้สำหรับเก็บข้อมูลความคิดเห็นและประสบการณ์การใช้งาน เพื่อปรับปรุงแอปพลิเคชันให้ดีขึ้น
+        User research system for collecting feedback and usage experience to improve the application
+    </div>
 
     <div id="mapContainer">
         <!-- Info Panel -->
@@ -888,6 +912,8 @@
     <script src="iterative-design.js"></script>
     <!-- User Testing System -->
     <script src="user-testing.js"></script>
+    <!-- User Research System -->
+    <script src="user-research-system.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
