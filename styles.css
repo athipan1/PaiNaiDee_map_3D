@@ -312,12 +312,33 @@ body::before {
     padding: 1.5rem 1rem;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 0;
+    transform: translateY(30px);
+    animation: cardSlideIn 0.6s ease-out forwards;
 }
 
+.feature-item:nth-child(1) { animation-delay: 0.1s; }
+.feature-item:nth-child(2) { animation-delay: 0.2s; }
+.feature-item:nth-child(3) { animation-delay: 0.3s; }
+.feature-item:nth-child(4) { animation-delay: 0.4s; }
+
 .feature-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(72, 177, 232, 0.3);
+}
+
+@keyframes cardSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .feature-icon {
@@ -523,6 +544,9 @@ body::before {
     transition: all var(--transition-normal);
     position: relative;
     overflow: hidden;
+    opacity: 0;
+    transform: translateX(-50px);
+    animation: panelSlideInLeft 0.8s ease-out 0.2s forwards;
 }
 
 .info-panel::before {
@@ -578,6 +602,9 @@ body::before {
     justify-self: end;
     position: relative;
     overflow: hidden;
+    opacity: 0;
+    transform: translateX(50px);
+    animation: panelSlideInRight 0.8s ease-out 0.4s forwards;
 }
 
 .controls::before {
@@ -765,6 +792,8 @@ button {
     position: relative;
     overflow: hidden;
     min-width: 120px;
+    transform: translateY(0);
+    animation: buttonSlideIn 0.6s ease-out forwards;
 }
 
 button::before {
@@ -784,18 +813,61 @@ button:hover::before {
 
 button:hover {
     background: var(--button-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(72, 177, 232, 0.4);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 28px rgba(72, 177, 232, 0.4);
+    animation: buttonHover 0.3s ease-out;
 }
 
 button:active {
-    transform: translateY(0);
-    box-shadow: 0 4px 12px rgba(72, 177, 232, 0.3);
+    transform: translateY(-1px) scale(0.98);
+    box-shadow: 0 6px 16px rgba(72, 177, 232, 0.3);
+    transition: all 0.1s ease;
 }
 
 button:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(72, 177, 232, 0.3);
+}
+
+/* Enhanced button animations */
+@keyframes buttonSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes buttonHover {
+    0% {
+        transform: translateY(-1px) scale(1.01);
+    }
+    50% {
+        transform: translateY(-4px) scale(1.03);
+    }
+    100% {
+        transform: translateY(-3px) scale(1.02);
+    }
+}
+
+/* Enhanced ripple effect for buttons */
+.button-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    pointer-events: none;
+    transform: scale(0);
+    animation: rippleEffect 0.6s linear;
+}
+
+@keyframes rippleEffect {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
 }
 
 .button-row {
@@ -838,6 +910,9 @@ button:focus {
     width: 400px;
     height: 400px;
     transition: transform var(--transition-normal);
+    opacity: 0;
+    transform: scale(0.8);
+    animation: globeScaleIn 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.6s forwards;
 }
 
 @media (min-width: 768px) {
@@ -973,10 +1048,12 @@ button:focus {
     cursor: pointer;
     z-index: 100;
     transform-origin: center;
-    transition: all var(--transition-normal);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     /* Enhanced clickability with larger click area */
     border: 3px solid transparent;
     background-clip: padding-box;
+    opacity: 0;
+    animation: markerFadeIn 0.8s ease-out forwards, markerPulseGentle 3s ease-in-out infinite 0.8s;
 }
 
 .marker::before {
@@ -994,21 +1071,23 @@ button:focus {
 
 /* Enhanced stable click state - pause animation on hover for precise clicking */
 .marker:hover {
-    transform: scale(1.3);
+    transform: scale(1.4);
     box-shadow: 
-        0 0 25px rgba(255, 215, 0, 1),
-        inset 0 0 12px rgba(255, 255, 255, 0.8);
+        0 0 30px rgba(255, 215, 0, 1),
+        inset 0 0 15px rgba(255, 255, 255, 0.8),
+        0 0 60px rgba(72, 177, 232, 0.3);
     animation-play-state: paused !important;
-    animation: none !important;
     z-index: 200;
-    border: 3px solid rgba(255, 255, 255, 0.3);
+    border: 3px solid rgba(255, 255, 255, 0.4);
     transition: all 0.2s ease !important;
+    filter: brightness(1.2);
 }
 
 /* Active state for better touch feedback */
 .marker:active {
-    transform: scale(1.1);
+    transform: scale(1.2);
     transition: transform 0.1s ease;
+    animation: markerClickEffect 0.3s ease-out;
 }
 
 .marker:focus {
@@ -1017,6 +1096,49 @@ button:focus {
         0 0 30px rgba(255, 215, 0, 1),
         inset 0 0 15px rgba(255, 255, 255, 0.8),
         0 0 0 3px var(--accent-color);
+}
+
+/* Enhanced marker animations */
+@keyframes markerFadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3) translateY(-20px);
+    }
+    60% {
+        opacity: 1;
+        transform: scale(1.2) translateY(-5px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes markerClickEffect {
+    0% {
+        transform: scale(1.2);
+        box-shadow: 0 0 30px rgba(255, 215, 0, 1);
+    }
+    50% {
+        transform: scale(1.6);
+        box-shadow: 0 0 50px rgba(255, 215, 0, 1), 0 0 80px rgba(72, 177, 232, 0.6);
+    }
+    100% {
+        transform: scale(1.4);
+        box-shadow: 0 0 30px rgba(255, 215, 0, 1);
+    }
+}
+
+/* Enhanced marker pulse - gentler animation for better clickability */
+@keyframes markerPulseGentle {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+    }
+    50% { 
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.9);
+    }
 }
 
 /* Enhanced marker positioning for all Thai destinations */
@@ -1227,7 +1349,7 @@ button:focus {
     border: 1px solid var(--glass-border);
 }
 
-/* Modal styles */
+/* Modal styles with enhanced animations */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -1241,7 +1363,8 @@ button:focus {
     align-items: center;
     justify-content: center;
     opacity: 0;
-    transition: opacity var(--transition-normal);
+    transition: all var(--transition-normal);
+    animation: modalOverlayFadeIn 0.4s ease-out forwards;
 }
 
 .modal-overlay.show {
@@ -1259,12 +1382,54 @@ button:focus {
     overflow-y: auto;
     color: var(--panel-text);
     position: relative;
-    transform: scale(0.8);
-    transition: transform var(--transition-normal);
+    transform: scale(0.7) translateY(-50px);
+    opacity: 0;
+    transition: all var(--transition-normal);
+    animation: modalSlideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.1s forwards;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
 }
 
 .modal-overlay.show .location-modal {
-    transform: scale(1);
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+/* Enhanced modal animations */
+@keyframes modalOverlayFadeIn {
+    0% {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+    }
+    100% {
+        opacity: 1;
+        backdrop-filter: blur(5px);
+    }
+}
+
+@keyframes modalSlideIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.7) translateY(-50px);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05) translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes modalSlideOut {
+    0% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+    }
 }
 
 .modal-close {
@@ -1688,6 +1853,10 @@ button:focus {
         transition-duration: 0.01ms !important;
     }
     
+    .marker {
+        animation: none;
+    }
+    
     .globe-sphere {
         animation: none;
     }
@@ -1700,8 +1869,67 @@ button:focus {
         animation: none;
     }
     
+    /* Replace with simple fade-in for reduced motion users */
+    .fade-in, .slide-in-up, .slide-in-left, .slide-in-right, .scale-in, .scale-in-center {
+        animation: reducedMotionFadeIn 0.3s ease-out forwards !important;
+    }
+}
+
+@keyframes reducedMotionFadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* Mobile-optimized animations */
+@media (max-width: 768px) {
+    /* Faster animations for mobile */
+    .fade-in, .slide-in-up, .slide-in-left, .slide-in-right {
+        animation-duration: 0.4s !important;
+    }
+    
+    .scale-in, .scale-in-center {
+        animation-duration: 0.3s !important;
+    }
+    
+    /* Reduce animation complexity on mobile */
     .marker {
-        animation: none;
+        animation: markerPulseMobile 2s ease-in-out infinite !important;
+    }
+    
+    /* Simplified button animations for mobile */
+    button:hover {
+        transform: translateY(-1px) scale(1.01) !important;
+    }
+    
+    .feature-item:hover {
+        transform: translateY(-3px) scale(1.01) !important;
+    }
+    
+    /* Optimize modal animations for mobile */
+    .location-modal {
+        animation: modalSlideInMobile 0.4s ease-out 0.1s forwards !important;
+    }
+}
+
+@keyframes markerPulseMobile {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+    }
+    50% { 
+        transform: scale(1.02);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+    }
+}
+
+@keyframes modalSlideInMobile {
+    0% {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
     }
 }
 
@@ -1989,8 +2217,124 @@ button:focus {
 }
 
 /* ========================================
-   ENHANCED UX/UI IMPROVEMENTS
+   ENHANCED UX/UI IMPROVEMENTS & ANIMATIONS
    ======================================== */
+
+/* Core Animation Classes for UX Enhancement */
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+.fade-in-delay-1 {
+    opacity: 0;
+    animation: fadeIn 0.6s ease-out 0.2s forwards;
+}
+
+.fade-in-delay-2 {
+    opacity: 0;
+    animation: fadeIn 0.6s ease-out 0.4s forwards;
+}
+
+.fade-in-delay-3 {
+    opacity: 0;
+    animation: fadeIn 0.6s ease-out 0.6s forwards;
+}
+
+.slide-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.slide-in-left {
+    opacity: 0;
+    transform: translateX(-30px);
+    animation: slideInLeft 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.slide-in-right {
+    opacity: 0;
+    transform: translateX(30px);
+    animation: slideInRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.scale-in {
+    opacity: 0;
+    transform: scale(0.8);
+    animation: scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.scale-in-center {
+    opacity: 0;
+    transform: scale(0.3);
+    animation: scaleInCenter 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+/* Core Animation Keyframes */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes scaleInCenter {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
 
 /* Enhanced Loading States */
 .loading-skeleton {
@@ -2003,6 +2347,44 @@ button:focus {
 @keyframes loading-shimmer {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
+}
+
+/* Enhanced panel animations */
+@keyframes panelSlideInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes panelSlideInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes globeScaleIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    70% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 /* Smooth Button Transitions with Modern Shadows */
