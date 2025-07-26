@@ -8,9 +8,8 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # คัดลอกเฉพาะไฟล์ static ที่จำเป็น
-COPY index.html /usr/share/nginx/html/
-COPY script.js /usr/share/nginx/html/
-COPY styles.css /usr/share/nginx/html/
+COPY src/pages/home/index.html /usr/share/nginx/html/
+COPY src/assets/ /usr/share/nginx/html/assets/
 
 # เปิดพอร์ต 80
 EXPOSE 80
