@@ -1,0 +1,58 @@
+MIT License
+
+Copyright (c) 2024 PaiNaiDee - Thailand Tourism 3D Map Project
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+สัญญาอนุญาต MIT
+
+ลิขสิทธิ์ (c) 2024 PaiNaiDee - โปรเจกต์แผนที่ท่องเที่ยวไทย 3 มิติ
+
+อนุญาตให้แก่บุคคลใดก็ตามที่ได้รับสำเนาของซอฟต์แวร์นี้และไฟล์เอกสารที่เกี่ยวข้อง 
+("ซอฟต์แวร์") โดยไม่เสียค่าใช้จ่าย ในการใช้งานซอฟต์แวร์โดยไม่มีข้อจำกัด 
+รวมถึงแต่ไม่จำกัดเฉพาะสิทธิในการใช้ แก้ไข ผสานรวม เผยแพร่ แจกจ่าย 
+ให้สัญญาอนุญาตช่วง และ/หรือขายสำเนาของซอฟต์แวร์ และอนุญาตให้บุคคลที่ได้รับ
+ซอฟต์แวร์ทำเช่นนั้นได้ ภายใต้เงื่อนไขต่อไปนี้:
+
+ประกาศลิขสิทธิ์และประกาศอนุญาตนี้จะต้องรวมอยู่ในสำเนาทั้งหมดหรือส่วนสำคัญ
+ของซอฟต์แวร์
+
+ซอฟต์แวร์นี้ให้บริการ "ตามสภาพที่เป็น" โดยไม่มีการรับประกันใดๆ ไม่ว่าจะเป็น
+การรับประกันโดยชัดแจ้งหรือโดยนัย รวมถึงแต่ไม่จำกัดเฉพาะการรับประกันการขาย
+ความเหมาะสมสำหรับการใช้งานเฉพาะ และการไม่ละเมิดสิทธิ์ ในกรณีใดๆ ผู้เขียนหรือ
+ผู้ถือลิขสิทธิ์จะไม่รับผิดชอบต่อการเรียกร้อง ความเสียหาย หรือความรับผิดอื่นใด
+ไม่ว่าจะเป็นการกระทำตามสัญญา ละเมิด หรืออื่นๆ ที่เกิดขึ้นจาก การใช้งาน หรือ
+การเกี่ยวข้องกับซอฟต์แวร์หรือการใช้งานหรือการติดต่ออื่นๆ ในซอฟต์แวร์
+
+---
+
+ข้อมูลเพิ่มเติม / Additional Information:
+
+โปรเจกต์นี้สร้างขึ้นเพื่อการศึกษาและส่งเสริมการท่องเที่ยวไทย
+This project is created for educational purposes and to promote Thailand tourism.
+
+การใช้งานเชิงพาณิชย์อนุญาตภายใต้เงื่อนไข MIT License
+Commercial use is permitted under the MIT License conditions.
+
+สำหรับการสนับสนุนหรือคำถาม โปรดติดต่อผ่าน GitHub Issues
+For support or questions, please contact via GitHub Issues.
+
+Repository: https://github.com/athipan1/PaiNaiDee_map_3D

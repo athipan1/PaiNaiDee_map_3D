@@ -1,0 +1,58 @@
+{
+  "name": "PaiNaiDee 3D Map Health Check",
+  "description": "Health check configuration for monitoring deployment status",
+  "version": "2.0.0",
+  "timestamp": "2024-01-01T00:00:00.000Z",
+  "endpoints": {
+    "primary": "/",
+    "health": "/health",
+    "assets": "/assets/",
+    "api": "/api/"
+  },
+  "checks": [
+    {
+      "name": "Main Application",
+      "url": "/",
+      "method": "GET",
+      "expectedStatus": 200,
+      "expectedContent": "PaiNaiDee 3D Map",
+      "timeout": 5000
+    },
+    {
+      "name": "CSS Assets",
+      "url": "/assets/css/styles.css",
+      "method": "GET",
+      "expectedStatus": 200,
+      "expectedContentType": "text/css",
+      "timeout": 3000
+    },
+    {
+      "name": "JavaScript Assets",
+      "url": "/assets/js/script.js",
+      "method": "GET",
+      "expectedStatus": 200,
+      "expectedContentType": "application/javascript",
+      "timeout": 3000
+    }
+  ],
+  "monitoring": {
+    "interval": "5m",
+    "retries": 3,
+    "alerting": {
+      "enabled": true,
+      "channels": ["email", "slack"]
+    }
+  },
+  "performance": {
+    "lighthouse": {
+      "performance": ">= 90",
+      "accessibility": ">= 95",
+      "bestPractices": ">= 90",
+      "seo": ">= 90"
+    },
+    "loadTime": {
+      "target": "< 2s",
+      "warning": "< 5s"
+    }
+  }
+}
