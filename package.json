@@ -1,0 +1,33 @@
+{
+  "name": "painaidee-map-3d",
+  "version": "1.0.0",
+  "description": "PaiNaiDee 3D Interactive Map - แผนที่ 3 มิติแบบอินเทอแรคทีฟสำหรับการท่องเที่ยวประเทศไทย",
+  "main": "src/pages/home/index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "python3 -m http.server 8080",
+    "validate:js": "node -c src/assets/js/script.js",
+    "validate:html": "echo 'HTML validation placeholder'",
+    "validate": "npm run validate:js && npm run validate:html"
+  },
+  "keywords": [
+    "3d-map",
+    "thailand",
+    "interactive",
+    "tourism",
+    "accessibility",
+    "web-application"
+  ],
+  "author": "PaiNaiDee",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/athipan1/PaiNaiDee_map_3D.git"
+  },
+  "homepage": "https://github.com/athipan1/PaiNaiDee_map_3D#readme"
+}
