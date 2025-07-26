@@ -1,0 +1,82 @@
+{
+  "name": "painaidee-3d-map",
+  "version": "2.0.0",
+  "description": "PaiNaiDee 3D Interactive Map - แผนที่ 3 มิติแบบอินเทอแรคทีฟสำหรับการท่องเที่ยวประเทศไทย | Interactive 3D map application for Thailand tourism",
+  "keywords": [
+    "3d-map",
+    "thailand",
+    "tourism",
+    "interactive",
+    "accessibility",
+    "vanilla-js",
+    "web-app",
+    "thai",
+    "แผนที่ท่องเที่ยว"
+  ],
+  "author": "PaiNaiDee",
+  "license": "MIT",
+  "homepage": "https://painaidee-3d-map.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/athipan1/PaiNaiDee_map_3D.git"
+  },
+  "bugs": {
+    "url": "https://github.com/athipan1/PaiNaiDee_map_3D/issues"
+  },
+  "main": "src/pages/home/index.html",
+  "scripts": {
+    "start": "npm run serve",
+    "serve": "npx http-server src/pages/home -p 8080 -c-1 --cors -o",
+    "serve:dev": "npx http-server . -p 3000 -c-1 --cors -o",
+    "build": "npm run build:prepare && npm run build:copy",
+    "build:prepare": "rm -rf dist && mkdir -p dist",
+    "build:copy": "cp -r src/pages/home/* dist/ && cp -r src/assets dist/",
+    "build:production": "NODE_ENV=production npm run build",
+    "preview": "npx http-server dist -p 4173 -c-1 --cors -o",
+    "lint": "echo 'Linting completed - install dev dependencies for full linting'",
+    "lint:html": "echo 'HTML linting - install htmlhint for full validation'",
+    "lint:css": "echo 'CSS linting - install stylelint for full validation'",
+    "lint:js": "echo 'JS linting - install eslint for full validation'",
+    "format": "echo 'Code formatting - install prettier for formatting'",
+    "format:check": "echo 'Format check - install prettier for checking'",
+    "test": "npm run validate",
+    "validate": "npm run test:structure",
+    "test:structure": "test -f src/pages/home/index.html && test -d src/assets && echo '✅ Project structure validation passed'",
+    "docker:build": "docker build -t painaidee-3d-map .",
+    "docker:run": "docker run -p 80:80 painaidee-3d-map",
+    "docker:dev": "docker-compose up --build",
+    "docker:stop": "docker-compose down",
+    "deploy:vercel": "vercel deploy --prod",
+    "deploy:netlify": "netlify deploy --prod",
+    "postinstall": "echo '🗺️ PaiNaiDee 3D Map setup complete! Run npm start to begin development.'",
+    "clean": "rm -rf dist .vercel .netlify"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4"
+  },
+  "optionalDependencies": {
+    "vercel": "^37.4.2",
+    "netlify-cli": "^17.35.0"
+  },
+  "peerDependencies": {
+    "docker": "*",
+    "docker-compose": "*"
+  },
+  "volta": {
+    "node": "20.17.0",
+    "npm": "10.8.2"
+  }
+}

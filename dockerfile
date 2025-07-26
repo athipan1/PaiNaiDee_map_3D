@@ -1,18 +1,25 @@
-# ใช้ base image เป็น nginx ที่มีขนาดเล็ก
+# PaiNaiDee 3D Map - Simplified Production Docker Build
 FROM nginx:alpine
 
-# ลบไฟล์ default ที่ nginx ใส่มา
-RUN rm -rf /usr/share/nginx/html/*
-
-# คัดลอก nginx configuration สำหรับ production
+# Copy nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# คัดลอกเฉพาะไฟล์ static ที่จำเป็น
+# Remove default nginx files and copy application
+RUN rm -rf /usr/share/nginx/html/*
 COPY src/pages/home/index.html /usr/share/nginx/html/
 COPY src/assets/ /usr/share/nginx/html/assets/
 
-# เปิดพอร์ต 80
+# Expose port
 EXPOSE 80
 
-# สั่ง nginx ทำงานใน foreground
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost/ || exit 1
+
+# Labels for metadata
+LABEL maintainer="PaiNaiDee" \
+      version="2.0" \
+      description="PaiNaiDee 3D Interactive Map - Production Container"
+
+# Start nginx
 CMD ["nginx", "-g", "daemon off;"]

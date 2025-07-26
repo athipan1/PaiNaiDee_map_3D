@@ -1,0 +1,22 @@
+# PaiNaiDee 3D Map - Netlify Redirects
+# This file handles client-side routing
+
+# Redirect all traffic to index.html for SPA behavior
+/*    /index.html   200
+
+# Redirect old routes (if any existed)
+/map                  /                 301
+/home                 /                 301
+
+# Cache static assets
+/assets/*             /assets/:splat    200  Cache-Control: max-age=31536000
+*.css                 /:splat           200  Cache-Control: max-age=31536000
+*.js                  /:splat           200  Cache-Control: max-age=31536000
+*.png                 /:splat           200  Cache-Control: max-age=31536000
+*.jpg                 /:splat           200  Cache-Control: max-age=31536000
+*.jpeg                /:splat           200  Cache-Control: max-age=31536000
+*.gif                 /:splat           200  Cache-Control: max-age=31536000
+*.svg                 /:splat           200  Cache-Control: max-age=31536000
+*.ico                 /:splat           200  Cache-Control: max-age=31536000
+*.woff                /:splat           200  Cache-Control: max-age=31536000
+*.woff2               /:splat           200  Cache-Control: max-age=31536000
