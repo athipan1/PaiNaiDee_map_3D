@@ -822,6 +822,42 @@ npm run validate
 
 ### 🚀 Deployment
 
+#### 🚀 Quick Deploy to Vercel
+
+Deploy your own copy of PaiNaiDee 3D Map with one click:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fathipan1%2FPaiNaiDee_map_3D)
+
+##### Environment Variables
+
+When deploying to Vercel, configure the following environment variables in your project settings:
+
+```bash
+# OpenAI API Key (if using AI features)
+OPENAI_API_KEY=your_openai_api_key_here
+
+# Database URL (if using database features)
+DATABASE_URL=your_database_connection_string
+
+# Vercel Project Name
+VERCEL_PROJECT_NAME=your-project-name
+```
+
+##### Testing Your Deployment
+
+After deployment, validate your application with our comprehensive test suite:
+
+```bash
+python tests/run_all_tests.py
+```
+
+This command runs:
+- ✅ Dependency checks
+- ✅ Code validation (JavaScript & HTML)
+- ✅ Accessibility compliance tests
+- ✅ Performance analysis
+- ✅ Browser compatibility tests
+
 #### Production Deployment Options
 
 1. **Static Hosting** (Recommended)
