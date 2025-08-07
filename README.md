@@ -1257,6 +1257,190 @@ For the latest updates, visit: [GitHub Repository](https://github.com/athipan1/P
 
 ---
 
+## 🚀 Deploy บน Vercel
+
+Deploy your PaiNaiDee 3D Map application instantly on Vercel with one click!
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fathipan1%2FPaiNaiDee_map_3D&project-name=painaidee-map-3d&repository-name=painaidee-map-3d)
+
+### 🔧 Environment Variables Setup
+
+After deployment, configure the following environment variables in your Vercel dashboard:
+
+```bash
+# Required Environment Variables
+OPENAI_API_KEY=your_openai_api_key_here
+DATABASE_URL=your_database_connection_string
+NEXT_PUBLIC_APP_URL=https://your-app-name.vercel.app
+
+# Optional Environment Variables
+GOOGLE_MAPS_API_KEY=your_google_maps_key
+WEATHER_API_KEY=your_weather_api_key
+ANALYTICS_ID=your_analytics_id
+```
+
+### 📝 Setup Instructions:
+
+1. **Click the "Deploy with Vercel" button above**
+2. **Connect your GitHub account** and authorize Vercel
+3. **Configure project settings**:
+   - Project Name: `painaidee-map-3d`
+   - Framework Preset: Other
+   - Root Directory: `./`
+4. **Add environment variables** in the Vercel dashboard
+5. **Deploy and enjoy!** Your app will be live in minutes
+
+---
+
+## 🤗 Deploy บน Hugging Face Spaces
+
+Deploy your application on Hugging Face Spaces for easy sharing and collaboration!
+
+[![Deploy on Hugging Face Spaces](https://huggingface.co/datasets/huggingface/badges/raw/main/deploy-on-spaces-sm.svg)](https://huggingface.co/new-space?template=static)
+
+### 📁 Repository Structure for HF Spaces
+
+To deploy on Hugging Face Spaces, organize your repository as follows:
+
+```
+your-space/
+├── app.py                 # Main application entry point
+├── requirements.txt       # Python dependencies
+├── README.md             # Space documentation
+├── static/               # Static assets
+│   ├── index.html
+│   ├── script.js
+│   ├── styles.css
+│   └── assets/
+└── config.yaml          # Space configuration (optional)
+```
+
+### 🐍 Create `app.py` for HF Spaces:
+
+```python
+import os
+import gradio as gr
+from pathlib import Path
+
+# Path to your static files
+static_path = Path(__file__).parent / "static"
+
+def create_interface():
+    # Read your index.html file
+    with open(static_path / "index.html", "r", encoding="utf-8") as f:
+        html_content = f.read()
+    
+    # Create Gradio interface
+    iface = gr.Interface(
+        fn=lambda: html_content,
+        inputs=[],
+        outputs=gr.HTML(),
+        title="🗺️ PaiNaiDee 3D Map",
+        description="Interactive 3D map for exploring Thailand and the world",
+        allow_flagging="never"
+    )
+    
+    return iface
+
+if __name__ == "__main__":
+    demo = create_interface()
+    demo.launch(
+        server_name="0.0.0.0",
+        server_port=7860,
+        share=False
+    )
+```
+
+### 📦 Create `requirements.txt`:
+
+```txt
+gradio>=4.0.0
+fastapi>=0.100.0
+uvicorn>=0.23.0
+python-multipart>=0.0.6
+jinja2>=3.1.0
+```
+
+### ⚙️ Configuration Notes:
+
+- **Space Type**: Choose "Gradio" when creating your space
+- **Python Version**: 3.9+ recommended
+- **GPU**: Not required for this frontend application
+- **Visibility**: Public or Private based on your preference
+
+---
+
+## ⚗️ ทดลองใช้งานบน Google Colab
+
+### 🧪 ทดลอง API ทั้งหมดใน Google Colab
+
+Test all API endpoints and features directly in Google Colab without any local setup!
+
+[![Run in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/athipan1/PaiNaiDee_map_3D/blob/main/tests/test_all_apis.ipynb)
+
+**คำอธิบาย (Thai):** โน้ตบุ๊คนี้ช่วยให้คุณทดสอบ API endpoints ทั้งหมดของ PaiNaiDee 3D Map ได้อย่างง่ายดาย รวมถึงการทดสอบประสิทธิภาพและการวิเคราะห์ข้อมูล
+
+**Description (English):** This notebook allows you to easily test all PaiNaiDee 3D Map API endpoints, including performance testing and data analysis features.
+
+### 📋 Tested API Endpoints:
+
+- ✅ `/api/talk` - Chat and conversation API for tourist guidance
+- ✅ `/api/attractions` - Retrieve all tourist attractions data
+- ✅ `/api/attractions/<id>` - Get specific attraction details by ID
+- ✅ `/api/videos` - Access video content and media
+- ✅ `/api/videos/upload` - Upload new video content
+- ✅ `/api/locations` - Geographic location data
+- ✅ `/api/weather` - Weather information for locations
+- ✅ `/api/search` - Search functionality across all content
+
+### 🛠️ Colab Setup Instructions:
+
+1. **Open the notebook** by clicking the "Run in Colab" badge above
+2. **Install dependencies** by running:
+   ```python
+   !pip install -r requirements.txt
+   # หรือติดตั้งแต่ละตัว / Or install individually:
+   !pip install requests pandas matplotlib seaborn
+   ```
+
+3. **Set your API endpoint URL**:
+   ```python
+   # แทนที่ด้วย URL ของ Vercel deployment / Replace with your Vercel deployment URL
+   BASE_URL = "https://your-app-name.vercel.app"
+   ```
+
+4. **Use the helper function**:
+   ```python
+   def call_api(method, url, payload=None, headers=None):
+       """
+       Helper function for making API calls
+       ฟังก์ชันช่วยสำหรับเรียก API
+       
+       Args:
+           method (str): HTTP method (GET, POST, PUT, DELETE)
+           url (str): API endpoint URL
+           payload (dict): Request data for POST/PUT
+           headers (dict): HTTP headers
+       
+       Returns:
+           dict: API response data
+       """
+       # Implementation provided in the notebook
+   ```
+
+### 📊 Features Available in Colab:
+
+- **Bilingual Testing**: Test APIs with both Thai (ภาษาไทย) and English inputs
+- **Performance Analysis**: Measure response times and create performance charts
+- **Visual Charts**: Matplotlib/Seaborn visualizations for data analysis
+- **Error Handling**: Comprehensive error catching and reporting
+- **Export Results**: Save test results and performance metrics
+
+### 💡 Note:
+**Programming Language**: Python is used throughout the notebook with outputs displayed in both Thai and English for maximum clarity and accessibility.
+
+---
+
 **ยินดีต้อนรับสู่แผนที่ 3 มิติที่ทันสมัย! 🇹🇭**
 *Welcome to the Modern 3D Map Experience!*
 
