@@ -25,6 +25,42 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
+      # Set up Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # Install dependencies using lock file for consistent builds
+      - name: Install dependencies
+        run: |
+          echo "📦 Installing dependencies using package-lock.json..."
+          npm ci
+          echo "✅ Dependencies installed successfully"
+
+      # Validate dependency lock file
+      - name: Validate dependency lock file
+        run: |
+          echo "🔒 Validating package-lock.json..."
+          if [ -f "package-lock.json" ]; then
+            echo "✅ package-lock.json found"
+            # Verify lock file is valid JSON and has required structure
+            node -e "
+              const fs = require('fs');
+              const lockfile = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
+              if (!lockfile.lockfileVersion) throw new Error('Invalid lockfile: missing lockfileVersion');
+              if (!lockfile.packages) throw new Error('Invalid lockfile: missing packages');
+              console.log('✅ package-lock.json structure is valid');
+              console.log('🔹 Lockfile version:', lockfile.lockfileVersion);
+            "
+            # Verify dependencies are in sync
+            npm ls > /dev/null && echo "✅ Dependencies are in sync with lock file" || echo "⚠️ Dependencies may need sync"
+          else
+            echo "❌ package-lock.json not found"
+            exit 1
+          fi
+
       # Validate HTML structure
       - name: Validate HTML
         run: |
@@ -40,33 +76,12 @@ jobs:
             exit 1
           fi
 
-      # Validate JavaScript syntax (Robust version)
+      # Validate JavaScript syntax (Using npm scripts)
       - name: Validate JavaScript
         run: |
-          echo "🔍 Validating JavaScript files..."
-          # List of potential directories for JS files
-          js_dirs=("src/assets/js" "frontend/src/js" "js" ".")
-
-          found_js=false
-          for dir in "${js_dirs[@]}"; do
-            if [ -d "$dir" ] && [ -n "$(find "$dir" -maxdepth 1 -name '*.js' -print -quit)" ]; then
-              echo "✅ JavaScript files found in '$dir'."
-              # Use find to check all .js files in the directory
-              find "$dir" -name "*.js" -print0 | xargs -0 -n1 node -c
-              if [ $? -eq 0 ]; then
-                echo "✅ All JavaScript files in '$dir' have valid syntax."
-                found_js=true
-                break
-              else
-                echo "❌ Syntax error found in one or more JavaScript files in '$dir'."
-                exit 1
-              fi
-            fi
-          done
-
-          if [ "$found_js" = false ]; then
-            echo "⚠️ No JavaScript files found in standard directories. Skipping validation."
-          fi
+          echo "🔍 Validating JavaScript files using npm scripts..."
+          npm run validate:js
+          echo "✅ JavaScript validation completed successfully"
 
       # Check CSS files (Robust version)
       - name: Validate CSS
@@ -139,6 +154,20 @@ jobs:
     
     steps:
       - uses: actions/checkout@v4
+      
+      # Set up Node.js environment for deployment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # Install dependencies for deployment
+      - name: Install dependencies
+        run: |
+          echo "📦 Installing dependencies for deployment..."
+          npm ci
+          echo "✅ Dependencies ready for deployment"
       
       - name: Deploy Ready
         run: |
