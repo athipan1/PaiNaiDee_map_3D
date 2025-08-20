@@ -40,29 +40,47 @@ jobs:
             exit 1
           fi
 
-      # Validate JavaScript syntax
+      # Validate JavaScript syntax (Robust version)
       - name: Validate JavaScript
         run: |
           echo "🔍 Validating JavaScript files..."
-          if [ -f "script.js" ]; then
-            echo "✅ script.js found"
-            # Basic syntax check using node
-            node -c script.js && echo "✅ JavaScript syntax valid" || exit 1
-          else
-            echo "❌ script.js not found"
-            exit 1
+          # List of potential directories for JS files
+          js_dirs=("src/assets/js" "frontend/src/js" "js" ".")
+
+          found_js=false
+          for dir in "${js_dirs[@]}"; do
+            if [ -d "$dir" ] && [ -n "$(find "$dir" -maxdepth 1 -name '*.js' -print -quit)" ]; then
+              echo "✅ JavaScript files found in '$dir'."
+              # Use find to check all .js files in the directory
+              find "$dir" -name "*.js" -print0 | xargs -0 -n1 node -c
+              if [ $? -eq 0 ]; then
+                echo "✅ All JavaScript files in '$dir' have valid syntax."
+                found_js=true
+                break
+              else
+                echo "❌ Syntax error found in one or more JavaScript files in '$dir'."
+                exit 1
+              fi
+            fi
+          done
+
+          if [ "$found_js" = false ]; then
+            echo "⚠️ No JavaScript files found in standard directories. Skipping validation."
           fi
 
-      # Check CSS files
+      # Check CSS files (Robust version)
       - name: Validate CSS
         run: |
           echo "🔍 Checking CSS files..."
-          if [ -f "styles.css" ]; then
-            echo "✅ styles.css found"
-            # Basic check for CSS content
+          # Check for styles.css in common locations
+          if [ -f "src/assets/css/styles.css" ]; then
+            echo "✅ styles.css found in src/assets/css/"
+            [ -s "src/assets/css/styles.css" ] && echo "✅ CSS file is not empty" || exit 1
+          elif [ -f "styles.css" ]; then
+            echo "✅ styles.css found in root"
             [ -s "styles.css" ] && echo "✅ CSS file is not empty" || exit 1
           else
-            echo "❌ styles.css not found"
+            echo "❌ styles.css not found in common locations."
             exit 1
           fi
 

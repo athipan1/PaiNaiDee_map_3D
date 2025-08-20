@@ -1,3 +1,5 @@
+import { userPreferences } from './state.js';
+
 // Enhanced Feedback System for PaiNaiDee 3D Map
 // ระบบ Feedback ที่ครอบคลุม สำหรับ Loading, Success, Error, Warning และ Info
 
@@ -658,12 +660,7 @@ class FeedbackSystem {
 // ========================================
 
 // Create global instance
-const feedbackSystem = new FeedbackSystem();
-
-// Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = FeedbackSystem;
-}
+export const feedbackSystem = new FeedbackSystem();
 
 // ========================================
 // INTEGRATION WITH EXISTING NOTIFICATION SYSTEM
